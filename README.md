@@ -1,4 +1,4 @@
-# NewRepo
+# InscriptionMP
 InscriptionMP is a 2D low-power version of the original game with no intent to take a cut from the original game. It will not include any of the story. The only thing that will be coppied is the idea, the characters, the core game mechanics & some inspiration.
 This will make it look like the original inscription but with a lot of extra steps.
 
