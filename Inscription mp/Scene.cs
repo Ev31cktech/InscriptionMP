@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Inscription_mp.Support;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,11 +11,11 @@ namespace Inscription_mp
 	{
 		private int x = 0;
 		private int y = 0;
-		private Dictionary<int, Dictionary<int, Page>> views = new Dictionary<int, Dictionary<int, Page>>();
+		private Dictionary<Location, Page> views = new Dictionary<Location,Page>();
 		private Storyboard MoveViewSTB = new Storyboard();
 		public Scene(Page centerView)
 		{
-			views[x][y] = centerView;
+			View_Insert(centerView,0,0);
 		}
 		public void Scene_KeyDown(object Sender, KeyEventArgs e)
 		{
@@ -59,9 +60,11 @@ namespace Inscription_mp
 
 		public void View_Insert(Page view, int x, int y)
 		{
-			if (views[x] == null)
-				views[x] = new Dictionary<int, Page>();
-			views[x][y] = view;
+			Location loc = new Location(x, y);
+			if (views.ContainsKey(loc))
+			{ views.Add(loc,view);}
+			else
+			{ views[loc] = view; }
 		}
 		public void View_SetActive(int x,int y)
 		{

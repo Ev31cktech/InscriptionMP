@@ -1,10 +1,10 @@
 ﻿using System.Windows.Media.Animation;
 
-namespace Inscription_mp.Scenes
+namespace Inscription_mp.Scenes.MainScene
 {
-	internal class MainScene
+	internal class MainScene : Scene
 	{
-		public MainScene()
+		public MainScene() : base(new MainView())
 		{
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Inscription_mp.Scenes;
+using Inscription_mp.Scenes.MainScene;
 using Newtonsoft.Json;
 
 
@@ -11,7 +12,7 @@ namespace Inscription_mp
 	public partial class MainWindow : Window
 	{
 		public static Settings Settings;
-		private Scene scene = new GameScene();
+		private Scene scene = new MainScene();
 		public MainWindow()
 		{
 			if (Properties.Settings.Default.AllSettings != "")

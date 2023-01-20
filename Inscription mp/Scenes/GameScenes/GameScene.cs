@@ -6,7 +6,7 @@ namespace Inscription_mp.Scenes
 {
 	internal class GameScene : Scene
 	{
-		public GameScene() : base(new BoardView())
+		public GameScene(GameSettings gameSettings) : base(new BoardView(gameSettings))
 		{
 
 		}
