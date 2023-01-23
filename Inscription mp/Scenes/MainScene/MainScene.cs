@@ -1,6 +1,4 @@
-﻿using System.Windows.Media.Animation;
-
-namespace Inscription_mp.Scenes.MainScene
+﻿namespace Inscription_mp.Scenes.MainScene
 {
 	internal class MainScene : Scene
 	{

@@ -26,7 +26,7 @@ namespace Inscription_mp
 		public struct Game
 		{
 			private Duration view_shift_duration;
-			public Duration View_shift_duration { get { return view_shift_duration; } set { if (value.TimeSpan.Ticks > 0) view_shift_duration = value; } }
+			public Duration View_shift_duration { get { return view_shift_duration; } set { if (value.HasTimeSpan && value.TimeSpan.Ticks > 0) view_shift_duration = value; } }
 		
 			public Game()
 			{

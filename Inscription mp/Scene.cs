@@ -1,6 +1,5 @@
 ﻿using Inscription_mp.Support;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -11,11 +10,14 @@ namespace Inscription_mp
 	{
 		private int x = 0;
 		private int y = 0;
-		private Dictionary<Location, Page> views = new Dictionary<Location,Page>();
+		private Dictionary<Location, Page> views = new Dictionary<Location, Page>();
 		private Storyboard MoveViewSTB = new Storyboard();
+
+		public Page CurrentView { get { return views[new Location(x, y)]; } }
+
 		public Scene(Page centerView)
 		{
-			View_Insert(centerView,0,0);
+			View_Insert(centerView, 0, 0);
 		}
 		public void Scene_KeyDown(object Sender, KeyEventArgs e)
 		{
@@ -62,15 +64,9 @@ namespace Inscription_mp
 		{
 			Location loc = new Location(x, y);
 			if (views.ContainsKey(loc))
-			{ views.Add(loc,view);}
+			{ views.Add(loc, view); }
 			else
 			{ views[loc] = view; }
-		}
-		public void View_SetActive(int x,int y)
-		{
-			MoveViewSTB.Children.Clear();
-			MoveViewSTB.Children.Add(new DoubleAnimation(this.x,x,MainWindow.Settings.game.View_shift_duration));
-			MoveViewSTB.Children.Add(new DoubleAnimation(this.y,y,MainWindow.Settings.game.View_shift_duration));
 		}
 	}
 }
