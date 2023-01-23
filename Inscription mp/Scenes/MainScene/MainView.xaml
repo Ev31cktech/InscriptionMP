@@ -2,25 +2,41 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Inscription_mp.Scenes.MainScene"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1080" d:DesignWidth="1920"
       Title="MainView"
       Background="#1e1e28">
-      
-
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#9F2530"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="{StaticResource InscriptionFont}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#C9D296"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-
-        <Button Grid.Row="0" Content="Create Game" Background="{x:Null}" />
-        <Button Grid.Row="1" Content="Join Game" Background="{x:Null}"/>
-        <Button Grid.Row="2" Content="Settings" Background="{x:Null}"/>
-        <Button Grid.Row="3" Content="Exit Game" Background="{x:Null}"/>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="Create Game"/>
+            <Button Grid.Row="1" Content="Join Game"/>
+            <Button Grid.Row="2" Content="Settings"/>
+            <Button Grid.Row="3" Content="Exit Game"/>
+        </Grid>
     </Grid>
 </Page>

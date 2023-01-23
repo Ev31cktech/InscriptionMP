@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Inscription_mp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <FontFamily x:Key="inscriptionfont">/resources/inscriptionfont.ttf</FontFamily>
     </Application.Resources>
 </Application>

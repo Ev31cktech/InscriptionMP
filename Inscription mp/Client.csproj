@@ -125,6 +125,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\inscriptionfont.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
