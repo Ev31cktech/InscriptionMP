@@ -13,7 +13,7 @@
             <Setter Property="Foreground" Value="#9F2530"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontFamily" Value="{StaticResource InscriptionFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource inscriptionfont}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#C9D296"/>
