@@ -66,12 +66,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Card.cs" />
+    <Compile Include="Card.xaml.cs">
+      <DependentUpon>Card.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Card_OLD.cs" />
     <Compile Include="Exceptions\SceneExceptions\SceneExceptions.cs" />
-    <Compile Include="GameSettings.cs" />
+    <Compile Include="GameRules.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Scenes\GameScenes\BoardView.xaml.cs">
       <DependentUpon>BoardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Scenes\GameScenes\CardSlot.xaml.cs">
+      <DependentUpon>CardSlot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scenes\GameScenes\GameScene.cs" />
     <Compile Include="Scenes\MainScene\MainScene.cs" />
@@ -79,8 +85,14 @@
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Sigils.cs" />
+    <Compile Include="Sigil.xaml.cs">
+      <DependentUpon>Sigil.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Support\Location.cs" />
+    <Page Include="Card.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,7 +109,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Scenes\GameScenes\CardSlot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Scenes\MainScene\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sigil.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

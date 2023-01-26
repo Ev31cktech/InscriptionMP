@@ -1,6 +1,6 @@
 ﻿namespace Inscription_mp
 {
-	public class Sigils
+	public struct GameRules
 	{
 	}
 }

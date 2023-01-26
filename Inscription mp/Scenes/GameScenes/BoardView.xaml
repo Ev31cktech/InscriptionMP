@@ -7,7 +7,5 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BoardView">
-    <Grid x:Name="BoardGrid">
-        
-    </Grid>
+    <Grid x:Name="BoardGrid" Background="white"/>
 </Page>

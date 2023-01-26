@@ -2,16 +2,16 @@
 
 namespace Inscription_mp
 {
-	abstract class Card
+	class Card_OLD
 	{
 		public uint Health { get; private set; }
 		public uint Power { get; private set; }
 		public string Name { get; private set; }
 
-		private List<Sigils> Sigils;
-		public Card(string name, uint power, uint health,params Sigils[] sigils)
+		private List<Sigil> Sigils;
+		public Card_OLD(string name, uint power, uint health,params Sigil[] sigils)
 		{
-			Sigils = new List<Sigils>(sigils);
+			Sigils = new List<Sigil>(sigils);
 			Health = health;
 			Power = power;
 			Name = name;

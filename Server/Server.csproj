@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardData.cs" />
+    <Compile Include="Cost.cs" />
     <Compile Include="Network\NetworkManager.cs" />
     <Compile Include="Network\SteamManager.cs" />
     <Compile Include="Program.cs" />
@@ -62,5 +64,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

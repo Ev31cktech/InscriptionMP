@@ -12,7 +12,6 @@ namespace Inscription_mp
 		private int y = 0;
 		private Dictionary<Location, Page> views = new Dictionary<Location, Page>();
 		private Storyboard MoveViewSTB = new Storyboard();
-
 		public Page CurrentView { get { return views[new Location(x, y)]; } }
 
 		public Scene(Page centerView)
@@ -67,6 +66,10 @@ namespace Inscription_mp
 			{ views.Add(loc, view); }
 			else
 			{ views[loc] = view; }
+		}
+		public Page getView(int x,int  y)
+		{
+			return views[new Location(x,y)];
 		}
 	}
 }
