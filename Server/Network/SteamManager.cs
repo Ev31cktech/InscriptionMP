@@ -1,6 +1,4 @@
 ﻿using Steamworks;
-using System;
-using System.Windows;
 
 namespace Inscription_mp.Network
 {
@@ -18,8 +16,6 @@ namespace Inscription_mp.Network
 		public SteamManager()
 		{
 			Inited = SteamAPI.Init();
-			Console.WriteLine();
-
 		}
 	}
 }
