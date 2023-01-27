@@ -9,16 +9,31 @@
       Background="#1e1e28">
     <Page.Resources>
         <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#9F2530"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontFamily" Value="{StaticResource InscriptionFont}"/>
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="#9F2530"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/Resourses/inscriptionfont.ttf"/>
+            <!--
+            -->
+            <Setter Property="FontStretch" Value="Expanded"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#C9D296"/>
+                    <Setter Property="Foreground" Value="Black"/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <Style TargetType="Label">
         </Style>
     </Page.Resources>
     <Grid>
@@ -33,10 +48,26 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="Create Game"/>
-            <Button Grid.Row="1" Content="Join Game"/>
-            <Button Grid.Row="2" Content="Settings"/>
-            <Button Grid.Row="3" Content="Exit Game"/>
+            <Button Grid.Row="0">
+                <Viewbox>
+                    <Button Content="Create Game"/>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="1">
+                <Viewbox>
+                    <Button Content="Join Game"/>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="2">
+                <Viewbox>
+                    <Button Content="Settings"/>
+                </Viewbox>
+            </Button>
+            <Button Grid.Row="3">
+                <Viewbox>
+                    <Button Content="Exit Game"/>
+                </Viewbox>
+            </Button>
         </Grid>
     </Grid>
 </Page>
