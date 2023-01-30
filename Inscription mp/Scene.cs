@@ -18,44 +18,7 @@ namespace Inscription_mp
 		{
 			View_Insert(centerView, 0, 0);
 		}
-		public void Scene_KeyDown(object Sender, KeyEventArgs e)
-		{
-			switch (e.Key)
-			{
-				case Key.W:
-				case Key.Up:
-					View_Up();
-					break;
-				case Key.A:
-				case Key.Left:
-					View_Left();
-					break;
-				case Key.S:
-				case Key.Down:
-					View_Down();
-					break;
-				case Key.D:
-				case Key.Right:
-					View_Right();
-					break;
-				default:
-					break;
-			}
-		}
-
-		private void View_Up()
-		{
-		}
-
-		private void View_Left()
-		{
-		}
-
-		private void View_Down()
-		{
-		}
-
-		private void View_Right()
+		public virtual void Scene_KeyDown(object Sender, KeyEventArgs e)
 		{
 		}
 

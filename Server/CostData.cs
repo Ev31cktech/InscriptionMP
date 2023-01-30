@@ -1,9 +1,9 @@
 ﻿namespace Server
 {
-	public struct Cost
+	public struct CostData
 	{
 		public string Type {get;private set;}
-		public Cost(string type)
+		public CostData(string type)
 		{
 			Type = type;
 		}

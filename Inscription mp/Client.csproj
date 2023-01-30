@@ -80,8 +80,8 @@
       <DependentUpon>CardSlot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scenes\GameScenes\GameScene.cs" />
-    <Compile Include="Scenes\MainScene\MainScene.cs" />
-    <Compile Include="Scenes\MainScene\MainView.xaml.cs">
+    <Compile Include="Scenes\MainScenes\MainScene.cs" />
+    <Compile Include="Scenes\MainScenes\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
@@ -113,7 +113,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Scenes\MainScene\MainView.xaml">
+    <Page Include="Scenes\MainScenes\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

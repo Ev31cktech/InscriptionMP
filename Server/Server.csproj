@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardData.cs" />
-    <Compile Include="Cost.cs" />
+    <Compile Include="CostData.cs" />
     <Compile Include="Network\NetworkManager.cs" />
     <Compile Include="Network\SteamManager.cs" />
     <Compile Include="Program.cs" />

@@ -7,5 +7,12 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BoardView">
-    <Grid x:Name="BoardGrid" Background="white"/>
+    <Viewbox>
+        <Grid x:Name="BoardGrid" Background="white" FlowDirection="LeftToRight" MouseDown="BoardGrid_MouseDown">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+        </Grid>
+    </Viewbox>
 </Page>

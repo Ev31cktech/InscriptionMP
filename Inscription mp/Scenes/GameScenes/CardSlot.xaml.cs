@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Inscription_mp.Scenes.GameScenes
 {
@@ -20,8 +8,21 @@ namespace Inscription_mp.Scenes.GameScenes
 	/// </summary>
 	public partial class CardSlot : UserControl
 	{
-		public CardSlot()
+		BoardView boardView;
+		public bool HasCard { get { return cardSlot.Child != null; } }
+		public Card Card
 		{
+			get { return cardSlot.Child as Card; }
+			set
+			{
+				if (!HasCard)
+				{ cardSlot.Child = value; }
+			}
+		}
+		public CardSlot(BoardView bv)
+		{
+			MouseEnter += (s, e) => { boardView.SetActive(this); };
+			boardView = bv;
 			InitializeComponent();
 		}
 	}
