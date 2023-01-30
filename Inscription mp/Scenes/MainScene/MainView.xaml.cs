@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Inscription_mp.Scenes.MainScene
 {
@@ -11,5 +12,25 @@ namespace Inscription_mp.Scenes.MainScene
 		{
 			InitializeComponent();
 		}
-	}
+
+        private void CreateGameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void JoinGameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Exit();
+        }
+    }
 }

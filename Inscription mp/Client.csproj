@@ -136,5 +136,11 @@
       <Name>Server</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Scenes\MainScene\Inscryption logo Fullsize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Inscryption logo Fullsize.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,26 +17,26 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#C9D296"/>
+                    <Setter Property="Foreground" Value="Black"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
     </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="Create Game"/>
-            <Button Grid.Row="1" Content="Join Game"/>
-            <Button Grid.Row="2" Content="Settings"/>
-            <Button Grid.Row="3" Content="Exit Game"/>
-        </Grid>
+        <Image Grid.Row="0" Source="pack://application:,,,/resources/Inscryption logo Fullsize.png"/>
+
+        <Viewbox Grid.Row="1">
+            <StackPanel >
+                <Button Content="Create Game" Click="CreateGameButton_Click"/>
+                <Button Content="Join Game" Click="JoinGameButton_Click"/>
+                <Button Content="Settings" Click="SettingsButton_Click"/>
+                <Button Content="Exit Game" Click="ExitButton_Click"/>
+            </StackPanel>
+        </Viewbox>
     </Grid>
 </Page>
