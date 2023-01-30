@@ -78,6 +78,10 @@
     <Compile Include="Scenes\MainScene\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scenes\MainScene\SettingsScene\SettingScene.cs" />
+    <Compile Include="Scenes\MainScene\SettingsScene\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Sigils.cs" />
     <Compile Include="Support\Location.cs" />
@@ -98,6 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Scenes\MainScene\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Scenes\MainScene\SettingsScene\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -135,9 +143,6 @@
       <Project>{18577b7d-2a22-4ba6-af4f-4bf9027c0522}</Project>
       <Name>Server</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Scenes\MainScene\Inscryption logo Fullsize.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Inscryption logo Fullsize.png" />

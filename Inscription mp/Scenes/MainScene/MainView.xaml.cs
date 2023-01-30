@@ -25,7 +25,7 @@ namespace Inscription_mp.Scenes.MainScene
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MainWindow.Scene = new SettingsScene.SettingScene();
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
