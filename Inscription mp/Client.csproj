@@ -68,19 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="Card.cs" />
     <Compile Include="Exceptions\SceneExceptions\SceneExceptions.cs" />
-    <Compile Include="GameSettings.cs" />
-    <Compile Include="Scene.cs" />
-    <Compile Include="Scenes\GameScenes\BoardView.xaml.cs">
-      <DependentUpon>BoardView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Scenes\GameScenes\GameScene.cs" />
-    <Compile Include="Scenes\MainScene\MainScene.cs" />
-    <Compile Include="Scenes\MainScene\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Sigils.cs" />
-    <Compile Include="Support\Location.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,14 +81,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Scenes\GameScenes\BoardView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Scenes\MainScene\MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -134,6 +114,9 @@
       <Project>{18577b7d-2a22-4ba6-af4f-4bf9027c0522}</Project>
       <Name>Server</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Support\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

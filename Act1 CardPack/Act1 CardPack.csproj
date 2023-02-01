@@ -52,5 +52,8 @@
   <ItemGroup>
     <Folder Include="Sigils\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Cards\Texture\Portrait_Opposum.svg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

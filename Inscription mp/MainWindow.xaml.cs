@@ -1,11 +1,7 @@
-﻿using System;
-using System.Management.Instrumentation;
+﻿using Server;
+using System;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Inscription_mp.Scenes.MainScene;
 using Newtonsoft.Json;
-
 
 namespace Inscription_mp
 {
@@ -16,16 +12,7 @@ namespace Inscription_mp
 	{
 		private static MainWindow mw;
 		public static Settings Settings;
-		private Scene scene;
-		public static Scene Scene
-		{
-			get {return mw.scene;}
-			set
-			{
-				mw.scene = value;
-				mw.Content = value.CurrentView;
-			}
-		}
+		public Client client;
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -33,8 +20,6 @@ namespace Inscription_mp
 			if (Properties.Settings.Default.AllSettings != "")
 			{ Settings = JsonConvert.DeserializeObject<Settings>(Properties.Settings.Default.AllSettings); }
 			else { Settings = new Settings(); }
-			Scene = new MainScene();
-			this.KeyDown += (s, e) => { scene.Scene_KeyDown(s, e); };
 			Closing += MainWindow_Closing;
 		}
 		private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

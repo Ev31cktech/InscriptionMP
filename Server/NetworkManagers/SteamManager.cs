@@ -1,10 +1,9 @@
 ﻿using Steamworks;
 using System;
-using System.Windows;
 
-namespace Inscription_mp.Network
+namespace Server.NetworkManagers
 {
-	class SteamManager
+	public class SteamManager : IServerManager
 	{
 		public string user
 		{
@@ -15,11 +14,19 @@ namespace Inscription_mp.Network
 			}
 		}
 		public bool Inited { get; private set; }
-		public SteamManager()
+		public void Init()
 		{
 			Inited = SteamAPI.Init();
 			Console.WriteLine();
-
 		}
+		public void Loop()
+		{
+			SteamAPI.RunCallbacks();
+		}
+
+		public void Shutdown()
+		{
+		}
+
 	}
 }

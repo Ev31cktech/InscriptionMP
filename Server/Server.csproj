@@ -53,10 +53,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\NetworkManager.cs" />
-    <Compile Include="Network\SteamManager.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="NetworkManagers\IServerManager.cs" />
+    <Compile Include="NetworkManagers\LocalServerManager.cs" />
+    <Compile Include="NetworkManagers\SteamManager.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\SetupScene.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sigils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
