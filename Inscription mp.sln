@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resourses", "Resourses", "{CA2E7037-FEB6-4EDF-ADAE-C4A1C794AB36}"
 	ProjectSection(SolutionItems) = preProject
+		Resources\InscriptionFont.TTF = Resources\InscriptionFont.TTF
 		Resources\InscriptionMP.ico = Resources\InscriptionMP.ico
 	EndProjectSection
 EndProject
