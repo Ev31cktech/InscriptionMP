@@ -5,7 +5,8 @@ namespace Inscription_mp
 {
 	public struct Settings
 	{
-		public Window window;
+		public String Username {get; set;}
+		public Window window { get; set;}
 		public struct Window
 		{
 			public WindowState State { get; set; }
@@ -22,7 +23,7 @@ namespace Inscription_mp
 				Height = 450;
 			}
 		}
-		public Game game;
+		public Game game{get;set;}
 		public struct Game
 		{
 			private Duration view_shift_duration;

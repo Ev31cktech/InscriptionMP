@@ -1,14 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 
-namespace Server.Scenes
+namespace Inscription_Server.Scenes
 {
 	internal class SetupScene : Scene
 	{
-		public SetupScene()
-		{}
+		public SetupScene() : base(
+			new System.Action<JObject>(Sync))
+		{ }
+		public static void Sync(JObject data)
+		{
 
-		public override void Loop(JObject data)
-		{}
+		}
 	}
 }

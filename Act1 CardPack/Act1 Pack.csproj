@@ -50,10 +50,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Scenes\" />
     <Folder Include="Sigils\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Cards\Texture\Portrait_Opposum.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MetaData.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,40 +1,48 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 using System.Net.Sockets;
 
-namespace Server
+namespace Inscription_Server
 {
 	public class Client
 	{
-		public bool Available { get{return socket.Available > 0;} }
-		public bool IsHost {get; private set; }
-		public Scene CurrentScene {get; private set;}
+		public bool Available { get { return socket.Available > 0; } }
+		public bool IsHost { get; private set; }
+		public Scene CurrentScene { get; private set; }
 		public bool Connected { get; private set; } = true;
 		StreamWriter writer;
 		StreamReader reader;
 
 		TcpClient socket;
-		public Client(TcpClient socket)
+		public Client(TcpClient socket, bool isHost = false)
 		{
 			this.socket = socket;
-			writer = new StreamWriter(socket.GetStream()) { AutoFlush = true};
+			IsHost = isHost;
+			writer = new StreamWriter(socket.GetStream()) { AutoFlush = true };
 			reader = new StreamReader(socket.GetStream());
 		}
-
-		internal void Loop()
+		public JObject ReadData()
 		{
 			String rawData = "";
-			while(Available)
+			while (Available)
 			{
 				char[] buffer = new char[1024];
-				reader.ReadBlock(buffer,0,buffer.Length);
+				reader.ReadBlock(buffer, 0, buffer.Length);
 				rawData += new String(buffer);
 			}
-			Console.WriteLine($"client send:{rawData}");
-
+			return JObject.Parse(rawData);
 		}
-
-		internal void Shutdown()
+		public void Loop()
+		{
+			if (Available)
+			{
+				JObject data = ReadData();
+				foreach (JObject test in data.Values())
+				{ }
+			}
+		}
+		public void Shutdown()
 		{
 			socket.Close();
 		}

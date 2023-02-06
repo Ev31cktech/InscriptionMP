@@ -1,13 +1,10 @@
-﻿using Server.Scenes;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Server.NetworkManagers
+namespace Inscription_Server.NetworkManagers
 {
-	public class LocalServerManager : IServerManager
+	public class LocalServerManager : AServerManager
 	{
 		bool setupState = true;
 		TcpListener tcpListener;
@@ -18,7 +15,7 @@ namespace Server.NetworkManagers
 			tcpListener.Start();
 		}
 
-		public void Shutdown()
+		public override void Shutdown()
 		{
 			foreach (Client client in tcpClients)
 			{
@@ -27,7 +24,7 @@ namespace Server.NetworkManagers
 			tcpListener.Stop();
 		}
 
-		public void Loop()
+		public override void Loop()
 		{
 			while(setupState && tcpListener.Pending())
 			{ tcpClients.Add(new Client(tcpListener.AcceptTcpClient())); }

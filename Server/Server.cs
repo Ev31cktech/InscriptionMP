@@ -1,28 +1,31 @@
-﻿using Server.NetworkManagers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Timers;
 
-namespace Server
+using Inscription_Server.NetworkManagers;
+
+namespace Inscription_Server
 {
 	public class Server
 	{
-		static bool shutdown = false;
-		static IServerManager server = null;
-		static Timer looper = new Timer() { Interval = 100 };
-		static Command[] commands = new Command[]
+		private static Server server;
+		private AServerManager manager;
+		private Timer looper = new Timer() { Interval = 100 };
+
+		private static Command[] commands = new Command[]
+			{
+				new Command(Command_Exit,"exit"),
+				new Command(Command_Help,"help"),
+				new Command(Command_Send,"send", "input"),
+				new Command(Command_Start,"start", "IPAddress")
+			};
+		private static bool shutdown = false;
+
+		public static void Main(string[] args)
 		{
-			new Command(Command_Exit,"exit"),
-			new Command(Command_Help,"help"),
-			new Command(Command_Send,"send", "input"),
-			new Command(Command_Start,"start", "IPAddress")
-		};
-		static void Main(string[] args)
-		{
-			looper.Elapsed += (s, e) => { if (server != null) server.Loop(); };
 			try
 			{
 				while (!shutdown)
@@ -40,8 +43,21 @@ namespace Server
 			}
 			Console.ReadKey();
 		}
-
-		static bool RunCommand(String inp, Command[] command)
+		public Server(AServerManager manager)
+		{
+			this.manager = manager;
+			looper.Elapsed += (s, e) => { manager.Loop();};
+		}
+		public void Start()
+		{
+			looper.Start();
+		}
+		public void Stop()
+		{
+			looper.Stop();
+			manager.Shutdown();
+		}
+		private static bool RunCommand(String inp, Command[] commands)
 		{
 			for (int i = 0; i < commands.Length; i++)
 			{
@@ -49,11 +65,11 @@ namespace Server
 				if (Regex.IsMatch(args[0], commands[i].command))
 				{
 					args.RemoveAt(0);
-					if (!command[i].action.Invoke(args.ToArray()))
+					if (!commands[i].action.Invoke(args.ToArray()))
 					{
 						Console.WriteLine($"Incorrect use of command {inp.Split(' ')[0]}");
-						if (command[i].arguments.Length > 0)
-							Console.WriteLine($"Expected folowing arguments:\n{command[i].ListArguments()}");
+						if (commands[i].arguments.Length > 0)
+							Console.WriteLine($"Expected folowing arguments:\n{commands[i].ListArguments()}");
 					}
 					return true;
 				}
@@ -62,15 +78,14 @@ namespace Server
 		}
 		#region Commands
 
-		static bool Command_Exit(String[] args)
+		private static bool Command_Exit(String[] args)
 		{
 			Console.WriteLine("Shutting down...");
-			looper.Stop();
-			server.Shutdown();
+			server.Stop();
 			shutdown = true;
 			return shutdown;
 		}
-		public static bool Command_Start(params String[] Args)
+		private static bool Command_Start(params String[] Args)
 		{
 			IPAddress ip = IPAddress.Any;
 			if (Args.Length > 1 && IPAddress.TryParse(Args[0], out ip))
@@ -79,11 +94,11 @@ namespace Server
 				return false;
 			}
 			Console.WriteLine("Server started");
-			server = new LocalServerManager(ip);
-			looper.Start();
+			server = new Server(new LocalServerManager(ip));
+			server.Start();
 			return true;
 		}
-		public static bool Command_Help(String[] Args)
+		private static bool Command_Help(String[] Args)
 		{
 			if (Args.Length < 1)
 			{ Console.WriteLine("this is the list of commands that can be used:"); }
@@ -97,17 +112,17 @@ namespace Server
 			}
 			return true;
 		}
-		static bool Command_Send(String[] args)
+		private static bool Command_Send(String[] args)
 		{
-			throw new NotImplementedException();
 			return true;
 		}
+
 		#endregion
 		/// <summary>
 		/// The command object that holds the command name, decsription, 
 		/// a list of all arguments(argument validation should be done by the action) and the action itself
 		/// </summary>
-		public struct Command
+		private struct Command
 		{
 			public Func<String[], bool> action { get; private set; }
 			public String command { get; private set; }

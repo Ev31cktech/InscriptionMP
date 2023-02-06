@@ -1,18 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
-using Server;
+using Inscription_Server;
+using System.Collections.Generic;
+using System;
 
 namespace Inscription_mp.Scenes
 {
 	internal class GameScene : Scene
 	{
-		public GameScene()
+		public GameScene() : base(new Action<JObject>[]
 		{
 
-		}
-
-		public override void Loop(JObject data)
-		{
-			throw new System.NotImplementedException();
-		}
+		})
+		{}
 	}
 }

@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
-    <Compile Include="NetworkManagers\IServerManager.cs" />
+    <Compile Include="NetworkManagers\AServerManager.cs" />
     <Compile Include="NetworkManagers\LocalServerManager.cs" />
     <Compile Include="NetworkManagers\SteamManager.cs" />
     <Compile Include="Scene.cs" />
