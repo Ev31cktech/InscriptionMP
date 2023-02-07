@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
@@ -27,7 +28,12 @@ namespace Inscription_Server.NetworkManagers
 		public override void Loop()
 		{
 			while(setupState && tcpListener.Pending())
-			{ tcpClients.Add(new Client(tcpListener.AcceptTcpClient())); }
+			{ 
+				Client client = new Client(tcpListener.AcceptTcpClient());
+				client.Add_Data(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
+				tcpClients.Add(client);
+			}
+				
 			for(int i = 0; i < tcpClients.Count; i++)
 			{
 				Client client = tcpClients[i];
@@ -35,8 +41,8 @@ namespace Inscription_Server.NetworkManagers
 				{
 					tcpClients.RemoveAt(i--);
 				}
-				if(client.Available)
-				{ client.Loop();}
+				if(!client.Handled)
+				{ client.Loop(); }
 			}
 		}
 	}

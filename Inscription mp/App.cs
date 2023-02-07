@@ -56,9 +56,8 @@ namespace Inscription_mp
 			if(_consoleAttached && SetConsoleMode(GetConsoleWindow(),2))
 			{ Console.WriteLine("Could not set console mode");}
 
-			timer= new Timer() {Interval = 20};
+			timer= new Timer() {Interval = 100};
 			timer.Elapsed += (s,e) => {
-				client.AddData(JObject.Parse("{ \"test\" : \"test\"}"));
 				client.Loop();
 			};
 
@@ -69,15 +68,16 @@ namespace Inscription_mp
 		}
 		public static void StartLocalServer()
 		{
-			server = new Server(new LocalServerManager(server,IPAddress.Any));
+			server = new Server(new LocalServerManager(IPAddress.Any));
 			server.Start();
-			JoinDedicatedServer(IPAddress.Any);
+			JoinDedicatedServer(IPAddress.Loopback);
 		}
 		public static void JoinDedicatedServer(IPAddress ip)
 		{
 			TcpClient tcpc = new TcpClient();
-			tcpc.Connect(IPAddress.Loopback,5801);
+			tcpc.Connect(ip,5801);
 			client = new Client(tcpc,true);
+			timer.Start();
 		}
 		public static void Close()
 		{

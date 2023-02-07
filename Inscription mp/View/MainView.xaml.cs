@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -31,6 +32,7 @@ namespace Inscription_mp.View
 
 		private void JoinGameButton_Click(object sender, RoutedEventArgs e)
 		{
+			App.JoinDedicatedServer(IPAddress.Loopback);
 			ToggleButtons();
 		}
 
