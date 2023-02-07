@@ -76,6 +76,9 @@
     <Compile Include="View\CreateGameView.xaml.cs">
       <DependentUpon>CreateGameView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\GameRuleView.xaml.cs">
+      <DependentUpon>GameRuleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\JoinGameView.xaml.cs">
       <DependentUpon>JoinGameView.xaml</DependentUpon>
     </Compile>
@@ -98,6 +101,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\CreateGameView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GameRuleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
