@@ -1,5 +1,6 @@
 ﻿using Inscription_Server;
 using Inscription_Server.NetworkManagers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -56,7 +57,10 @@ namespace Inscription_mp
 			{ Console.WriteLine("Could not set console mode");}
 
 			timer= new Timer() {Interval = 20};
-			timer.Elapsed += (s,e) => {client.Loop();};
+			timer.Elapsed += (s,e) => {
+				client.AddData(JObject.Parse("{ \"test\" : \"test\"}"));
+				client.Loop();
+			};
 
 			App app = new App();
 			app.InitializeComponent();
@@ -65,8 +69,9 @@ namespace Inscription_mp
 		}
 		public static void StartLocalServer()
 		{
-			server = new Server(new LocalServerManager(IPAddress.Any));
+			server = new Server(new LocalServerManager(server,IPAddress.Any));
 			server.Start();
+			JoinDedicatedServer(IPAddress.Any);
 		}
 		public static void JoinDedicatedServer(IPAddress ip)
 		{

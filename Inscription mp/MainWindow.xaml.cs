@@ -1,11 +1,9 @@
-﻿using Inscription_Server;
-using System.Windows;
+﻿using System.Windows;
 using Newtonsoft.Json;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System;
 using Inscription_mp.View;
-using Inscription_mp.Properties;
 
 namespace Inscription_mp
 {

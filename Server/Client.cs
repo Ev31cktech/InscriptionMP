@@ -11,17 +11,24 @@ namespace Inscription_Server
 		public bool IsHost { get; private set; }
 		public Scene CurrentScene { get; private set; }
 		public bool Connected { get; private set; } = true;
-		StreamWriter writer;
-		StreamReader reader;
-
-		TcpClient socket;
+		private JArray nPacket;
+		private StreamWriter writer;
+		private StreamReader reader;
+		private TcpClient socket;
 		public Client(TcpClient socket, bool isHost = false)
 		{
 			this.socket = socket;
 			IsHost = isHost;
 			writer = new StreamWriter(socket.GetStream()) { AutoFlush = true };
 			reader = new StreamReader(socket.GetStream());
+			Add_Data(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
 		}
+
+		public void Add_Data(JToken data)
+		{
+			nPacket.Add(data);
+		}
+
 		public JObject ReadData()
 		{
 			String rawData = "";
@@ -39,7 +46,7 @@ namespace Inscription_Server
 			{
 				JObject data = ReadData();
 				foreach (JObject test in data.Values())
-				{ }
+				{}
 			}
 		}
 		public void Shutdown()

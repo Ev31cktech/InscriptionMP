@@ -57,6 +57,7 @@
     <Compile Include="NetworkManagers\AServerManager.cs" />
     <Compile Include="NetworkManagers\LocalServerManager.cs" />
     <Compile Include="NetworkManagers\SteamManager.cs" />
+    <Compile Include="NetworkPacket.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\SetupScene.cs" />

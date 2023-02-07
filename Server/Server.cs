@@ -51,9 +51,11 @@ namespace Inscription_Server
 		public void Start()
 		{
 			looper.Start();
+			Console.WriteLine("Server started");
 		}
 		public void Stop()
 		{
+			Console.WriteLine("Shutting down server...");
 			looper.Stop();
 			manager.Shutdown();
 		}
@@ -80,7 +82,6 @@ namespace Inscription_Server
 
 		private static bool Command_Exit(String[] args)
 		{
-			Console.WriteLine("Shutting down...");
 			server.Stop();
 			shutdown = true;
 			return shutdown;
@@ -93,7 +94,6 @@ namespace Inscription_Server
 				Console.WriteLine("Invalid IP");
 				return false;
 			}
-			Console.WriteLine("Server started");
 			server = new Server(new LocalServerManager(ip));
 			server.Start();
 			return true;
