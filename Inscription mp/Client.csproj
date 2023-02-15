@@ -71,21 +71,23 @@
     </ApplicationDefinition>
     <Compile Include="App.cs" />
     <Compile Include="Card.cs" />
-    <Compile Include="Exceptions\SceneExceptions\SceneExceptions.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Exceptions\UnknownPageException.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="View\CreateGameView.xaml.cs">
+    <Compile Include="View.cs" />
+    <Compile Include="Views\CreateGameView.xaml.cs">
       <DependentUpon>CreateGameView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\GameRuleView.xaml.cs">
-      <DependentUpon>GameRuleView.xaml</DependentUpon>
+    <Compile Include="Views\SetupView.xaml.cs">
+      <DependentUpon>SetupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\JoinGameView.xaml.cs">
+    <Compile Include="Views\JoinGameView.xaml.cs">
       <DependentUpon>JoinGameView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainView.xaml.cs">
+    <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingsView.xaml.cs">
+    <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -100,23 +102,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\CreateGameView.xaml">
+    <Page Include="Views\CreateGameView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\GameRuleView.xaml">
+    <Page Include="Views\SetupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\JoinGameView.xaml">
+    <Page Include="Views\JoinGameView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainView.xaml">
+    <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SettingsView.xaml">
+    <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

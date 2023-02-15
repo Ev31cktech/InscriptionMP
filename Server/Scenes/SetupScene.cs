@@ -1,16 +1,18 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Net.Sockets;
+using System.Collections.Generic;
 
 namespace Inscription_Server.Scenes
 {
-	internal class SetupScene : Scene
+	public class SetupScene : Scene
 	{
-		public SetupScene() : base(
-			new System.Action<JObject>(Sync))
-		{ }
-		public static void Sync(JObject data)
+		List<string> team1 = new List<string>();
+		List<string> team2 = new List<string>();
+		public SetupScene() : base()
 		{
-
+		}
+		public void AddPlayer(string player)
+		{
+			team1.Add(player);
 		}
 	}
 }

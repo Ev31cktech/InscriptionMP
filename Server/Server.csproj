@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="Exceptions\SceneExceptions\SceneException.cs" />
+    <Compile Include="Exceptions\SceneExceptions\UnknownActionException.cs" />
+    <Compile Include="Exceptions\SceneExceptions\UnknownSceneException.cs" />
     <Compile Include="NetworkManagers\AServerManager.cs" />
     <Compile Include="NetworkManagers\LocalServerManager.cs" />
     <Compile Include="NetworkManagers\SteamManager.cs" />

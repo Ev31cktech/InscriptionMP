@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Inscription_mp.View
+namespace Inscription_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for SettingsView.xaml

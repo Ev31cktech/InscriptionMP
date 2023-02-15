@@ -1,13 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Inscription_Server.Scenes;
+using Newtonsoft.Json.Linq;
 
 namespace Inscription_Server.NetworkManagers
 {
 	public abstract class AServerManager
 	{
-		JObject data;
-		public void AddData(JObject data)
+		public bool SetupState {get; set;}= true;
+		public Scene CommonScene { get; private set; }
+		public AServerManager()
 		{
-			data.Add(data);	
+			CommonScene = new SetupScene();
 		}
 		public abstract void Loop();
 		public abstract void Shutdown();

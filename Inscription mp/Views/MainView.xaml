@@ -1,12 +1,11 @@
-﻿<Page x:Class="Inscription_mp.View.MainView"
+﻿<Page x:Class="Inscription_mp.Views.MainView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
-      Title="MainView"
-      Background="#1e1e28">
+      Title="MainView">
     <Page.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>

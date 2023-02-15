@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Inscription_Server.Scenes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -7,7 +9,6 @@ namespace Inscription_Server.NetworkManagers
 {
 	public class LocalServerManager : AServerManager
 	{
-		bool setupState = true;
 		TcpListener tcpListener;
 		List<Client> tcpClients = new List<Client>();
 		public LocalServerManager(IPAddress ip)
@@ -27,10 +28,11 @@ namespace Inscription_Server.NetworkManagers
 
 		public override void Loop()
 		{
-			while(setupState && tcpListener.Pending())
+			while(SetupState && tcpListener.Pending())
 			{ 
 				Client client = new Client(tcpListener.AcceptTcpClient());
-				client.Add_Data(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
+				client.AddData(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
+				client.ChangeScene(CommonScene);
 				tcpClients.Add(client);
 			}
 				
@@ -41,8 +43,7 @@ namespace Inscription_Server.NetworkManagers
 				{
 					tcpClients.RemoveAt(i--);
 				}
-				if(!client.Handled)
-				{ client.Loop(); }
+				client.Loop();
 			}
 		}
 	}

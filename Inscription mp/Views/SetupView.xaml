@@ -1,9 +1,8 @@
-﻿<Page x:Class="Inscription_mp.View.GameRuleView"
+﻿<Page x:Class="Inscription_mp.Views.SetupView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Inscription_mp.View"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="GameRuleView">
@@ -25,10 +24,11 @@
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" BorderBrush="#F00">
             <Border.Background>
-                <SolidColorBrush Color="#F00" Opacity="0.25" />
+                <SolidColorBrush Color="#F00" Opacity="0.25"/>
             </Border.Background>
             <StackPanel>
                 <Label Content="Player 1" Name="TeamALBL"/>
+                <StackPanel x:Name="Team1"/>
             </StackPanel>
         </Border>
         <Border Grid.Column="1" BorderBrush="#aaa" BorderThickness="4">
@@ -37,6 +37,8 @@
             </Border.Background>
             <StackPanel>
                 <Label Content="Settings"/>
+                <StackPanel Name="SettingsSTP"/>
+                <Button Name="StartGameBTN" Click="StartGameBTN_Click" Width="100" Content="start game"/>
             </StackPanel>
         </Border>
         <Border Grid.Column="2" BorderBrush="#00F" BorderThickness="4">

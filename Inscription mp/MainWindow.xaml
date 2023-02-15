@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Inscription_mp" xmlns:view="clr-namespace:Inscription_mp.View"
+        xmlns:local="clr-namespace:Inscription_mp" xmlns:views="clr-namespace:Inscription_mp.Views"
         mc:Ignorable="d"
+        Background="#1e1e28"
         Title="Inscription mp" Height="450" Width="800">
-    <view:MainView/>
+    <views:MainView/>
 </Window>

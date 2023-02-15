@@ -1,21 +1,26 @@
-﻿using Inscription_Server;
+﻿using Inscription_mp.Exceptions;
+using Inscription_mp.Views;
+using Inscription_Server;
 using Inscription_Server.NetworkManagers;
+using Inscription_Server.Scenes;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows;
-
+using System.Windows.Controls;
 
 namespace Inscription_mp
 {
 	public class App : Application
 	{
 		private static Server server;
-		public static Client client;
-		public static Timer timer;
+		private static Client client;
+		private static Timer timer;
+		private static Dictionary<string, Page> scenePageList = new Dictionary<string, Page>();
 		private bool _contentLoaded;
 		private static bool _consoleAttached;
 		public void InitializeComponent()
@@ -41,10 +46,12 @@ namespace Inscription_mp
 		static extern IntPtr GetConsoleWindow();
 		private const int ATTACH_PARENT_PROCESS = -1;
 
+		public static bool IsHost { get{return client.IsHost; } }
 
 		[STAThread]
 		public static void Main(string[] args)
 		{
+			#region ConsoleAttach
 			if (!(_consoleAttached = AttachConsole(ATTACH_PARENT_PROCESS)))
 			{ Console.WriteLine("Could not find Console to attach to.");}
 #if DEBUG_CONSOLE
@@ -55,8 +62,10 @@ namespace Inscription_mp
 			{Console.WriteLine("continuing without console");}
 			if(_consoleAttached && SetConsoleMode(GetConsoleWindow(),2))
 			{ Console.WriteLine("Could not set console mode");}
-
-			timer= new Timer() {Interval = 100};
+#endregion
+			Scene.RegisterScene(new SetupScene());
+			scenePageList.Add(typeof(SetupScene).FullName, new SetupView(null));
+			timer = new Timer() {Interval = 100};
 			timer.Elapsed += (s,e) => {
 				client.Loop();
 			};
@@ -70,13 +79,13 @@ namespace Inscription_mp
 		{
 			server = new Server(new LocalServerManager(IPAddress.Any));
 			server.Start();
-			JoinDedicatedServer(IPAddress.Loopback);
+			JoinDedicatedServer(IPAddress.Loopback,true);
 		}
-		public static void JoinDedicatedServer(IPAddress ip)
+		public static void JoinDedicatedServer(IPAddress ip, bool isHost = false)
 		{
 			TcpClient tcpc = new TcpClient();
 			tcpc.Connect(ip,5801);
-			client = new Client(tcpc,true);
+			client = new Client(tcpc,isHost);
 			timer.Start();
 		}
 		public static void Close()
@@ -85,6 +94,14 @@ namespace Inscription_mp
 			server.Stop();
 			if(client != null)
 			client.Shutdown();
+		}
+
+		internal static Page GetPage(Scene scene)
+		{
+			Page page;
+			if(!scenePageList.TryGetValue(scene.GetType().FullName,out page))
+			{throw new UnknownPageException("No Page associated with Scene"); }
+			return page;
 		}
 	}
 }

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Timers;
 
 using Inscription_Server.NetworkManagers;
+using Inscription_Server.Scenes;
 
 namespace Inscription_Server
 {
@@ -13,6 +14,8 @@ namespace Inscription_Server
 	{
 		private static Server server;
 		private AServerManager manager;
+		private List<string> team1 = new List<string>();
+		private List<string> team2 = new List<string>();
 		private Timer looper = new Timer() { Interval = 100 };
 
 		private static Command[] commands = new Command[]
@@ -23,9 +26,9 @@ namespace Inscription_Server
 				new Command(Command_Start,"start", "IPAddress")
 			};
 		private static bool shutdown = false;
-
 		public static void Main(string[] args)
 		{
+			Scene.RegisterScene(new SetupScene());
 			try
 			{
 				while (!shutdown)
@@ -46,7 +49,7 @@ namespace Inscription_Server
 		public Server(AServerManager manager)
 		{
 			this.manager = manager;
-			looper.Elapsed += (s, e) => { manager.Loop();};
+			looper.Elapsed += (s, e) => { manager.Loop(); };
 		}
 		public void Start()
 		{

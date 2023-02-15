@@ -4,7 +4,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Inscription_mp.View
+namespace Inscription_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for MainView.xaml

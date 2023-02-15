@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Windows.Controls;
 using System.ComponentModel;
 using System;
-using Inscription_mp.View;
+using Inscription_mp.Views;
 
 namespace Inscription_mp
 {
@@ -39,7 +39,11 @@ namespace Inscription_mp
 		}
 		public static void MainWindow_ShowView(Page view)
 		{
-			mw.Content = view;
+			mw.Dispatcher.Invoke(mw.ShowView, view);
+		}
+		private void ShowView(Page view)
+		{
+			Content = view;
 		}
 		private void MainWindow_Closing(object sender, CancelEventArgs e)
 		{
