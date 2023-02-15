@@ -74,7 +74,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="Exceptions\UnknownPageException.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="View.cs" />
     <Compile Include="Views\CreateGameView.xaml.cs">
       <DependentUpon>CreateGameView.xaml</DependentUpon>
     </Compile>
