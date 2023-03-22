@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Inscription_mp
+namespace Inscription_Server
 {
 	abstract class Card
 	{

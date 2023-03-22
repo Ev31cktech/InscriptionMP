@@ -57,6 +57,7 @@
     <Content Include="Cards\Texture\Portrait_Opposum.svg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="MetaData.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

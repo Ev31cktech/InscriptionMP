@@ -17,7 +17,6 @@ namespace Inscription_mp
 		private static SettingsView settingsView;
 		public MainWindow()
 		{
-			Console.WriteLine("this is a test");
 			InitializeComponent();
 			mw = this;
 			Settings tempset = new Settings();

@@ -32,7 +32,9 @@ namespace Inscription_Server.NetworkManagers
 			{ 
 				Client client = new Client(tcpListener.AcceptTcpClient());
 				client.AddData(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
-				client.ChangeScene(CommonScene);
+				client.ChangeScene(client,CommonScene);
+				SetupScene setupScene = CommonScene as SetupScene;
+				setupScene.AddPlayer();//$"player{setupScene.Team1.Length + setupScene.Team2.Length}");
 				tcpClients.Add(client);
 			}
 				

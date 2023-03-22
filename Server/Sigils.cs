@@ -1,4 +1,4 @@
-﻿namespace Inscription_mp
+﻿namespace Inscription_Server
 {
 	public class Sigils
 	{

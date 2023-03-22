@@ -17,7 +17,6 @@ namespace Inscription_Server.NetworkManagers
 		public void Init()
 		{
 			Inited = SteamAPI.Init();
-			Console.WriteLine();
 		}
 		public override void Loop()
 		{

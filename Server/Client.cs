@@ -4,7 +4,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 
 namespace Inscription_Server
 {
@@ -31,7 +30,7 @@ namespace Inscription_Server
 		{
 			nPacket.data.Add(data);
 		}
-		public void AddAction(Action<JObject> func, JObject data)
+		public void AddAction(Action<Client,JObject> func, JObject data)
 		{
 			JObject action = JObject.Parse($"{{\"target\":\"{Scene.GetActionName(func)}\"}}");
 			action.Add("data",data);
@@ -55,6 +54,10 @@ namespace Inscription_Server
 			}
 			return Jdata;
 		}
+		public virtual void RunAction(String func, JObject data)
+		{
+			CurrentScene.RunAction(func ,this , data);
+		}
 		public void Loop()
 		{
 			if (Available)
@@ -65,16 +68,16 @@ namespace Inscription_Server
 					foreach(JObject j in i["actions"])
 					{
 						if(j["target"].Value<string>() == "Inscription_Server.Client.ChangeScene")
-						{ ChangeScene(j["data"].Value<JObject>());}
+						{ ChangeScene(this,j["data"].Value<JObject>());}
 						else
-						{ CurrentScene.RunAction(j["target"].Value<string>(),j["data"].Value<JObject>()); }
+						{ RunAction(j["target"].Value<string>(),j["data"].Value<JObject>()); }
 					}
 				}
 			}
 			if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)
 			{
 				LastSincDTM = DateTime.Now;
-				CurrentScene.RunAction(CurrentScene.Sync, CurrentScene.ToJObject());
+				CurrentScene.RunAction(CurrentScene.Sync, this, CurrentScene.ToJObject()["data"].Value<JObject>());
 			}
 			if (nPacket.data.Count > 0)
 			{
@@ -82,14 +85,14 @@ namespace Inscription_Server
 				nPacket = new NetworkPacket(nPacket.PacketN + 1);
 			}
 		}
-		public virtual void ChangeScene(JObject data)
+		public virtual void ChangeScene(Client client,JObject data)
 		{
-			Scene scene = Scene.GetScene(data, this);
+			Scene scene = Scene.GetScene(client, data);
 			CurrentScene = scene;
 		}
-		public void ChangeScene(Scene scene)
+		public void ChangeScene(Client client, Scene scene)
 		{
-			CurrentScene = Scene.GetScene(scene.ToJObject(),this);
+			CurrentScene = scene;
 			AddAction(ChangeScene,scene.ToJObject());
 		}
 
