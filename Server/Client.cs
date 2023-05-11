@@ -1,45 +1,77 @@
-﻿using Inscription_Server.Scenes;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Inscription_Server.Exceptions;
+using Inscription_Server.Events.INotifyEvent;
 
 namespace Inscription_Server
 {
 	public class Client
 	{
+		public const char ETX = (char)3;
+		public uint UserID { get; protected set; }
 		public bool Available { get { return socket.Available > 0; } }
-		public bool IsHost { get; private set; }
-		public Scene CurrentScene { get; private set; }
+		public bool IsHost { get; protected set; }
+		public string Username { get; protected set; }
+		public Scene CurrentScene { get; protected set; }
 		public bool Connected { get; private set; } = true;
+		protected StreamWriter writer;
+		protected StreamReader reader;
+		protected TcpClient socket;
 		private NetworkPacket nPacket = new NetworkPacket(0);
-		private StreamWriter writer;
-		private StreamReader reader;
-		private TcpClient socket;
 		private DateTime LastSincDTM = DateTime.Now;
-		public Client(TcpClient socket, bool isHost = false)
+		public Client(TcpClient socket, uint iD) : this(socket)
+		{
+			UserID = iD;
+			IsHost = UserID == 0;
+			AddData("Message", "Hello, welcome to the lobby");
+			AddData("client", new JObject(
+						new JProperty("ID", UserID),
+						new JProperty("IsHost", IsHost))
+					);
+			Loop();
+			DateTime endTime = DateTime.Now.AddSeconds(5);
+			while (true)
+			{
+				if (DateTime.Now > endTime)
+					throw new ClientDisconnectedException("No Response in 5 sec. Assuming disconnection");
+				if (Available)
+					break;
+				Thread.Sleep(500);
+			}
+			NetworkPacket[] packets = ReadData();
+			foreach (JObject data in packets[0].data) //only packet 0 should contain the MOTD and client data
+			{
+				if (data.ContainsKey("Username"))
+					Username = data.Value<string>("Username");
+			}
+		}
+		public Client(TcpClient socket)
 		{
 			this.socket = socket;
-			IsHost = isHost;
 			writer = new StreamWriter(socket.GetStream()) { AutoFlush = true };
 			reader = new StreamReader(socket.GetStream());
 		}
 
-		public void AddData(JObject data)
+		public void AddData(string Name, object data)
 		{
-			nPacket.data.Add(data);
+			nPacket.data.Add(new JObject(new JProperty(Name, data)));
 		}
-		public void AddAction(Action<Client,JObject> func, JObject data)
+		public void AddAction(Action<JObject> func, JObject data)
 		{
 			JObject action = JObject.Parse($"{{\"target\":\"{Scene.GetActionName(func)}\"}}");
-			action.Add("data",data);
+			action.Add("data", data);
 			nPacket.actions.Add(action);
 		}
 
-		private JArray ReadData()
+		protected NetworkPacket[] ReadData()
 		{
-			JArray Jdata = new JArray();
+			List<NetworkPacket> packets = new List<NetworkPacket>();
+
 			String rawData = "";
 			while (Available)
 			{
@@ -47,58 +79,86 @@ namespace Inscription_Server
 				reader.Read(buffer, 0, buffer.Length);
 				rawData += new String(buffer).Split('\0')[0].Trim();
 			}
-			foreach (String i in rawData.Split((char)3))
+			foreach (String i in rawData.Split(ETX))
 			{
 				if (i != "")
-				{ Jdata.Add(JsonConvert.DeserializeObject<JObject>(i)); }
+				{
+					packets.Add(new NetworkPacket(JsonConvert.DeserializeObject<JObject>(i)));
+				}
 			}
-			return Jdata;
+			return packets.ToArray();
 		}
-		public virtual void RunAction(String func, JObject data)
+		public virtual void RunAction(Client client, String func, JObject data)
 		{
-			CurrentScene.RunAction(func ,this , data);
+			try
+			{
+				CurrentScene.TryRunAction(client, func, data);
+			}
+			catch (Exception e)
+			{
+				Server.Logger.Error(e);
+			}
 		}
 		public void Loop()
 		{
 			if (Available)
 			{
-				JArray data = ReadData();
-				foreach (JObject i in data)
-				{
-					foreach(JObject j in i["actions"])
-					{
-						if(j["target"].Value<string>() == "Inscription_Server.Client.ChangeScene")
-						{ ChangeScene(this,j["data"].Value<JObject>());}
-						else
-						{ RunAction(j["target"].Value<string>(),j["data"].Value<JObject>()); }
-					}
-				}
+				HandleActions(ReadData());
 			}
-			if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)
+			//if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)
+			//{
+			//	LastSincDTM = DateTime.Now;
+			//	AddAction(CurrentScene.Sync, CurrentScene.ToJObject());
+			//}
+			if (nPacket.data.Count > 0 | nPacket.actions.Count > 0)
 			{
-				LastSincDTM = DateTime.Now;
-				CurrentScene.RunAction(CurrentScene.Sync, this, CurrentScene.ToJObject()["data"].Value<JObject>());
-			}
-			if (nPacket.data.Count > 0)
-			{
-				writer.Write($"{nPacket}{(char)3}");
+				writer.Write($"{nPacket}{ETX}");
 				nPacket = new NetworkPacket(nPacket.PacketN + 1);
 			}
 		}
-		public virtual void ChangeScene(Client client,JObject data)
+		public void HandleActions(NetworkPacket[] data)
 		{
-			Scene scene = Scene.GetScene(client, data);
-			CurrentScene = scene;
+			foreach (NetworkPacket packet in data)
+			{
+				foreach (JObject i in packet.actions)
+				{
+					switch (true)
+					{
+						case true when i["target"].Value<string>() == "Inscription_Server.Client.ChangeScene":
+							ChangeScene(i["data"].Value<JObject>());
+							break;
+						default:
+							RunAction(this,i["target"].Value<string>(), i["data"].Value<JObject>());
+							break;
+					}
+				}
+			}
 		}
-		public void ChangeScene(Client client, Scene scene)
+		public virtual void ChangeScene(JObject data)
+		{
+			Scene scene = Scene.GetScene(data);
+			CurrentScene = scene;
+			CurrentScene.ActionRunEvent += CurrentScene_ActionRunEvent;
+		}
+
+		private void CurrentScene_ActionRunEvent(Client sender, ActionRunEventData e)
+		{
+			if (sender != this)
+				AddAction(e.Action, e.Data);
+			e.Action.Invoke(e.Data);
+		}
+
+		public void ChangeScene(Scene scene)
 		{
 			CurrentScene = scene;
-			AddAction(ChangeScene,scene.ToJObject());
+			AddAction(ChangeScene, scene.ToJObject());
+			CurrentScene.ActionRunEvent += CurrentScene_ActionRunEvent;
 		}
 
 		public void Shutdown()
 		{
 			socket.Close();
+			Connected = false;
 		}
 	}
 }

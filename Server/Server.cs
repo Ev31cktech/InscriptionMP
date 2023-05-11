@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Timers;
-
+using System.Threading;
 using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
 using log4net;
@@ -25,8 +24,12 @@ namespace Inscription_Server
 		private AServerManager manager;
 		private List<string> team1 = new List<string>();
 		private List<string> team2 = new List<string>();
-		private Timer looper = new Timer() { Interval = 100 };
-		private static ILog Logger {get{ return LogManager.GetLogger("SERVER"); } }
+		private Timer looper;
+		private bool looping = false;
+		private static bool shutdown = false;
+		public static ILog Logger { get { return LogManager.GetLogger("SERVER"); } }
+
+		public bool IsAllive { get { return looper != null; } }
 
 		private static Command[] commands = new Command[]
 			{
@@ -34,14 +37,13 @@ namespace Inscription_Server
 				new Command(Command_Help,"help"),
 				new Command(Command_Send,"send", "input"),
 				new Command(Command_Start,"start", "IPAddress"),
+				new Command(Command_Stop,"stop"),
 				new Command(Command_Crash,"crash")
 			};
-		private static bool shutdown = false;
 		public static void Main(string[] args)
 		{
-			XmlConfigurator.Configure(new FileInfo("logger.config"));
-			Log4NetLoggingBackend loggingBackend = new Log4NetLoggingBackend();
-			LoggingServices.DefaultBackend = loggingBackend;
+
+			LoggingServices.DefaultBackend = InitializeBackend();
 			Logger.Info("Server Logging Enabled");
 			Stack<string> argStack = new Stack<string>(args);
 			Scene.RegisterScene(new SetupScene());
@@ -59,6 +61,7 @@ namespace Inscription_Server
 						Logger.Warn("unknown command. Use help to see a list of commands");
 					}
 				}
+				Console.WriteLine("Press any key to close the console");
 			}
 			catch (Exception e)
 			{
@@ -66,22 +69,55 @@ namespace Inscription_Server
 			}
 			Console.ReadKey();
 		}
+		
 		public Server(AServerManager manager)
 		{
 			this.manager = manager;
-			looper.Elapsed += (s, e) => { manager.Loop(); };
 		}
+
 		public void Start()
 		{
-			looper.Start();
+			looper = new Timer((sender) => Loop(), null, 0, 1);
 			Logger.Info("Server started");
 		}
+
 		public void Stop()
 		{
 			Logger.Info("Shutting down server...");
-			looper.Stop();
+			looper.Dispose();
 			manager.Shutdown();
 		}
+
+		public void Loop()
+		{
+			{
+				if (!looping)
+				{
+					try
+					{
+						looping = true;
+						manager.Loop();
+
+					}
+					catch (Exception e)
+					{
+						Logger.Error(e.Message, e);
+						throw;
+					}
+					finally
+					{
+						looping = false;
+					}
+				}
+			}
+		}
+
+		public static Log4NetLoggingBackend InitializeBackend()
+		{
+			XmlConfigurator.Configure(new FileInfo("logger.config"));
+			return new Log4NetLoggingBackend();
+		}
+
 		private static bool RunCommand(String inp, Command[] commands)
 		{
 			for (int i = 0; i < commands.Length; i++)
@@ -101,17 +137,20 @@ namespace Inscription_Server
 			}
 			return false;
 		}
+
 		#region Commands
 		private static bool Command_Crash(String[] args)
 		{
 			throw new Exception("this is a test command to crash the program");
 		}
+
 		private static bool Command_Exit(String[] args)
 		{
 			server.Stop();
 			shutdown = true;
 			return shutdown;
 		}
+
 		private static bool Command_Start(params String[] Args)
 		{
 			IPAddress ip = IPAddress.Any;
@@ -120,10 +159,20 @@ namespace Inscription_Server
 				Logger.Error("Invalid IP");
 				return false;
 			}
-			server = new Server(new LocalServerManager(ip));
+			if (server.IsAllive)
+				Logger.Warn("Server is already running"); return true;
+			if (server == null || !server.IsAllive)
+				server = new Server(new LocalServerManager(ip));
 			server.Start();
 			return true;
 		}
+
+		private static bool Command_Stop(params String[] Args)
+		{
+			server.Stop();
+			return true;
+		}
+
 		private static bool Command_Help(String[] Args)
 		{
 			if (Args.Length < 1)
@@ -142,7 +191,6 @@ namespace Inscription_Server
 		{
 			return true;
 		}
-
 		#endregion
 		/// <summary>
 		/// The command object that holds the command name, decsription, 

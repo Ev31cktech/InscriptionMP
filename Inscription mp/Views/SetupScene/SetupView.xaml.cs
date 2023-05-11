@@ -1,45 +1,39 @@
 ﻿using Inscription_mp.Views.SetupScene;
-using static Inscription_mp.Views.SetupScene.PlayerDisplay;
 
 namespace Inscription_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for SetupView.xaml
 	/// </summary>
-	public partial class SetupView : View
+	public partial class SetupView : View<Inscription_Server.Scenes.SetupScene>
 	{
-		private static SetupView setupView;
-		private Inscription_Server.Scenes.SetupScene scene;
-		public SetupView(Inscription_Server.Scenes.SetupScene scene)
+		public SetupView(Inscription_Server.Scenes.SetupScene scene) : base(scene)
 		{
-			this.scene = scene;
 			InitializeComponent();
-			Loaded += (s, e) => { StartGameBTN.IsEnabled = App.IsHost; };
+			Loaded += (s, e) => { StartGameBTN.IsEnabled = App.Client.IsHost; };
+			scene.Team1.ValueChanged += (s,e) => { Dispatcher.Invoke(Team1_Update);};
+			scene.Team2.ValueChanged += (s,e) => { Dispatcher.Invoke(Team2_Update);};
 		}
-		public override void Update()
+		public void Team1_Update()
 		{
-			Team1.Children.Clear();
-			Team2.Children.Clear();
-			foreach (string name in scene.Team1)
-			{
-				PlayerDisplay p = new PlayerDisplay(name, Team.one);
-				Team1.Children.Add(p);
-			}
-			foreach (string name in scene.Team2)
-			{
-				PlayerDisplay p = new PlayerDisplay(name, Team.two);
-				Team2.Children.Add(p);
-			}
+			Team1STP.Children.Clear();
+			foreach (var player in thisScene.Team1)
+				Team1STP.Children.Add(new PlayerDisplay(player, this));
 		}
-		public static void SwitchTeam(PlayerDisplay pd)
+		public void Team2_Update()
 		{
-
+			Team2STP.Children.Clear();
+			foreach (var player in thisScene.Team2)
+				Team2STP.Children.Add(new PlayerDisplay(player, this));
 		}
 
+		public void SwitchTeam(PlayerDisplay pd)
+		{
+			thisScene.RunAction(App.Client, thisScene.SwitchTeam, pd.Player.ToJObject());
+		}
 		private void StartGameBTN_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			App.Client.CurrentView.Update();
-			//scene.RunAction(scene.Sync, App.Client, scene.ToJObject());
+
 		}
 	}
 }

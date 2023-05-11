@@ -6,14 +6,19 @@
              xmlns:local="clr-namespace:Inscription_mp.Views.SetupScene"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="12"></Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="40"/>
             <ColumnDefinition />
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" x:Name="SwitchTeamRightBTN" Click="SwitchTeam" Content="▸" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
-        <Label Grid.Column="1" x:Name="NameLBL" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-        <Button Grid.Column="2" x:Name="SwitchTeamLeftBTN" Click="SwitchTeam" Content="◂" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+        <Button Grid.Column="0" x:Name="SwitchTeamLeftBTN" Click="SwitchTeam" Content="◂" VerticalContentAlignment="Stretch"/>
+        <Label Grid.Column="1" x:Name="NameLBL" HorizontalContentAlignment="Center" VerticalAlignment="Center" Content="{Binding Player.Username}"/>
+        <Button Grid.Column="2" x:Name="SwitchTeamRightBTN" Click="SwitchTeam" Content="▸" VerticalContentAlignment="Stretch"/>
     </Grid>
 </UserControl>

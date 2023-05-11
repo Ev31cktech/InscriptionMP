@@ -1,34 +1,55 @@
-﻿using Inscription_mp.Exceptions;
+﻿#define DEBUG_CONSOLE
+
+using Inscription_mp.Exceptions;
 using Inscription_mp.Views;
 using Inscription_Server;
 using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
-using log4net;
-using PostSharp.Patterns.Diagnostics;
-using PostSharp.Patterns.Diagnostics.Backends.Console;
-using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Timers;
 using System.Windows;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using log4net;
+using PostSharp.Patterns.Diagnostics;
+using Newtonsoft.Json;
+using System.Threading;
 
-[assembly:Log]
+[assembly: Log]
+[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributeExclude = true, AttributePriority = 3)]
 namespace Inscription_mp
 {
 	public class App : Application
 	{
+		private static App app { get; } = new App();
+		public static Settings Settings
+		{
+			get
+			{
+				if (Inscription_mp.Properties.Settings.Default.AllSettings != "")
+				{ app.settings = JsonConvert.DeserializeObject<Settings>(Inscription_mp.Properties.Settings.Default.AllSettings); }
+				return app.settings;
+			}
+			set
+			{
+				app.settings = value;
+				Inscription_mp.Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(value);
+				Inscription_mp.Properties.Settings.Default.Save();
+			}
+		}
 		public static Server Server { get; private set; }
 		public static Client Client { get; private set; }
-		private static ILog Logger { get { return LogManager.GetLogger("CLIENT"); } }
-		private static Timer timer;
+		public static ILog Logger { get { return LogManager.GetLogger("CLIENT"); } }
+		private static Timer looper;
 		private static Dictionary<string, View> sceneViewList = new Dictionary<string, View>();
+		private Settings settings;
 		private bool _contentLoaded;
+		private static bool looping = false;
 		private static bool _consoleAttached;
 		public void InitializeComponent()
 		{
+
 			if (_contentLoaded)
 			{
 				return;
@@ -37,78 +58,98 @@ namespace Inscription_mp
 			this.StartupUri = new System.Uri("MainWindow.xaml", System.UriKind.Relative);
 		}
 
-#if DEBUG_CONSOLE
-		[DllImport("kernel32.dll")]
-		static extern bool AllocConsole();
-#endif
+
 		[DllImport("kernel32.dll")]
 		static extern bool AttachConsole(int dwProcessId);
 		[DllImport("kernel32.dll")]
 		static extern bool FreeConsole();
-		[DllImport("kernel32.dll")]
-		static extern bool SetConsoleMode(IntPtr handle, int mode);
-		[DllImport("kernel32.dll")]
-		static extern IntPtr GetConsoleWindow();
 		private const int ATTACH_PARENT_PROCESS = -1;
 
-		public static bool IsHost { get { return Client.IsHost; } }
 
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			LoggingServices.DefaultBackend = new Log4NetLoggingBackend();
-			#region ConsoleAttach
 			if (!(_consoleAttached = AttachConsole(ATTACH_PARENT_PROCESS)))
 			{ Logger.Warn("Could not find Console to attach to."); }
-#if DEBUG_CONSOLE
-			if(!(_consoleAttached = AllocConsole()))
-			{ Logger.Error("Console could not be created"); }
-#endif
-			if (!_consoleAttached)
-			{ Logger.Info("continuing without console"); }
-			if (_consoleAttached && SetConsoleMode(GetConsoleWindow(), 2))
-			{ Logger.Warn("Could not set console mode"); }
-			#endregion
+
+			LoggingServices.DefaultBackend = Server.InitializeBackend();
 			SetupScene setupScene = new SetupScene();
 			Scene.RegisterScene(setupScene);
+			List<Scene> list = new List<Scene>();
+			list.Add(new SetupScene());
 			sceneViewList.Add(typeof(SetupScene).FullName, new SetupView(setupScene));
-			timer = new Timer() { Interval = 100 };
-			timer.Elapsed += (s, e) =>
-			{
-				Client.Loop();
-			};
-
-			App app = new App();
 			app.InitializeComponent();
 			app.Run();
 			FreeConsole();
+			Close();
 		}
 		public static void StartLocalServer()
 		{
 			Server = new Server(new LocalServerManager(IPAddress.Any));
 			Server.Start();
-			JoinDedicatedServer(IPAddress.Loopback, true);
+			JoinDedicatedServer(IPAddress.Loopback);
 		}
-		public static void JoinDedicatedServer(IPAddress ip, bool isHost = false)
+		public static void JoinDedicatedServer(IPAddress ip)
 		{
 			TcpClient tcpc = new TcpClient();
-			tcpc.Connect(ip, 5801);
-			Client = new Client(tcpc, isHost);
-			timer.Start();
+			try
+			{
+				tcpc.Connect(ip, 5801);
+				Client = new Client(tcpc);
+				Client.WaitForMOTD();
+				looper = new Timer(app.Loop, null, 0, 1);
+			}
+			catch (SocketException e)
+			{
+				Logger.Error($"Could not connect. Are you a server is running on that IP?\n{e.Message}");
+			}
+			catch
+			{
+
+			}
+			finally
+			{
+				Inscription_mp.MainWindow.ShowMainView();
+			}
+		}
+		public void Loop(object sender)
+		{
+			if (!looping)
+			{
+				try
+				{
+					looping = true;
+					if(Client.Connected)
+						Client.Loop();
+
+				}
+				catch (Exception e)
+				{
+					Logger.Error(e.Message, e);
+					MessageBox.Show($"{e.Message}\n\n{e.StackTrace}"); //TODO do not use Messagebox
+				}
+				finally
+				{
+					looping = false;
+				}
+			}
 		}
 		public static void Close()
 		{
 			if (Server != null)
 				Server.Stop();
+			if(looper != null)
+				looper.Dispose();
 			if (Client != null)
 				Client.Shutdown();
+			app.Shutdown();
 		}
 
-		internal static View GetPage(Scene scene)
+		internal static View GetView(Scene scene)
 		{
 			View view;
 			if (!sceneViewList.TryGetValue(scene.GetType().FullName, out view))
-			{ throw new UnknownPageException("No Page associated with Scene"); }
+			{ throw new UnknownViewException("No view associated with Scene"); }
 			return view;
 		}
 	}

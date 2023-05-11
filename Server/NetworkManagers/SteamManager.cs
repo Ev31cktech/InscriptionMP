@@ -1,5 +1,4 @@
 ﻿using Steamworks;
-using System;
 
 namespace Inscription_Server.NetworkManagers
 {
@@ -24,8 +23,7 @@ namespace Inscription_Server.NetworkManagers
 		}
 
 		public override void Shutdown()
-		{
-		}
+		{}
 
 	}
 }

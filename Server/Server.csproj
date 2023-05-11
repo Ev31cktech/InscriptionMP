@@ -40,7 +40,7 @@
     <ApplicationIcon>..\Resources\InscriptionMP.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -78,13 +78,19 @@
   <ItemGroup>
     <Compile Include="Card.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Exceptions\ActionNotFoundException.cs" />
+    <Compile Include="Exceptions\ClientDisconnectedException.cs" />
     <Compile Include="Exceptions\SceneExceptions\SceneException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownActionException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownSceneException.cs" />
+    <Compile Include="INotifyEvent.cs" />
+    <Compile Include="INotifyValueChanged.cs" />
+    <Compile Include="IToJObject.cs" />
     <Compile Include="NetworkManagers\AServerManager.cs" />
     <Compile Include="NetworkManagers\LocalServerManager.cs" />
     <Compile Include="NetworkManagers\SteamManager.cs" />
     <Compile Include="NetworkPacket.cs" />
+    <Compile Include="ObservableList.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Scenes\BoardScene.cs" />
     <Compile Include="Scenes\SetupScene.cs" />
@@ -106,10 +112,10 @@
   </Target>
   <Import Project="..\packages\PostSharp.2023.0.4\build\PostSharp.targets" Condition="Exists('..\packages\PostSharp.2023.0.4\build\PostSharp.targets')" />
   <PropertyGroup>
-    <PreBuildEvent>copy $(SolutionDir)logger.config $(TargetDir)logger.config</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /Y $(SolutionDir)logger.config $(TargetDir)logger.config</PostBuildEvent>
   </PropertyGroup>
 </Project>

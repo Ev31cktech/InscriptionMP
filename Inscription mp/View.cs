@@ -1,14 +1,20 @@
-﻿using System.Windows.Controls;
+﻿using Inscription_Server;
+using System.Windows.Controls;
 
 namespace Inscription_mp
 {
-	public abstract class View : Page
+	
+	public abstract class View<T>  : View where T : Scene
 	{
-		protected View view;
-		public View()
+		public T thisScene{ get; private set; }
+		public View<T> thisView { get; private set; }
+		public View( T scene)
 		{
-			view = this;
+			DataContext = scene;
+			thisScene = scene;
+			thisView = this;
 		}
-		public abstract void Update();
 	}
+	public abstract class View : UserControl
+	{}
 }

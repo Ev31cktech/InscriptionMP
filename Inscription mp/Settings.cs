@@ -5,8 +5,8 @@ namespace Inscription_mp
 {
 	public struct Settings
 	{
-		public String Username {get; set;}
-		public Window window { get; set;}
+		public String Username { get; set; }
+		public Window window { get; set; }
 		public struct Window
 		{
 			public WindowState State { get; set; }
@@ -23,15 +23,15 @@ namespace Inscription_mp
 				Height = 450;
 			}
 		}
-		public Game game{get;set;}
+		public Game game { get; set; }
 		public struct Game
 		{
 			private Duration view_shift_duration;
 			public Duration View_shift_duration { get { return view_shift_duration; } set { if (value.HasTimeSpan && value.TimeSpan.Ticks > 0) view_shift_duration = value; } }
-		
+
 			public Game()
 			{
-				View_shift_duration = new TimeSpan(0,0,0,0,200);
+				View_shift_duration = new TimeSpan(0, 0, 0, 0, 200);
 			}
 		}
 		public Settings()

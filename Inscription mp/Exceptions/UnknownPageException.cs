@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Inscription_mp.Exceptions
 {
 
 	[Serializable]
-	public class UnknownPageException : Exception
+	public class UnknownViewException : Exception
 	{
-		public UnknownPageException() : base("Unknown Page") { }
-		public UnknownPageException(string message) : base(message) { }
-		public UnknownPageException(string message, Exception inner) : base(message, inner) { }
-		protected UnknownPageException(
+		public UnknownViewException() : base("Unknown View") { }
+		public UnknownViewException(string message) : base(message) { }
+		public UnknownViewException(string message, Exception inner) : base(message, inner) { }
+		protected UnknownViewException(
 		  System.Runtime.Serialization.SerializationInfo info,
 		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 	}
