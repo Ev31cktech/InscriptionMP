@@ -2,7 +2,7 @@
 
 namespace Inscription_Server.NetworkManagers
 {
-	public class SteamManager : AServerManager
+	public class SteamServer : Server
 	{
 		public string user
 		{

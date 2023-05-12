@@ -9,27 +9,24 @@ using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
 using log4net;
 using log4net.Config;
-using PostSharp.Patterns.Diagnostics;
-using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
+using log4net.Repository.Hierarchy;
+using Newtonsoft.Json.Linq;
+//using PostSharp.Patterns.Diagnostics;
+//using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
 
-[assembly: Log(AttributePriority = 1)]
-[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
-[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
+//[assembly: Log(AttributePriority = 1)]
+//[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
+//[assembly: Log(AttributeTargetMembers = "regex:^..ctor", AttributeExclude = true, AttributePriority = 2)]
+//[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
 
 namespace Inscription_Server
 {
-	public class Server
+	public class App
 	{
 		private static Server server;
-		private AServerManager manager;
-		private List<string> team1 = new List<string>();
-		private List<string> team2 = new List<string>();
-		private Timer looper;
-		private bool looping = false;
 		private static bool shutdown = false;
 		public static ILog Logger { get { return LogManager.GetLogger("SERVER"); } }
 
-		public bool IsAllive { get { return looper != null; } }
 
 		private static Command[] commands = new Command[]
 			{
@@ -42,8 +39,8 @@ namespace Inscription_Server
 			};
 		public static void Main(string[] args)
 		{
-
-			LoggingServices.DefaultBackend = InitializeBackend();
+			//LoggingServices.DefaultBackend = InitializeBackend();
+			InitializeBackend();
 			Logger.Info("Server Logging Enabled");
 			Stack<string> argStack = new Stack<string>(args);
 			Scene.RegisterScene(new SetupScene());
@@ -69,54 +66,17 @@ namespace Inscription_Server
 			}
 			Console.ReadKey();
 		}
-		
-		public Server(AServerManager manager)
-		{
-			this.manager = manager;
-		}
-
-		public void Start()
-		{
-			looper = new Timer((sender) => Loop(), null, 0, 1);
-			Logger.Info("Server started");
-		}
-
-		public void Stop()
-		{
-			Logger.Info("Shutting down server...");
-			looper.Dispose();
-			manager.Shutdown();
-		}
-
-		public void Loop()
-		{
-			{
-				if (!looping)
-				{
-					try
-					{
-						looping = true;
-						manager.Loop();
-
-					}
-					catch (Exception e)
-					{
-						Logger.Error(e.Message, e);
-						throw;
-					}
-					finally
-					{
-						looping = false;
-					}
-				}
-			}
-		}
-
-		public static Log4NetLoggingBackend InitializeBackend()
+		public static void InitializeBackend()
 		{
 			XmlConfigurator.Configure(new FileInfo("logger.config"));
-			return new Log4NetLoggingBackend();
 		}
+
+
+		//public static Log4NetLoggingBackend InitializeBackend()
+		//{
+		//	XmlConfigurator.Configure(new FileInfo("logger.config"));
+		//	return new Log4NetLoggingBackend();
+		//}
 
 		private static bool RunCommand(String inp, Command[] commands)
 		{
@@ -157,12 +117,12 @@ namespace Inscription_Server
 			if (Args.Length > 1 && IPAddress.TryParse(Args[0], out ip))
 			{
 				Logger.Error("Invalid IP");
-				return false;
+				return true;
 			}
-			if (server.IsAllive)
-				Logger.Warn("Server is already running"); return true;
 			if (server == null || !server.IsAllive)
-				server = new Server(new LocalServerManager(ip));
+				server = new LocalServer(ip);
+			if (server.IsAllive)
+			{ Logger.Warn("Server is already running"); return true; }
 			server.Start();
 			return true;
 		}

@@ -12,12 +12,14 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using log4net;
-using PostSharp.Patterns.Diagnostics;
+//using PostSharp.Patterns.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Web.WebSockets;
+using Newtonsoft.Json.Linq;
 
-[assembly: Log]
-[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributeExclude = true, AttributePriority = 3)]
+//[assembly: Log]
+//[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:\\.\\.ctor\\(\\)$")]
 namespace Inscription_mp
 {
 	public class App : Application
@@ -72,12 +74,14 @@ namespace Inscription_mp
 			if (!(_consoleAttached = AttachConsole(ATTACH_PARENT_PROCESS)))
 			{ Logger.Warn("Could not find Console to attach to."); }
 
-			LoggingServices.DefaultBackend = Server.InitializeBackend();
+			//LoggingServices.DefaultBackend = 
+				Inscription_Server.App.InitializeBackend();
 			SetupScene setupScene = new SetupScene();
 			Scene.RegisterScene(setupScene);
-			List<Scene> list = new List<Scene>();
-			list.Add(new SetupScene());
+			BoardScene boardScene = new BoardScene(new JObject());
+			Scene.RegisterScene(boardScene);
 			sceneViewList.Add(typeof(SetupScene).FullName, new SetupView(setupScene));
+			sceneViewList.Add(typeof(BoardScene).FullName, new BoardView(boardScene));
 			app.InitializeComponent();
 			app.Run();
 			FreeConsole();
@@ -85,7 +89,7 @@ namespace Inscription_mp
 		}
 		public static void StartLocalServer()
 		{
-			Server = new Server(new LocalServerManager(IPAddress.Any));
+			Server = new LocalServer(IPAddress.Any);
 			Server.Start();
 			JoinDedicatedServer(IPAddress.Loopback);
 		}
@@ -96,19 +100,16 @@ namespace Inscription_mp
 			{
 				tcpc.Connect(ip, 5801);
 				Client = new Client(tcpc);
-				Client.WaitForMOTD();
 				looper = new Timer(app.Loop, null, 0, 1);
 			}
 			catch (SocketException e)
 			{
 				Logger.Error($"Could not connect. Are you a server is running on that IP?\n{e.Message}");
+				Inscription_mp.MainWindow.ShowMainView();
 			}
-			catch
+			catch (Exception e)
 			{
-
-			}
-			finally
-			{
+				Logger.Error($"{e.Message}\n\n{e.StackTrace}");
 				Inscription_mp.MainWindow.ShowMainView();
 			}
 		}

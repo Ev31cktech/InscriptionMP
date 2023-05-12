@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Inscription_mp
 {
@@ -15,6 +17,7 @@ namespace Inscription_mp
 
 		public Client(TcpClient socket) : base(socket)
 		{
+			WaitForMOTD();
 		}
 		public void WaitForMOTD()
 		{
@@ -27,23 +30,32 @@ namespace Inscription_mp
 					break;
 				Thread.Sleep(500);
 			}
+
 			NetworkPacket[] packets = ReadData();
-			foreach (JObject i in packets[0].data) //only packet 0 should contain the MOTD and client data
+
+			bool notMOTD = false;
+			List<JObject> data = packets[0].data.Children<JObject>().ToList();
+			JObject token;
+			if ((token = data.Find(i => (i.First as JProperty).Name == "Message")) != null)
 			{
-				JToken client = null;
-				if (i.ContainsKey("Message"))
-				{ Task.Run(() => MessageBox.Show(i["Message"].Value<string>())) ;}
-				else if (i.TryGetValue("client", out client))
-				{
-					UserID = client["ID"].Value<uint>();
-					IsHost = client["IsHost"].Value<bool>();
-				}
-				else
-				{ throw new Exception("First package did not contain MOTD data. Disconnecting"); }
+				string message = token.Value<string>("Message");
+				Task.Run(() => MessageBox.Show(message));
 			}
+			else
+				notMOTD = true;
+			JToken client = data.Find(i => (i.First as JProperty).Name == "client")["client"];
+			if (client != null)
+			{
+				UserID = client.Value<uint>("ID");
+				IsHost = client.Value<bool>("IsHost");
+			}
+			else
+				notMOTD = true;
+			if (notMOTD)
+				throw new Exception("First package did not contain MOTD data. Disconnecting");
 			HandleActions(packets);
 			Username = $"{App.Settings.Username}P{UserID}";
-			AddData("Username",Username);
+			AddData("Username", Username);
 			Loop();
 		}
 		public override void ChangeScene(JObject data)

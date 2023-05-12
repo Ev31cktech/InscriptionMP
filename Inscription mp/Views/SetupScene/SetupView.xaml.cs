@@ -33,7 +33,7 @@ namespace Inscription_mp.Views
 		}
 		private void StartGameBTN_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-
+			thisScene.RunAction(App.Client, thisScene.StartGame, thisScene.ToJObject());
 		}
 	}
 }

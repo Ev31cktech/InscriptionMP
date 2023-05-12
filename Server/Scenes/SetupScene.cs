@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Inscription_Server.Serialization;
+using Inscription_Server.NetworkManagers;
 
 namespace Inscription_Server.Scenes
 {
@@ -7,9 +8,10 @@ namespace Inscription_Server.Scenes
 	{
 		public ObservableList<Player> Team1 { get; protected set; } = new ObservableList<Player>();
 		public ObservableList<Player> Team2 { get; protected set; } = new ObservableList<Player>();
+		public JObject GameSettings { get; protected set; }	= new JObject();
 		public SetupScene() : base()
 		{
-			InitializeScene(AddPlayer, SwitchTeam);
+			InitializeScene(AddPlayer, SwitchTeam, StartGame);
 		}
 
 		public void AddPlayer(JObject data)
@@ -41,6 +43,10 @@ namespace Inscription_Server.Scenes
 					Team1.Add(pData);
 					break;
 			}
+		}
+		public void StartGame(JObject data)
+		{
+			Server.Start_Game(data);
 		}
 		public struct Player : IToJObject
 		{

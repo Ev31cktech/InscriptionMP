@@ -96,7 +96,7 @@ namespace Inscription_Server
 			}
 			catch (Exception e)
 			{
-				Server.Logger.Error(e);
+				App.Logger.Error(e);
 			}
 		}
 		public void Loop()
