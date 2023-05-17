@@ -1,0 +1,42 @@
+[plantuml, class-diagram, svg]
+----
+@startuml
+class Server{
+	- clients[] : Client
+	--functions--
+	+ Loop
+}
+class Client{
+	- currentScene : Scene
+}
+abstract class Scene{
+	+ Change
+}
+@enduml
+
+----
+```
+class Server{
+	public override void Loop()
+	{
+		while(setupState && tcpListener.Pending())
+		{ 
+			Client client = new Client(tcpListener.AcceptTcpClient());
+			client.AddData(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
+			//TODO Change Scene
+			tcpClients.Add(client);
+		}
+			
+		for(int i = 0; i < tcpClients.Count; i++)
+		{
+			Client client = tcpClients[i];
+			if(!client.Connected)
+			{
+				tcpClients.RemoveAt(i--);
+			}
+			if(!client.Handled)
+			{ client.Loop(); }
+		}
+	}
+}
+````

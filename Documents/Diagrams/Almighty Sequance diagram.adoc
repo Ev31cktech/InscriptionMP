@@ -1,0 +1,37 @@
+[plantuml, sequance-diagram ,svg]
+----
+@startuml
+
+!pragma teoz true
+
+box "Server"
+Participant App as ServerApp
+box #pink
+Participant Server as Server
+Participant Client as ServerClient
+Participant Scene as ServerScene
+endbox
+endbox
+
+box "Client"
+box #lightblue
+Participant Client as Client
+Participant Scene as Scene
+Participant View as View
+endBox
+Participant MainView
+Participant MainWindow as Window
+Participant App as ClientApp
+endbox
+
+== Server Startup ==
+ServerApp -> Server : constructor
+Server -> ServerApp
+
+== Client Statup ==
+autoActivate on
+ClientApp -> Window : Create and show
+
+==  ==
+@enduml
+----
