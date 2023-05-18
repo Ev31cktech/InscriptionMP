@@ -42,11 +42,11 @@ namespace Inscription_Server
 			Type thisObj = GetType();
 			Sync(dataToken, thisObj, this);
 		}
-		private void Sync(JToken data, Type thisObj, object var)
+		protected void Sync(JToken data, Type parentType, object var)
 		{
 			foreach (var token in data.Children())
 			{
-				JProperty parent;
+				JProperty parent = token.Parent as JProperty;
 				switch (token.Type)
 				{
 					//==============================JValueTypes====================================
@@ -54,21 +54,25 @@ namespace Inscription_Server
 					case JTokenType.Float:
 					case JTokenType.String:
 					case JTokenType.Boolean:
-						parent = token.Parent as JProperty;
 						Sync(parent.Name, (token as JValue).Value, var);
 						break;
 					case JTokenType.Array:
-						parent = token.Parent as JProperty;
 						Sync(parent, token as JArray, var);
 						break;
 					//===============================JTokenTypes===================================
 					case JTokenType.Property:
-						Sync(token, thisObj, var);
+						if (token.First.Type == JTokenType.Null)
+							return;
+						if(token.First.Type == JTokenType.Object)
+						{
+							Type pt = var.GetType().GetRuntimeProperty((token as JProperty).Name).PropertyType;
+							var = Activator.CreateInstance(pt);
+							Sync(token, pt, var);
+						}
+						Sync(token, parentType, var);
 						break;
 					case JTokenType.Object:
-						parent = token.Parent as JProperty;
-						var = Activator.CreateInstance(thisObj.GetRuntimeProperty(parent.Name).PropertyType); //TODO werkt di?
-						Sync(token, thisObj, var);
+						Sync(token, parentType, var);
 						break;
 					/*
 					case JTokenType.None:
@@ -96,7 +100,6 @@ namespace Inscription_Server
 					*/
 					default:
 						throw new NotImplementedException($"Type '{token.Type}' is not implemented");
-						break;
 				}
 			}
 		}
@@ -157,17 +160,16 @@ namespace Inscription_Server
 		{
 			return $"{action.Target.GetType().FullName}.{action.Method.Name}";
 		}
-		public void RunAction(Client client, Action<JObject> action, JObject data)
+		public void RunAction(Client sender, Action<JObject> action, JObject data)
 		{
-			client.AddAction(action,data);
-			OnActionRun(client, new ActionRunEventData(action, data));
+			OnActionRun(sender, new ActionRunEventData(action, data));
 		}
-		public void TryRunAction(Client client, string func, JObject data)
+		public void TryRunAction(Client sender, string func, JObject data)
 		{
 			Action<JObject> action;
 			if(!actions.TryGetValue(func, out action))
 			throw new ActionNotFoundExceptionException();
-			OnActionRun(client, new ActionRunEventData(action, data));
+			OnActionRun(sender, new ActionRunEventData(action,data));
 		}
 
 		public void OnActionRun(Client sender, ActionRunEventData e)

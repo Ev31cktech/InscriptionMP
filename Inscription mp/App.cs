@@ -2,7 +2,6 @@
 
 using Inscription_mp.Exceptions;
 using Inscription_mp.Views;
-using Inscription_Server;
 using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
 using System;
@@ -15,8 +14,9 @@ using log4net;
 //using PostSharp.Patterns.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
-using System.Web.WebSockets;
 using Newtonsoft.Json.Linq;
+using Inscription_mp.Views.BoardScene;
+using Inscription_Server;
 
 //[assembly: Log]
 //[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:\\.\\.ctor\\(\\)$")]

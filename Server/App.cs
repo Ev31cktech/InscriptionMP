@@ -27,6 +27,7 @@ namespace Inscription_Server
 		private static bool shutdown = false;
 		public static ILog Logger { get { return LogManager.GetLogger("SERVER"); } }
 
+		public static Server Server { get; internal set; }
 
 		private static Command[] commands = new Command[]
 			{
@@ -113,7 +114,7 @@ namespace Inscription_Server
 
 		private static bool Command_Start(params String[] Args)
 		{
-			IPAddress ip = IPAddress.Any;
+			IPAddress ip = IPAddress.Loopback;
 			if (Args.Length > 1 && IPAddress.TryParse(Args[0], out ip))
 			{
 				Logger.Error("Invalid IP");

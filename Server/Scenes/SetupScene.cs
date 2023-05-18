@@ -13,7 +13,13 @@ namespace Inscription_Server.Scenes
 		{
 			InitializeScene(AddPlayer, SwitchTeam, StartGame);
 		}
-
+		public void AddPlayer(uint id, string name)
+		{
+			if(Team2.Count >= Team1.Count)
+			{ RunAction(null, AddPlayer, new Player(id, name, Team.one).ToJObject()); }
+			else
+			{ RunAction(null, AddPlayer,new Player(id, name, Team.two).ToJObject()); }
+		}
 		public void AddPlayer(JObject data)
 		{
 			Player pData = new Player(data);
@@ -46,7 +52,7 @@ namespace Inscription_Server.Scenes
 		}
 		public void StartGame(JObject data)
 		{
-			Server.Start_Game(data);
+			Server.Start_Game(this.ToJObject());
 		}
 		public struct Player : IToJObject
 		{

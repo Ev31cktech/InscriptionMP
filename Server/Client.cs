@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Inscription_Server.Exceptions;
 using Inscription_Server.Events.INotifyEvent;
+using Inscription_Server.NetworkManagers;
 
 namespace Inscription_Server
 {
@@ -19,6 +20,7 @@ namespace Inscription_Server
 		public string Username { get; protected set; }
 		public Scene CurrentScene { get; protected set; }
 		public bool Connected { get; private set; } = true;
+
 		protected StreamWriter writer;
 		protected StreamReader reader;
 		protected TcpClient socket;
@@ -43,7 +45,7 @@ namespace Inscription_Server
 					break;
 				Thread.Sleep(500);
 			}
-			NetworkPacket[] packets = ReadData();
+			NetworkPacket[] packets = GetPackets();
 			foreach (JObject data in packets[0].data) //only packet 0 should contain the MOTD and client data
 			{
 				if (data.ContainsKey("Username"))
@@ -68,7 +70,7 @@ namespace Inscription_Server
 			nPacket.actions.Add(action);
 		}
 
-		protected NetworkPacket[] ReadData()
+		protected NetworkPacket[] GetPackets()
 		{
 			List<NetworkPacket> packets = new List<NetworkPacket>();
 
@@ -88,22 +90,28 @@ namespace Inscription_Server
 			}
 			return packets.ToArray();
 		}
-		public virtual void RunAction(Client client, String func, JObject data)
+		public virtual void RunAction(Client sender, String func, JObject data)
 		{
 			try
 			{
-				CurrentScene.TryRunAction(client, func, data);
+				CurrentScene.TryRunAction(sender, func, data);
 			}
 			catch (Exception e)
 			{
 				App.Logger.Error(e);
+				throw;
 			}
 		}
 		public void Loop()
 		{
 			if (Available)
 			{
-				HandleActions(ReadData());
+				NetworkPacket[] packets = GetPackets();
+				foreach (NetworkPacket packet in packets)
+				{
+					HandleData(packet);
+					HandleActions(packet);
+				}
 			}
 			//if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)
 			//{
@@ -116,23 +124,19 @@ namespace Inscription_Server
 				nPacket = new NetworkPacket(nPacket.PacketN + 1);
 			}
 		}
-		public void HandleActions(NetworkPacket[] data)
+		public void HandleActions(NetworkPacket packet)
 		{
-			foreach (NetworkPacket packet in data)
+			foreach (JObject i in packet.actions)
 			{
-				foreach (JObject i in packet.actions)
-				{
-					switch (true)
-					{
-						case true when i["target"].Value<string>() == "Inscription_Server.Client.ChangeScene":
-							ChangeScene(i["data"].Value<JObject>());
-							break;
-						default:
-							RunAction(this,i["target"].Value<string>(), i["data"].Value<JObject>());
-							break;
-					}
-				}
+				if (i.Value<string>("target") == "Inscription_Server.Client.ChangeScene")
+					ChangeScene(i["data"].Value<JObject>());
+				else
+					RunAction(this, i["target"].Value<string>(), i["data"].Value<JObject>());
 			}
+		}
+		public void HandleData(NetworkPacket packet)
+		{//TODO fix function
+
 		}
 		public virtual void ChangeScene(JObject data)
 		{
@@ -144,8 +148,9 @@ namespace Inscription_Server
 		private void CurrentScene_ActionRunEvent(Client sender, ActionRunEventData e)
 		{
 			if (sender != this)
-				AddAction(e.Action, e.Data);
-			e.Action.Invoke(e.Data);
+			{ AddAction(e.Action, e.Data); }
+			if (Server.IsServer)
+			{ e.Action.Invoke(e.Data); }
 		}
 
 		public void ChangeScene(Scene scene)

@@ -1,5 +1,5 @@
 ﻿<inscription_mp:View  
-    x:Class="Inscription_mp.Views.BoardView" 
+    x:Class="Inscription_mp.Views.BoardScene.BoardView" 
 	x:TypeArguments="inscription_scenes:BoardScene" 
 	xmlns:inscription_mp="clr-namespace:Inscription_mp"
 	xmlns:inscription_scenes="clr-namespace:Inscription_Server.Scenes;assembly=Inscription_Server"
@@ -10,7 +10,10 @@
 	xmlns:local="clr-namespace:Inscription_mp.Views"
 	mc:Ignorable="d" 
 	d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-
-    </Grid>
+    <Viewbox>
+        <StackPanel>
+            <StackPanel x:Name="OpponentGrid" FlowDirection="LeftToRight"/>
+            <StackPanel x:Name="PlayerGrid" FlowDirection="LeftToRight" MouseDown="BoardGrid_MouseDown"/>
+        </StackPanel>
+    </Viewbox>
 </inscription_mp:View>

@@ -4,7 +4,9 @@ using Newtonsoft.Json.Linq;
 //using PostSharp.Patterns.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Threading;
+using static Inscription_Server.Scenes.SetupScene;
 
 //[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_|^.?Loop", AttributeExclude = true, AttributePriority = 3)]
 namespace Inscription_Server.NetworkManagers
@@ -16,12 +18,13 @@ namespace Inscription_Server.NetworkManagers
 		public Timer looper;
 		private bool looping = false;
 		public bool SetupState { get; set; } = true;
+		public static bool IsServer { get => server != null; }
 		public Scene CommonScene { get; private set; }
 		public bool IsAllive { get { return looper != null; } }
 		protected List<Client> clients = new List<Client>();
 
-		private string[] team1 = new string[0];
-		private string[] team2 = new string[0];
+		private Player[] team1 = new Player[0];
+		private Player[] team2 = new Player[0];
 		public Server()
 		{
 			server = this;
@@ -37,10 +40,11 @@ namespace Inscription_Server.NetworkManagers
 			server.SetupState = false;
 			if (server == null) //ik ben geen server
 				return;
-			server.team1 = data.Value<string[]>("team1");
-			server.team2 = data.Value<string[]>("team2");
+			JToken sceneData = data["sceneData"];
+			//server.team1 = sceneData.Values<Player>("Team1");
+			//server.team2 = sceneData.Value<Player[]>("Team2");
 			//generate new map
-			BoardScene scene = new BoardScene(new JObject());
+			BoardScene scene = new BoardScene(sceneData.Value<JObject>("rules"));
 			server.clients.ForEach( i => {i.ChangeScene(scene);});
 		}
 		public void Stop()

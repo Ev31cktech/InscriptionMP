@@ -9,9 +9,10 @@ namespace Inscription_Server.NetworkManagers
 	public class LocalServer : Server
 	{
 		TcpListener tcpListener;
-		private uint userID = 0;
+		private uint userID;
 		public LocalServer(IPAddress ip)
 		{
+			userID = 0;
 			tcpListener = new TcpListener(ip, 5801);
 		}
 
@@ -45,9 +46,8 @@ namespace Inscription_Server.NetworkManagers
 						continue;
 					}
 					SetupScene setupScene = CommonScene as SetupScene;
-					SetupScene.Player Pdata = new SetupScene.Player(client.UserID, client.Username, SetupScene.Team.one);
 					client.ChangeScene(setupScene);
-					setupScene.RunAction(client, setupScene.AddPlayer, Pdata.ToJObject());
+					setupScene.AddPlayer(client.UserID,client.Username);
 					clients.Add(client);
 				}
 				else
