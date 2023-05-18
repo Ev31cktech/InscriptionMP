@@ -19,6 +19,7 @@ using Inscription_mp.Views.BoardScene;
 using Inscription_Server;
 
 //[assembly: Log]
+//[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributePriority = 3)]
 //[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:\\.\\.ctor\\(\\)$")]
 namespace Inscription_mp
 {
