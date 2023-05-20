@@ -15,6 +15,7 @@ namespace Inscription_Server
 {
 	public abstract class Scene : INotifyActionRun, IToJObject
 	{
+		private static JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings() { ContractResolver = new IgnoreFieldsContractResolver() });
 		private Dictionary<string, Action<JObject>> actions = new Dictionary<string, Action<JObject>>();
 		private static Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
 
@@ -63,16 +64,19 @@ namespace Inscription_Server
 					case JTokenType.Property:
 						if (token.First.Type == JTokenType.Null)
 							return;
-						if(token.First.Type == JTokenType.Object)
+						if (token.First.Type == JTokenType.Object)
 						{
 							Type pt = var.GetType().GetRuntimeProperty((token as JProperty).Name).PropertyType;
-							var = Activator.CreateInstance(pt);
-							Sync(token, pt, var);
+							var val = Activator.CreateInstance(pt);
+							Sync(token, pt, val);
 						}
-						Sync(token, parentType, var);
+						else
+						{ Sync(token, parentType, var); }
 						break;
 					case JTokenType.Object:
 						Sync(token, parentType, var);
+						break;
+					case JTokenType.Null:
 						break;
 					/*
 					case JTokenType.None:
@@ -80,8 +84,6 @@ namespace Inscription_Server
 					case JTokenType.Constructor:
 						break;
 					case JTokenType.Comment:
-						break;
-					case JTokenType.Null:
 						break;
 					case JTokenType.Undefined:
 						break;
@@ -130,6 +132,8 @@ namespace Inscription_Server
 		private void Sync(string name, object value, object var)
 		{
 			PropertyInfo pi = var.GetType().GetRuntimeProperty(name);
+			if (pi == null)
+				throw new UnknownPropertyException(name, var);
 			if (pi.PropertyType.IsEnum)
 				value = Enum.ToObject(pi.PropertyType, value);
 			else
@@ -141,7 +145,7 @@ namespace Inscription_Server
 		public virtual JObject ToJObject()
 		{
 			JObject obj = JObject.Parse($"{{\"sceneName\":\"{SceneName}\"}}");
-			obj.Add("sceneData", JToken.FromObject(this));
+			obj.Add("sceneData", JObject.FromObject(this, serializer));
 			return obj;
 		}
 		public static void RegisterScene(Scene scene)
@@ -167,9 +171,9 @@ namespace Inscription_Server
 		public void TryRunAction(Client sender, string func, JObject data)
 		{
 			Action<JObject> action;
-			if(!actions.TryGetValue(func, out action))
-			throw new ActionNotFoundExceptionException();
-			OnActionRun(sender, new ActionRunEventData(action,data));
+			if (!actions.TryGetValue(func, out action))
+				throw new ActionNotFoundExceptionException();
+			OnActionRun(sender, new ActionRunEventData(action, data));
 		}
 
 		public void OnActionRun(Client sender, ActionRunEventData e)

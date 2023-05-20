@@ -12,8 +12,8 @@
 	d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox>
         <StackPanel>
-            <StackPanel x:Name="OpponentGrid" FlowDirection="LeftToRight"/>
-            <StackPanel x:Name="PlayerGrid" FlowDirection="LeftToRight" MouseDown="BoardGrid_MouseDown"/>
+            <StackPanel x:Name="OpponentSTP" Orientation="Horizontal"/>
+            <StackPanel x:Name="PlayerSTP" Orientation="Horizontal" MouseDown="BoardGrid_MouseDown"/>
         </StackPanel>
     </Viewbox>
 </inscription_mp:View>

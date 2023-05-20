@@ -1,6 +1,8 @@
 ﻿namespace Inscription_Server
 {
-	public class Sigils
+	public enum Team
 	{
+		one,
+		two
 	}
 }

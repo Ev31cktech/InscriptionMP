@@ -31,7 +31,7 @@ namespace Inscription_mp
 				Thread.Sleep(500);
 			}
 
-			NetworkPacket[] packets = ReadData();
+			NetworkPacket[] packets = GetPackets();
 
 			bool notMOTD = false;
 			List<JObject> data = packets[0].data.Children<JObject>().ToList();
@@ -53,7 +53,10 @@ namespace Inscription_mp
 				notMOTD = true;
 			if (notMOTD)
 				throw new Exception("First package did not contain MOTD data. Disconnecting");
-			HandleActions(packets);
+			foreach (NetworkPacket packet in packets)
+			{
+				HandleActions(packet);
+			}
 			Username = $"{App.Settings.Username}P{UserID}";
 			AddData("Username", Username);
 			Loop();

@@ -77,11 +77,5 @@ namespace Inscription_Server.Scenes
 				return JObject.FromObject(this);
 			}
 		}
-
-		public enum Team
-		{
-			one,
-			two
-		}
 	}
 }

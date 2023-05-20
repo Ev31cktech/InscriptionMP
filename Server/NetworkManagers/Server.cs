@@ -44,7 +44,7 @@ namespace Inscription_Server.NetworkManagers
 			//server.team1 = sceneData.Values<Player>("Team1");
 			//server.team2 = sceneData.Value<Player[]>("Team2");
 			//generate new map
-			BoardScene scene = new BoardScene(sceneData.Value<JObject>("rules"));
+			BoardScene scene = new BoardScene(sceneData.Value<JObject>("GameSettings"));
 			server.clients.ForEach( i => {i.ChangeScene(scene);});
 		}
 		public void Stop()

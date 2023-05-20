@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Inscription_Server;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using static Inscription_Server.Scenes.SetupScene;

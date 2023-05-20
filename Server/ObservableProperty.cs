@@ -2,7 +2,7 @@
 
 namespace Inscription_Server
 {
-	internal class ObservableProperty<T> : INotifyValueChanged
+	public class ObservableProperty<T> : INotifyValueChanged
 	{
 		private T value;
 		public T Value
@@ -19,7 +19,7 @@ namespace Inscription_Server
 		public event ValueChangedEventHandler ValueChanged;
 		public void OnValueChanged(ValueChangedEventArgs e)
 		{
-			throw new System.NotImplementedException();
+			ValueChanged?.Invoke(this, e);
 		}
 	}
 }
