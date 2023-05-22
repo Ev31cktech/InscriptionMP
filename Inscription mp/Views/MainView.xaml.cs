@@ -17,27 +17,12 @@ namespace Inscription_mp.Views
 
 		private void CreateGameButton_Click(object sender, RoutedEventArgs e)
 		{
-
-			Task.Run(() =>
-			{
-				try
-				{ App.StartLocalServer(); }
-				catch
-				{ ToggleButtons(); }
-			});
-			//MainWindow.MainWindow_ShowView(new CreateGameView());
+			MainWindow.MainWindow_ShowView(new CreateGameView());
 		}
 
 		private void JoinGameButton_Click(object sender, RoutedEventArgs e)
 		{
-			ToggleButtons();
-			Task.Run(() =>
-			{
-				try
-				{ App.JoinDedicatedServer(IPAddress.Loopback); }
-				catch
-				{ ToggleButtons(); }
-			});
+			MainWindow.MainWindow_ShowView(new JoinGameView());
 		}
 
 		private void SettingsButton_Click(object sender, RoutedEventArgs e)
