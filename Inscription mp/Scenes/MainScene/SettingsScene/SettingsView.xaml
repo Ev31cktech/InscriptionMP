@@ -6,12 +6,11 @@
       xmlns:local="clr-namespace:Inscription_mp.Scenes.MainScene"
       mc:Ignorable="d" 
       Title="SettingsView"
-      KeyDown="Settings_KeyDown"
       d:DesignHeight="1080" d:DesignWidth="1920"
       Background="#1e1e28">
 
     <DockPanel>
-        <Label DockPanel.Dock="Top" HorizontalContentAlignment="Center" FontFamily="Heavyweight" FontSize="24">Settings</Label>
+        <Label DockPanel.Dock="Top" HorizontalContentAlignment="Center" FontFamily="Heavyweight" FontSize="24" Foreground="White">Settings</Label>
         <Grid>
             <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
         </Grid>

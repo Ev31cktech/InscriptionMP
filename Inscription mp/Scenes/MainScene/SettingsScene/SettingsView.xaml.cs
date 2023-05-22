@@ -13,9 +13,14 @@ namespace Inscription_mp.Scenes.MainScene
             InitializeComponent();
         }
 
-        private void Settings_KeyDown(object sender, KeyEventArgs e)
+        public void Settings_KeyDown(object sender, KeyEventArgs e)
         {
-            
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    MainWindow.Scene = new MainScene();
+                    break;
+            }
         }
     }
 }
