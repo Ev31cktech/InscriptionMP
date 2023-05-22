@@ -1,30 +1,58 @@
-﻿using Inscription_mp.Exceptions;
+﻿#define DEBUG_CONSOLE
+
+using Inscription_mp.Exceptions;
 using Inscription_mp.Views;
-using Inscription_Server;
 using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using log4net;
+//using PostSharp.Patterns.Diagnostics;
+using Newtonsoft.Json;
+using System.Threading;
+using Newtonsoft.Json.Linq;
+using Inscription_mp.Views.BoardScene;
+using Inscription_Server;
 
+//[assembly: Log]
+//[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributePriority = 3)]
+//[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:\\.\\.ctor\\(\\)$")]
 namespace Inscription_mp
 {
 	public class App : Application
 	{
-		private static Server server;
-		private static Client client;
-		private static Timer timer;
-		private static Dictionary<string, Page> scenePageList = new Dictionary<string, Page>();
+		private static App app { get; } = new App();
+		public static Settings Settings
+		{
+			get
+			{
+				if (Inscription_mp.Properties.Settings.Default.AllSettings != "")
+				{ app.settings = JsonConvert.DeserializeObject<Settings>(Inscription_mp.Properties.Settings.Default.AllSettings); }
+				return app.settings;
+			}
+			set
+			{
+				app.settings = value;
+				Inscription_mp.Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(value);
+				Inscription_mp.Properties.Settings.Default.Save();
+			}
+		}
+		public static Server Server { get; private set; }
+		public static Client Client { get; private set; }
+		public static ILog Logger { get { return LogManager.GetLogger("CLIENT"); } }
+		private static Timer looper;
+		private static Dictionary<string, View> sceneViewList = new Dictionary<string, View>();
+		private Settings settings;
 		private bool _contentLoaded;
+		private static bool looping = false;
 		private static bool _consoleAttached;
 		public void InitializeComponent()
 		{
+
 			if (_contentLoaded)
 			{
 				return;
@@ -32,76 +60,99 @@ namespace Inscription_mp
 			_contentLoaded = true;
 			this.StartupUri = new System.Uri("MainWindow.xaml", System.UriKind.Relative);
 		}
-		#if DEBUG_CONSOLE
-		[DllImport("kernel32.dll")]
-		static extern bool AllocConsole();
-		#endif
+
+
 		[DllImport("kernel32.dll")]
 		static extern bool AttachConsole(int dwProcessId);
 		[DllImport("kernel32.dll")]
 		static extern bool FreeConsole();
-		[DllImport("kernel32.dll")]
-		static extern bool SetConsoleMode(IntPtr handle, int mode);
-		[DllImport("kernel32.dll")]
-		static extern IntPtr GetConsoleWindow();
 		private const int ATTACH_PARENT_PROCESS = -1;
 
-		public static bool IsHost { get{return client.IsHost; } }
 
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			#region ConsoleAttach
 			if (!(_consoleAttached = AttachConsole(ATTACH_PARENT_PROCESS)))
-			{ Console.WriteLine("Could not find Console to attach to.");}
-#if DEBUG_CONSOLE
-			if(!(_consoleAttached = AllocConsole()))
-			{ Console.WriteLine("Console could not be created"); }
-#endif
-			if(!_consoleAttached)
-			{Console.WriteLine("continuing without console");}
-			if(_consoleAttached && SetConsoleMode(GetConsoleWindow(),2))
-			{ Console.WriteLine("Could not set console mode");}
-#endregion
-			Scene.RegisterScene(new SetupScene());
-			scenePageList.Add(typeof(SetupScene).FullName, new SetupView(null));
-			timer = new Timer() {Interval = 100};
-			timer.Elapsed += (s,e) => {
-				client.Loop();
-			};
+			{ Logger.Warn("Could not find Console to attach to."); }
 
-			App app = new App();
+			//LoggingServices.DefaultBackend = 
+				Inscription_Server.App.InitializeBackend();
+			SetupScene setupScene = new SetupScene();
+			Scene.RegisterScene(setupScene);
+			BoardScene boardScene = new BoardScene(new JObject());
+			Scene.RegisterScene(boardScene);
+			sceneViewList.Add(typeof(SetupScene).FullName, new SetupView(setupScene));
+			sceneViewList.Add(typeof(BoardScene).FullName, new BoardView(boardScene));
 			app.InitializeComponent();
 			app.Run();
 			FreeConsole();
+			Close();
 		}
 		public static void StartLocalServer()
 		{
-			server = new Server(new LocalServerManager(IPAddress.Any));
-			server.Start();
-			JoinDedicatedServer(IPAddress.Loopback,true);
+			Server = new LocalServer(IPAddress.Any);
+			Server.Start();
+			JoinDedicatedServer(IPAddress.Loopback);
 		}
-		public static void JoinDedicatedServer(IPAddress ip, bool isHost = false)
+		public static void JoinDedicatedServer(IPAddress ip)
 		{
 			TcpClient tcpc = new TcpClient();
-			tcpc.Connect(ip,5801);
-			client = new Client(tcpc,isHost);
-			timer.Start();
+			try
+			{
+				tcpc.Connect(ip, 5801);
+				Client = new Client(tcpc);
+				looper = new Timer(app.Loop, null, 0, 1);
+			}
+			catch (SocketException e)
+			{
+				Logger.Error($"Could not connect. Are you a server is running on that IP?\n{e.Message}");
+				Inscription_mp.MainWindow.ShowMainView();
+			}
+			catch (Exception e)
+			{
+				Logger.Error($"{e.Message}\n\n{e.StackTrace}");
+				Inscription_mp.MainWindow.ShowMainView();
+			}
+		}
+		public void Loop(object sender)
+		{
+			if (!looping)
+			{
+				try
+				{
+					looping = true;
+					if(Client.Connected)
+						Client.Loop();
+
+				}
+				catch (Exception e)
+				{
+					Logger.Error(e.Message, e);
+					MessageBox.Show($"{e.Message}\n\n{e.StackTrace}"); //TODO do not use Messagebox
+				}
+				finally
+				{
+					looping = false;
+				}
+			}
 		}
 		public static void Close()
 		{
-			if(server != null)
-			server.Stop();
-			if(client != null)
-			client.Shutdown();
+			if (Server != null)
+				Server.Stop();
+			if(looper != null)
+				looper.Dispose();
+			if (Client != null)
+				Client.Shutdown();
+			app.Shutdown();
 		}
 
-		internal static Page GetPage(Scene scene)
+		internal static View GetView(Scene scene)
 		{
-			Page page;
-			if(!scenePageList.TryGetValue(scene.GetType().FullName,out page))
-			{throw new UnknownPageException("No Page associated with Scene"); }
-			return page;
+			View view;
+			if (!sceneViewList.TryGetValue(scene.GetType().FullName, out view))
+			{ throw new UnknownViewException("No view associated with Scene"); }
+			return view;
 		}
 	}
 }

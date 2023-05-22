@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System.Windows.Controls;
 using System.ComponentModel;
-using System;
 using Inscription_mp.Views;
 
 namespace Inscription_mp
@@ -12,21 +11,16 @@ namespace Inscription_mp
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private Settings Settings { get{return settingsView.Settings; } }
 		private static MainWindow mw;
 		private static SettingsView settingsView;
 		public MainWindow()
 		{
-			Console.WriteLine("this is a test");
 			InitializeComponent();
 			mw = this;
-			Settings tempset = new Settings();
-			if (Properties.Settings.Default.AllSettings != "")
-			{ tempset = JsonConvert.DeserializeObject<Settings>(Properties.Settings.Default.AllSettings); }
-			settingsView = new SettingsView(tempset);
-			Left = Settings.window.Left; Top = Settings.window.Top;
-			WindowState = Settings.window.State;
-			Closing += MainWindow_Closing;
+			
+			settingsView = new SettingsView();
+			Left = App.Settings.window.Left; Top = App.Settings.window.Top;
+			WindowState = App.Settings.window.State;
 		}
 
 		/// <summary>
@@ -35,20 +29,22 @@ namespace Inscription_mp
 		/// </summary>
 		public static void Mainwindow_ShowSettingsView()
 		{
-			MainWindow_ShowView(settingsView);
+			mw.ShowView(settingsView);
 		}
-		public static void MainWindow_ShowView(Page view)
+		public static void MainWindow_ShowView(View view)
 		{
-			mw.Dispatcher.Invoke(mw.ShowView, view);
+			mw.Dispatcher.InvokeAsync(() => { mw.ShowView(view); });
 		}
-		private void ShowView(Page view)
+		private void ShowView(UserControl view)
 		{
 			Content = view;
 		}
-		private void MainWindow_Closing(object sender, CancelEventArgs e)
+		public static void ShowMainView()
 		{
-			Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(Settings);
-			Properties.Settings.Default.Save();
+			mw.Dispatcher.InvokeAsync(() =>
+			{
+				MainWindow_ShowView(new MainView());
+			});
 		}
 
 		public static void Exit()

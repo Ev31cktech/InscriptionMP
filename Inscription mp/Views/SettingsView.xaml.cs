@@ -5,12 +5,11 @@ namespace Inscription_mp.Views
 	/// <summary>
 	/// Interaction logic for SettingsView.xaml
 	/// </summary>
-	public partial class SettingsView : Page
+	public partial class SettingsView : View
 	{
-		public Settings Settings { get; private set; }
-		public SettingsView(Settings settings)
+		public Settings Settings { get { return App.Settings; } }
+		public SettingsView() 
 		{
-			Settings = settings;
 			InitializeComponent();
 		}
 	}

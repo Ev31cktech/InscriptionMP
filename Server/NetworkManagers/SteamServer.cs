@@ -1,9 +1,8 @@
 ﻿using Steamworks;
-using System;
 
 namespace Inscription_Server.NetworkManagers
 {
-	public class SteamManager : AServerManager
+	public class SteamServer : Server
 	{
 		public string user
 		{
@@ -17,7 +16,6 @@ namespace Inscription_Server.NetworkManagers
 		public void Init()
 		{
 			Inited = SteamAPI.Init();
-			Console.WriteLine();
 		}
 		public override void Loop()
 		{
@@ -25,8 +23,7 @@ namespace Inscription_Server.NetworkManagers
 		}
 
 		public override void Shutdown()
-		{
-		}
+		{}
 
 	}
 }

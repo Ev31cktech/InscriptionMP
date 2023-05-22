@@ -1,39 +1,43 @@
-﻿using System;
-using System.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Inscription_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for MainView.xaml
 	/// </summary>
-	public partial class MainView : Page
+	public partial class MainView : View
 	{
-		Button[] buttons;
 		public MainView()
 		{
 			InitializeComponent();
-			buttons = new Button[]{
-				CreateGameBTN,
-				JoinGameBTN,
-				SettingsGameBTN,
-				ExitGameBTN
-			};
 		}
 
 		private void CreateGameButton_Click(object sender, RoutedEventArgs e)
 		{
-			App.StartLocalServer();
-			ToggleButtons();
+
+			Task.Run(() =>
+			{
+				try
+				{ App.StartLocalServer(); }
+				catch
+				{ ToggleButtons(); }
+			});
 			//MainWindow.MainWindow_ShowView(new CreateGameView());
 		}
 
 		private void JoinGameButton_Click(object sender, RoutedEventArgs e)
 		{
-			App.JoinDedicatedServer(IPAddress.Loopback);
 			ToggleButtons();
+			Task.Run(() =>
+			{
+				try
+				{ App.JoinDedicatedServer(IPAddress.Loopback); }
+				catch
+				{ ToggleButtons(); }
+			});
 		}
 
 		private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -47,8 +51,8 @@ namespace Inscription_mp.Views
 		}
 		private void ToggleButtons()
 		{
-			CreateGameBTN.IsEnabled = false;
-			JoinGameBTN.IsEnabled = false;
+			CreateGameBTN.IsEnabled = !CreateGameBTN.IsEnabled;
+			JoinGameBTN.IsEnabled = !JoinGameBTN.IsEnabled;
 		}
 	}
 }

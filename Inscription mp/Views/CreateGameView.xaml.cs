@@ -5,7 +5,7 @@ namespace Inscription_mp.Views
 	/// <summary>
 	/// Interaction logic for CreateGameView.xaml
 	/// </summary>
-	public partial class CreateGameView : Page
+	public partial class CreateGameView : View
 	{
 		public CreateGameView()
 		{

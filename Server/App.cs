@@ -1,34 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Timers;
-
+using System.Threading;
 using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
+using log4net;
+using log4net.Config;
+using log4net.Repository.Hierarchy;
+using Newtonsoft.Json.Linq;
+//using PostSharp.Patterns.Diagnostics;
+//using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
+
+//[assembly: Log(AttributePriority = 1)]
+//[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
+//[assembly: Log(AttributeTargetMembers = "regex:^..ctor", AttributeExclude = true, AttributePriority = 2)]
+//[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
 
 namespace Inscription_Server
 {
-	public class Server
+	public class App
 	{
 		private static Server server;
-		private AServerManager manager;
-		private List<string> team1 = new List<string>();
-		private List<string> team2 = new List<string>();
-		private Timer looper = new Timer() { Interval = 100 };
+		private static bool shutdown = false;
+		public static ILog Logger { get { return LogManager.GetLogger("SERVER"); } }
+
+		public static Server Server { get; internal set; }
 
 		private static Command[] commands = new Command[]
 			{
 				new Command(Command_Exit,"exit"),
 				new Command(Command_Help,"help"),
 				new Command(Command_Send,"send", "input"),
-				new Command(Command_Start,"start", "IPAddress")
+				new Command(Command_Start,"start", "IPAddress"),
+				new Command(Command_Stop,"stop"),
+				new Command(Command_Crash,"crash")
 			};
-		private static bool shutdown = false;
 		public static void Main(string[] args)
 		{
+			//LoggingServices.DefaultBackend = InitializeBackend();
+			InitializeBackend();
+			Logger.Info("Server Logging Enabled");
+			Stack<string> argStack = new Stack<string>(args);
 			Scene.RegisterScene(new SetupScene());
+			if (argStack.Count > 1)
+			{
+				RunCommand(String.Join(" ", argStack), commands);
+			}
 			try
 			{
 				while (!shutdown)
@@ -36,9 +56,10 @@ namespace Inscription_Server
 					String inp = Console.ReadLine();
 					if (!RunCommand(inp, commands))
 					{
-						Console.WriteLine("unknown command. Use help to see a list of commands");
+						Logger.Warn("unknown command. Use help to see a list of commands");
 					}
 				}
+				Console.WriteLine("Press any key to close the console");
 			}
 			catch (Exception e)
 			{
@@ -46,22 +67,18 @@ namespace Inscription_Server
 			}
 			Console.ReadKey();
 		}
-		public Server(AServerManager manager)
+		public static void InitializeBackend()
 		{
-			this.manager = manager;
-			looper.Elapsed += (s, e) => { manager.Loop(); };
+			XmlConfigurator.Configure(new FileInfo("logger.config"));
 		}
-		public void Start()
-		{
-			looper.Start();
-			Console.WriteLine("Server started");
-		}
-		public void Stop()
-		{
-			Console.WriteLine("Shutting down server...");
-			looper.Stop();
-			manager.Shutdown();
-		}
+
+
+		//public static Log4NetLoggingBackend InitializeBackend()
+		//{
+		//	XmlConfigurator.Configure(new FileInfo("logger.config"));
+		//	return new Log4NetLoggingBackend();
+		//}
+
 		private static bool RunCommand(String inp, Command[] commands)
 		{
 			for (int i = 0; i < commands.Length; i++)
@@ -72,16 +89,21 @@ namespace Inscription_Server
 					args.RemoveAt(0);
 					if (!commands[i].action.Invoke(args.ToArray()))
 					{
-						Console.WriteLine($"Incorrect use of command {inp.Split(' ')[0]}");
+						Logger.Error($"Incorrect use of command {inp.Split(' ')[0]}");
 						if (commands[i].arguments.Length > 0)
-							Console.WriteLine($"Expected folowing arguments:\n{commands[i].ListArguments()}");
+							Logger.Info($"Expected folowing arguments:\n{commands[i].ListArguments()}");
 					}
 					return true;
 				}
 			}
 			return false;
 		}
+
 		#region Commands
+		private static bool Command_Crash(String[] args)
+		{
+			throw new Exception("this is a test command to crash the program");
+		}
 
 		private static bool Command_Exit(String[] args)
 		{
@@ -89,29 +111,40 @@ namespace Inscription_Server
 			shutdown = true;
 			return shutdown;
 		}
+
 		private static bool Command_Start(params String[] Args)
 		{
-			IPAddress ip = IPAddress.Any;
+			IPAddress ip = IPAddress.Loopback;
 			if (Args.Length > 1 && IPAddress.TryParse(Args[0], out ip))
 			{
-				Console.WriteLine("Invalid IP");
-				return false;
+				Logger.Error("Invalid IP");
+				return true;
 			}
-			server = new Server(new LocalServerManager(ip));
+			if (server == null || !server.IsAllive)
+				server = new LocalServer(ip);
+			if (server.IsAllive)
+			{ Logger.Warn("Server is already running"); return true; }
 			server.Start();
 			return true;
 		}
+
+		private static bool Command_Stop(params String[] Args)
+		{
+			server.Stop();
+			return true;
+		}
+
 		private static bool Command_Help(String[] Args)
 		{
 			if (Args.Length < 1)
-			{ Console.WriteLine("this is the list of commands that can be used:"); }
+			{ Logger.Info("this is the list of commands that can be used:"); }
 			foreach (Command cm in commands)
 			{
 				if (Args.Length > 0 && Args[0] != cm.command)
 				{ continue; }
-				{ Console.WriteLine($"- {cm.command}"); }
+				{ Logger.Info($"- {cm.command}"); }
 				if (cm.arguments.Length > 0)
-				{ Console.WriteLine($"\t{cm.ListArguments()}"); }
+				{ Logger.Info($"\t{cm.ListArguments()}"); }
 			}
 			return true;
 		}
@@ -119,7 +152,6 @@ namespace Inscription_Server
 		{
 			return true;
 		}
-
 		#endregion
 		/// <summary>
 		/// The command object that holds the command name, decsription, 

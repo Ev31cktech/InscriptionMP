@@ -1,0 +1,24 @@
+[plantuml, sequance-diagram, svg]
+----
+@startuml
+participant Server
+participant Client
+participant SetupScene
+participant SetupView
+participant MapScene
+participant BoardScene
+participant BoardView
+
+SetupView -> Client : StartGame
+Client -> SetupScene : StartGame
+SetupScene -> Server : StartGame
+alt if is not server
+<-- Server
+end
+rnote over Server
+generate map
+end note 
+Server -> Client : ChangeScene(MapScene, data); 
+
+@enduml
+----
