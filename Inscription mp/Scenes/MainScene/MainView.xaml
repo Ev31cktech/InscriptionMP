@@ -22,13 +22,13 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Foreground" Value="#9F2530"/>
-            <Setter Property="FontFamily" Value="pack://application:,,,/Resourses/inscriptionfont.ttf"/>
-            <!--
-            -->
-            <Setter Property="FontStretch" Value="Expanded"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="{StaticResource inscriptionfont}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#C9D296"/>
+                    <Setter Property="Foreground" Value="Black"/>
                     <Setter Property="Foreground" Value="Black"/>
                 </Trigger>
             </Style.Triggers>
@@ -36,38 +36,21 @@
         <Style TargetType="Label">
         </Style>
     </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0">
-                <Viewbox>
-                    <Button Content="Create Game"/>
-                </Viewbox>
-            </Button>
-            <Button Grid.Row="1">
-                <Viewbox>
-                    <Button Content="Join Game"/>
-                </Viewbox>
-            </Button>
-            <Button Grid.Row="2">
-                <Viewbox>
-                    <Button Content="Settings"/>
-                </Viewbox>
-            </Button>
-            <Button Grid.Row="3">
-                <Viewbox>
-                    <Button Content="Exit Game"/>
-                </Viewbox>
-            </Button>
-        </Grid>
+        <Image Grid.Row="0" Source="pack://application:,,,/resources/Inscryption logo Fullsize.png"/>
+
+        <Viewbox Grid.Row="1">
+            <StackPanel >
+                <Button Name="CreateGameBTN" Content="Create Game" Click="CreateGameButton_Click"/>
+                <Button Content="Join Game" Click="JoinGameButton_Click"/>
+                <Button Content="Settings" Click="SettingsButton_Click"/>
+                <Button Content="Exit Game" Click="ExitButton_Click"/>
+            </StackPanel>
+        </Viewbox>
     </Grid>
 </Page>

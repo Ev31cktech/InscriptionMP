@@ -19,7 +19,7 @@ namespace Inscription_mp
 		{
 			View_Insert(centerView, 0, 0);
 		}
-		public void Scene_KeyDown(object Sender, KeyEventArgs e)
+		public virtual void Scene_KeyDown(object Sender, KeyEventArgs e)
 		{
 			switch (e.Key)
 			{

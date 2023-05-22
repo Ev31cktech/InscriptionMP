@@ -1,0 +1,18 @@
+﻿<Page x:Class="Inscription_mp.Scenes.MainScene.SettingsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Inscription_mp.Scenes.MainScene"
+      mc:Ignorable="d" 
+      Title="SettingsView"
+      d:DesignHeight="1080" d:DesignWidth="1920"
+      Background="#1e1e28">
+
+    <DockPanel>
+        <Label DockPanel.Dock="Top" HorizontalContentAlignment="Center" FontFamily="Heavyweight" FontSize="24" Foreground="White">Settings</Label>
+        <Grid>
+            <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+        </Grid>
+    </DockPanel>
+</Page>

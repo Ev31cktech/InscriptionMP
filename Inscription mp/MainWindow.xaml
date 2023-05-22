@@ -5,5 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Inscription_mp"
         mc:Ignorable="d"
-        Title="Inscription mp" Height="450" Width="800">
+        Title="Inscription mp" Height="450" Width="800"
+        FontFamily="{StaticResource inscriptionfont}"
+        MinWidth="600" MinHeight="338">
 </Window>

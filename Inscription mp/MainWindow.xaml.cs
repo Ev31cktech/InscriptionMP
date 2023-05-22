@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Management.Instrumentation;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -41,6 +42,10 @@ namespace Inscription_mp
 		{
 			Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(Settings);
 			Properties.Settings.Default.Save();
+		}
+		public static void Exit()
+		{
+			mw.Close();
 		}
 	}
 }
