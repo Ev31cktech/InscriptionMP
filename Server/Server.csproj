@@ -6,13 +6,30 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{18577B7D-2A22-4BA6-AF4F-4BF9027C0522}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Server</RootNamespace>
-    <AssemblyName>Server</AssemblyName>
+    <RootNamespace>Inscription_Server</RootNamespace>
+    <AssemblyName>Inscription_Server</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,15 +53,33 @@
   <PropertyGroup>
     <ApplicationIcon>..\Resources\InscriptionMP.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ARM64|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\Includes\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Steamworks.NET">
       <HintPath>..\Includes\Steam API\Steamworks.NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,14 +88,59 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\NetworkManager.cs" />
-    <Compile Include="Network\SteamManager.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Card.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Exceptions\ActionNotFoundException.cs" />
+    <Compile Include="Exceptions\ClientDisconnectedException.cs" />
+    <Compile Include="Exceptions\SceneExceptions\SceneException.cs" />
+    <Compile Include="Exceptions\SceneExceptions\UnknownActionException.cs" />
+    <Compile Include="Exceptions\SceneExceptions\UnknownPropertyException.cs" />
+    <Compile Include="Exceptions\SceneExceptions\UnknownSceneException.cs" />
+    <Compile Include="GameRules.cs" />
+    <Compile Include="IgnoreFieldsContractResolver.cs" />
+    <Compile Include="INotifyEvent.cs" />
+    <Compile Include="INotifyValueChanged.cs" />
+    <Compile Include="IToJObject.cs" />
+    <Compile Include="MapGenerator.cs" />
+    <Compile Include="NetworkManagers\Server.cs" />
+    <Compile Include="NetworkManagers\LocalServer.cs" />
+    <Compile Include="NetworkManagers\SteamServer.cs" />
+    <Compile Include="NetworkPacket.cs" />
+    <Compile Include="ObservableList.cs" />
+    <Compile Include="ObservableProperty.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="Scenes\BoardScene.cs" />
+    <Compile Include="Scenes\MapScene.cs" />
+    <Compile Include="Scenes\SetupScene.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="CardData.cs" />
+    <Compile Include="CostData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sigil.cs" />
+    <Compile Include="Team.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y $(SolutionDir)logger.config $(TargetDir)logger.config</PostBuildEvent>
+  </PropertyGroup>
 </Project>

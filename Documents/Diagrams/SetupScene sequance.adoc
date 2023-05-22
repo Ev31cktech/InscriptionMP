@@ -1,0 +1,17 @@
+[plantuml, sequance-diagram, svg]
+----
+@startuml
+Participant Host
+Participant Server
+Participant Clients
+alt 
+Clients -> Server : Join server
+Server -> Host : sync settings(players can change teams)
+Host -> Server : Change settings
+Server -> Clients : sync settings
+else start game
+Host -> Server : Start game
+end
+
+@enduml
+----

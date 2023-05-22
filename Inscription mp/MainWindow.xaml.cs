@@ -1,12 +1,6 @@
-﻿using System;
-using System.Management.Instrumentation;
-using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Inscription_mp.Scenes.MainScene;
-using Newtonsoft.Json;
-
+using Inscription_mp.Views;
 
 namespace Inscription_mp
 {
@@ -16,36 +10,55 @@ namespace Inscription_mp
 	public partial class MainWindow : Window
 	{
 		private static MainWindow mw;
-		public static Settings Settings;
-		private Scene scene;
-		public static Scene Scene
-		{
-			get {return mw.scene;}
-			set
-			{
-				mw.scene = value;
-				mw.Content = value.CurrentView;
-			}
-		}
+		private static SettingsView settingsView;
+		private static Stack<View> viewStack = new Stack<View>();
 		public MainWindow()
 		{
 			InitializeComponent();
 			mw = this;
-			if (Properties.Settings.Default.AllSettings != "")
-			{ Settings = JsonConvert.DeserializeObject<Settings>(Properties.Settings.Default.AllSettings); }
-			else { Settings = new Settings(); }
-			Scene = new MainScene();
-			this.KeyDown += (s, e) => { scene.Scene_KeyDown(s, e); };
-			Closing += MainWindow_Closing;
+			
+			settingsView = new SettingsView();
+			Left = App.Settings.window.Left; Top = App.Settings.window.Top;
+			WindowState = App.Settings.window.State;
 		}
-		private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+
+		/// <summary>
+		/// shows the settings window
+		/// <remark value="has it's own function because settings is difficult" />
+		/// </summary>
+		public static void Mainwindow_ShowSettingsView()
 		{
-			Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(Settings);
-			Properties.Settings.Default.Save();
+			viewStack.Push(settingsView);
+			mw.ShowView();
 		}
+		public static void MainWindow_ShowView(View view)
+		{
+			viewStack.Push(view);
+			mw.Dispatcher.InvokeAsync(mw.ShowView);
+		}
+		private void ShowView()
+		{
+			Content = viewStack.Peek();
+			UpdateLayout();
+			(Content as View).Focus();
+		}
+		public static void ShowMainView()
+		{
+			viewStack = new Stack<View>(new List<View>() { new MainView()});
+			mw.Dispatcher.InvokeAsync(mw.ShowView);
+		}
+
 		public static void Exit()
 		{
 			mw.Close();
+		}
+
+		internal static void ViewPrevious()
+		{
+			viewStack.Pop();
+			if(viewStack.Count >= 0)
+				ShowMainView();
+			mw.Dispatcher.InvokeAsync(mw.ShowView);
 		}
 	}
 }

@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Inscription_mp"
+        xmlns:local="clr-namespace:Inscription_mp" xmlns:views="clr-namespace:Inscription_mp.Views"
         mc:Ignorable="d"
         Title="Inscription mp" Height="450" Width="800"
         FontFamily="{StaticResource inscriptionfont}"
+        Background="#1e1e28"
         MinWidth="600" MinHeight="338">
+    <views:MainView/>
 </Window>

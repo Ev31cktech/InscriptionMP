@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resourses", "Resourses", "{
 		Resources\InscriptionMP.ico = Resources\InscriptionMP.ico
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Act1 CardPack", "Act1 CardPack\Act1 CardPack.csproj", "{BA8488AC-0695-4802-8E61-B2B470CC9463}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Act1 Pack", "Act1 CardPack\Act1 Pack.csproj", "{BA8488AC-0695-4802-8E61-B2B470CC9463}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
