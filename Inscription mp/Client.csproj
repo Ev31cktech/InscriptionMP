@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="Card.xaml.cs">
+    <Compile Include="Views\BoardScene\Card.xaml.cs">
       <DependentUpon>Card.xaml</DependentUpon>
     </Compile>
     <Compile Include="Card_OLD.cs" />
@@ -109,7 +109,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Card.xaml">
+    <Page Include="Views\BoardScene\Card.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -192,6 +192,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy $(SolutionDir)logger.config "$(TargetDir)logger.config"</PreBuildEvent>
+    <PreBuildEvent>XCOPY $(SolutionDir)logger.config "$(TargetDir)logger.config" /Y
+XCOPY $(SolutionDir)Resources\ "$(TargetDir)Resources\" /y /s</PreBuildEvent>
   </PropertyGroup>
 </Project>

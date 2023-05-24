@@ -4,13 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Inscription_Server.NetworkManagers;
 using Inscription_Server.Scenes;
 using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
-using Newtonsoft.Json.Linq;
 //using PostSharp.Patterns.Diagnostics;
 //using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
 
@@ -70,6 +68,11 @@ namespace Inscription_Server
 		public static void InitializeBackend()
 		{
 			XmlConfigurator.Configure(new FileInfo("logger.config"));
+			var repo = (Hierarchy)LogManager.GetRepository();
+			#if DEBUG
+			repo.Root.Level = log4net.Core.Level.All;
+			#endif
+			XmlConfigurator.Configure(repo);
 		}
 
 

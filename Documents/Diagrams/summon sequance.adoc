@@ -1,0 +1,39 @@
+[plantuml, sequance-diagram, svg]
+----
+@startuml
+Title summon
+
+!pragma teoz true
+
+box "Server"
+Participant App as ServerApp
+box #pink
+Participant Server as Server
+Participant Client as ServerClient
+Participant Scene as ServerScene
+endbox
+endbox
+
+box "Client"
+box #lightblue
+Participant Client as Client
+Participant Scene as Scene
+Participant View as View
+endBox
+Participant BoardView
+Participant MainWindow as Window
+Participant App as ClientApp
+endbox
+
+BoardView -> Scene: summonCard //Server First\nsac 1,2,3 place 4
+Scene -> Client: summonCard
+Client -> Server: npacket
+Server -> ServerClient: invoke(summonCard)
+ServerClient -> ServerScene : summonCard(data)
+ServerScene -> ServerClient : destroy(1)\ndestroy(2)\ndestroy(3)\nsummon(4)
+ServerClient -> Server : npacket
+Server -> Client : npacket
+Client -> Scene : destroy(1)\ndestroy(2)\ndestroy(3)\nsummon(4)
+Scene -> View : plyerSlots_Update\nopponentSlots_Update
+@enduml
+----

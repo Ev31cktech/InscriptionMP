@@ -23,7 +23,7 @@ namespace Inscription_mp.Views
 				try
 				{ App.StartLocalServer(); }
 				catch
-				{ ToggleButtons(); }
+				{  Dispatcher.InvokeAsync(ToggleButtons); }
 			});
 			//MainWindow.MainWindow_ShowView(new CreateGameView());
 		}
@@ -36,7 +36,7 @@ namespace Inscription_mp.Views
 				try
 				{ App.JoinDedicatedServer(IPAddress.Loopback); }
 				catch
-				{ ToggleButtons(); }
+				{  Dispatcher.InvokeAsync(ToggleButtons); }
 			});
 		}
 

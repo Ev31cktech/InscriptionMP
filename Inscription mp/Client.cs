@@ -8,6 +8,7 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Inscription_Server.DataTypes;
 
 namespace Inscription_mp
 {

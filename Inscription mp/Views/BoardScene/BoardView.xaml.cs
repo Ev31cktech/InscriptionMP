@@ -1,4 +1,5 @@
 ﻿using Inscription_Server;
+using Inscription_Server.DataTypes;
 using Inscription_Server.Events.ValueChanged;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -11,15 +12,16 @@ namespace Inscription_mp.Views.BoardScene
 	public partial class BoardView : View<Inscription_Server.Scenes.BoardScene>
 	{
 		CardSlot activeslot;
-		List<CardSlot> opponentSlots = new List<CardSlot>();
-		List<CardSlot> playerSlots = new List<CardSlot>();
-		ObservableList<Card> handCards;
+		CardSlot[] opponentSlots;
+		CardSlot[] playerSlots;
 		Stack<CardData> cards;
 
 		public BoardView(Inscription_Server.Scenes.BoardScene scene) : base(scene)
 		{
 			InitializeComponent();
-			uint columnCount = 4;//TODO settings.Board.ColumnCount;
+			uint columnCount = thisScene.settings.Board.ColumnCount;
+			opponentSlots= new CardSlot[columnCount];
+			opponentSlots= new CardSlot[columnCount];
 			if (thisScene.Team == Team.one)
 			{
 				thisScene.Team1Slots.ValueChanged += plyerSlots_Update;
@@ -35,8 +37,8 @@ namespace Inscription_mp.Views.BoardScene
 			{
 				CardSlot pSlot = new CardSlot(this);
 				CardSlot oSlot = new CardSlot(this);
-				playerSlots.Add(oSlot);
-				opponentSlots.Add(pSlot);
+				playerSlots[i] = oSlot;
+				opponentSlots[i] = pSlot;
 				OpponentSTP.Children.Add(oSlot);
 				PlayerSTP.Children.Add(pSlot);
 			}

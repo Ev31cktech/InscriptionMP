@@ -10,33 +10,42 @@ class Client{
 	- currentScene : Scene
 }
 abstract class Scene{
-	+ Change
+	+ ChangeScene()
 }
 @enduml
+
 
 ----
 ```
 class Server{
 	public override void Loop()
-	{
-		while(setupState && tcpListener.Pending())
-		{ 
-			Client client = new Client(tcpListener.AcceptTcpClient());
-			client.AddData(JObject.Parse("{\"Message\":\"Hello, welcome to the lobby\"}"));
-			//TODO Change Scene
-			tcpClients.Add(client);
-		}
-			
-		for(int i = 0; i < tcpClients.Count; i++)
 		{
-			Client client = tcpClients[i];
-			if(!client.Connected)
+			while (tcpListener.Pending())
 			{
-				tcpClients.RemoveAt(i--);
+				if (SetupState)
+				{
+					Client client;
+					try
+					{
+						client = new Client(tcpListener.AcceptTcpClient(), userID++);
+					}
+					catch (Exception e)
+					{
+						App.Logger.Error(e.Message, e);
+						continue;
+					}
+					SetupScene setupScene = CommonScene as SetupScene;
+					client.ChangeScene(setupScene);
+					setupScene.AddPlayer(client.UserID,client.Username);
+					clients.Add(client);
+				}
+				else
+				{
+					Client client = new Client(tcpListener.AcceptTcpClient());
+					client.AddData("Message","This lobby has already started");
+					client.Shutdown();
+				}
 			}
-			if(!client.Handled)
-			{ client.Loop(); }
 		}
 	}
-}
-````
+```

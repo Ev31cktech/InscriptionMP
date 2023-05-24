@@ -88,36 +88,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Card.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="DataTypes\Player.cs" />
+    <Compile Include="DataTypes\Runnable.cs" />
+    <Compile Include="DataTypes\Card.cs" />
+    <Compile Include="Classes\Client.cs" />
     <Compile Include="Exceptions\ActionNotFoundException.cs" />
     <Compile Include="Exceptions\ClientDisconnectedException.cs" />
     <Compile Include="Exceptions\SceneExceptions\SceneException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownActionException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownPropertyException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownSceneException.cs" />
-    <Compile Include="GameRules.cs" />
-    <Compile Include="IgnoreFieldsContractResolver.cs" />
-    <Compile Include="INotifyEvent.cs" />
-    <Compile Include="INotifyValueChanged.cs" />
-    <Compile Include="IToJObject.cs" />
-    <Compile Include="MapGenerator.cs" />
+    <Compile Include="DataTypes\GameRules.cs" />
+    <Compile Include="Classes\IgnoreFieldsContractResolver.cs" />
+    <Compile Include="Classes\INotifyEvent.cs" />
+    <Compile Include="Classes\INotifyValueChanged.cs" />
+    <Compile Include="Classes\IToJObject.cs" />
+    <Compile Include="Classes\MapGenerator.cs" />
     <Compile Include="NetworkManagers\Server.cs" />
     <Compile Include="NetworkManagers\LocalServer.cs" />
     <Compile Include="NetworkManagers\SteamServer.cs" />
-    <Compile Include="NetworkPacket.cs" />
-    <Compile Include="ObservableList.cs" />
-    <Compile Include="ObservableProperty.cs" />
-    <Compile Include="Scene.cs" />
+    <Compile Include="DataTypes\NetworkPacket.cs" />
+    <Compile Include="Classes\ObservableList.cs" />
+    <Compile Include="Classes\ObservableProperty.cs" />
+    <Compile Include="Classes\Scene.cs" />
     <Compile Include="Scenes\BoardScene.cs" />
     <Compile Include="Scenes\MapScene.cs" />
     <Compile Include="Scenes\SetupScene.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="CardData.cs" />
-    <Compile Include="CostData.cs" />
+    <Compile Include="DataTypes\CardData.cs" />
+    <Compile Include="DataTypes\CostData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sigil.cs" />
-    <Compile Include="Team.cs" />
+    <Compile Include="DataTypes\Sigil.cs" />
+    <Compile Include="DataTypes\Team.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

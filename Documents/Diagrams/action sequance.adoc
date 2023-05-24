@@ -1,0 +1,31 @@
+[plantuml, sequance-diagram, svg]
+----
+@startuml
+
+Participant Clients
+Participant Server
+Participant Client
+==from server, server first==
+Server -> Server : invoke()
+Server -> Clients : addAction()
+Clients -> Client : action
+Client -> Client : invoke()
+==from client, server first==
+Client -> Server : action
+Server -> Server : invoke()
+Server -> Clients : addAction()
+Clients -> Client : action
+Client -> Client : invoke()
+
+==from Client, client first==
+Client -> Client : invoke()
+Client -> Client : addAction()
+Client -> Server : action
+Server -> Server : invoke()
+Server -> Clients : addAction()
+alt Client is not sender
+	Clients -> Client : action
+	Client -> Client : invoke()
+end
+@endumnl
+----

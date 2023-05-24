@@ -1,4 +1,5 @@
 ﻿using Inscription_Server;
+using Inscription_Server.DataTypes;
 using System.Windows.Controls;
 
 namespace Inscription_mp
