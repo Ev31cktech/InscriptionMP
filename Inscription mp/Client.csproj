@@ -192,7 +192,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>XCOPY $(SolutionDir)logger.config "$(TargetDir)logger.config" /Y
-XCOPY $(SolutionDir)Resources\ "$(TargetDir)Resources\" /y /s</PreBuildEvent>
+    <PreBuildEvent>XCOPY "$(SolutionDir)logger.config" "$(TargetDir)logger.config" /Y
+XCOPY "$(SolutionDir)Resources\" "$(TargetDir)Resources\" /y /s</PreBuildEvent>
   </PropertyGroup>
 </Project>
