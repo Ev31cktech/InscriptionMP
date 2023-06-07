@@ -1,4 +1,5 @@
 ﻿using Inscription_mp.Views.SetupScene;
+using System.Windows;
 
 namespace Inscription_mp.Views
 {
@@ -29,11 +30,11 @@ namespace Inscription_mp.Views
 
 		public void SwitchTeam(PlayerDisplay pd)
 		{
-			thisScene.RunAction(App.Client, thisScene.SwitchTeam, pd.Player.ToJObject());
+			thisScene.TryRunAction(thisScene.SwitchTeam, pd.Player.ToJObject());
 		}
-		private void StartGameBTN_Click(object sender, System.Windows.RoutedEventArgs e)
+		private void StartGameBTN_Click(object sender, RoutedEventArgs e)
 		{
-			thisScene.RunAction(App.Client, thisScene.StartGame, thisScene.ToJObject());
+			thisScene.TryRunAction(thisScene.StartGame, thisScene.ToJObject());
 		}
 	}
 }

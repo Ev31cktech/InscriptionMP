@@ -1,12 +1,11 @@
 ﻿using Inscription_mp;
+using Inscription_Server.DataTypes;
 using Inscription_Server.Scenes;
 using Newtonsoft.Json.Linq;
 //using PostSharp.Patterns.Diagnostics;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Threading;
-using static Inscription_Server.Scenes.SetupScene;
 
 //[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_|^.?Loop", AttributeExclude = true, AttributePriority = 3)]
 namespace Inscription_Server.NetworkManagers

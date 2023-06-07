@@ -38,7 +38,9 @@ namespace Inscription_Server.NetworkManagers
 					Client client;
 					try
 					{
-						client = new Client(tcpListener.AcceptTcpClient(), userID++);
+						TcpClient tcpClient = tcpListener.AcceptTcpClient();
+						App.Logger.Info($"new connection at:{tcpClient.Client.RemoteEndPoint}");
+						client = new Client(tcpClient, userID++);
 					}
 					catch (Exception e)
 					{
