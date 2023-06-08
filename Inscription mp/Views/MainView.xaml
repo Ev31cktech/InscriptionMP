@@ -32,10 +32,10 @@
 
         <Viewbox Grid.Row="1">
             <StackPanel >
-                <Button Name="CreateGameBTN" Content="Create Game" Click="CreateGameButton_Click"/>
-                <Button Name="JoinGameBTN" Content="Join Game" Click="JoinGameButton_Click"/>
-                <Button Name="SettingsGameBTN" Content="Settings" Click="SettingsButton_Click"/>
-                <Button Name="ExitGameBTN" Content="Exit Game" Click="ExitButton_Click"/>
+                <Button Name="CreateGameBTN" Content="Create Game" Click="CreateGameButton_Click" MouseEnter="ButtonHover"/>
+                <Button Name="JoinGameBTN" Content="Join Game" Click="JoinGameButton_Click" MouseEnter="ButtonHover"/>
+                <Button Name="SettingsGameBTN" Content="Settings" Click="SettingsButton_Click" MouseEnter="ButtonHover"/>
+                <Button Name="ExitGameBTN" Content="Exit Game" Click="ExitButton_Click" MouseEnter="ButtonHover"/>
             </StackPanel>
         </Viewbox>
     </Grid>

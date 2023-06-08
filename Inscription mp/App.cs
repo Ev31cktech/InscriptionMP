@@ -26,6 +26,7 @@ namespace Inscription_mp
 	public class App : Application
 	{
 		private static App app { get; } = new App();
+		public static SoundEngine SoundEngine { get; private set; } = new SoundEngine();
 		public static Settings Settings
 		{
 			get

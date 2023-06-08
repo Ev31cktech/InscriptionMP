@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
+using static Inscription_mp.SoundEngine;
 
 namespace Inscription_mp.Views
 {
@@ -13,6 +14,10 @@ namespace Inscription_mp.Views
 		public MainView()
 		{
 			InitializeComponent();
+        }
+		private void ButtonHover(object sender, RoutedEventArgs e)
+		{
+			App.SoundEngine.PlaySound(Sfx.Click);
 		}
 
 		private void CreateGameButton_Click(object sender, RoutedEventArgs e)

@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="SoundEngine.cs" />
     <Compile Include="Views\BoardScene\Card.xaml.cs">
       <DependentUpon>Card.xaml</DependentUpon>
     </Compile>

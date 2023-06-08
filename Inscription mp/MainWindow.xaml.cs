@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Inscription_mp.Views;
+using static Inscription_mp.SoundEngine;
 
 namespace Inscription_mp
 {
@@ -20,7 +21,8 @@ namespace Inscription_mp
 			settingsView = new SettingsView();
 			Left = App.Settings.window.Left; Top = App.Settings.window.Top;
 			WindowState = App.Settings.window.State;
-		}
+            App.SoundEngine.PlaySong(Songs.MainMusic);
+        }
 
 		/// <summary>
 		/// shows the settings window

@@ -35,6 +35,7 @@ namespace Inscription_mp.Views
 		private void StartGameBTN_Click(object sender, RoutedEventArgs e)
 		{
 			thisScene.TryRunAction(thisScene.StartGame, thisScene.ToJObject());
+			App.SoundEngine.StopSound();
 		}
 	}
 }
