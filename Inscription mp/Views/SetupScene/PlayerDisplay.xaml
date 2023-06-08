@@ -11,6 +11,13 @@
             <Setter Property="FontSize" Value="12"></Setter>
         </Style>
     </UserControl.Resources>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Click="SwitchTeamMNI_Click" Name="SwitchTeamMNI" Header="Switch Team"/>
+            <MenuItem Click="KickMNI_Click" Name="KickMNI" Header="Kick Player"/>
+            <MenuItem Click="HostMNI_Click" Name="HostMNI" Header="Make Host"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>

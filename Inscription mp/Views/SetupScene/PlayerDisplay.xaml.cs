@@ -20,6 +20,11 @@ namespace Inscription_mp.Views.SetupScene
 			SetupView = parent;
 			InitializeComponent();
 			ChangeTeam(Player.Team);
+			if (!(App.Client.IsHost && App.Client.UserID != Player.UserID)) //only the host has the power to kick and transfer host. and can't kick or , transfer host to himself.
+			{
+				HostMNI.Visibility = Visibility.Collapsed;
+				KickMNI.Visibility = Visibility.Collapsed;
+			}
 		}
 		public void ChangeTeam(Team team)
 		{
@@ -41,6 +46,23 @@ namespace Inscription_mp.Views.SetupScene
 		public void SwitchTeam(object sender, EventArgs e)
 		{
 			SetupView.SwitchTeam(this);
+		}
+
+		private void HostMNI_Click(object sender, RoutedEventArgs e)
+		{
+			PlayerDisplay pd = sender as PlayerDisplay;
+			App.Client.TransferHost(pd.Player);
+		}
+
+		private void KickMNI_Click(object sender, RoutedEventArgs e)
+		{
+			PlayerDisplay pd = sender as PlayerDisplay;
+			App.Client.KickPlayer(pd.Player);
+		}
+
+		private void SwitchTeamMNI_Click(object sender, RoutedEventArgs e)
+		{
+			SwitchTeam(this, e);
 		}
 	}
 }

@@ -11,6 +11,7 @@ using Inscription_Server.Exceptions.SceneExceptions;
 using System.Linq;
 using Inscription_Server.Exceptions;
 using Inscription_Server.DataTypes;
+using static Inscription_Server.DataTypes.Runnable;
 
 namespace Inscription_Server
 {
@@ -23,17 +24,19 @@ namespace Inscription_Server
 		public event NotifyActionRunEventHandler ActionRunEvent;
 
 		[JsonIgnore]
-		public object SceneName { get { return GetType().FullName; } }
+		public String SceneName { get { return GetType().FullName; } }
 
 		public Scene()
 		{
 			actions.Add(GetActionName(Sync), new Runnable(Sync));
 		}
+
 		protected void InitializeScene(params Runnable[] funcs)
 		{
 			funcs.ToList().ForEach(i => this.actions.Add(GetActionName(i.Action), i));
 		}
-		public void Sync(JObject data)
+
+		public bool Sync(JObject data)
 		{
 			JToken nameToken = null;
 			JToken dataToken = null;
@@ -43,7 +46,9 @@ namespace Inscription_Server
 				throw new Exception("Scenes did not match");
 			Type thisObj = GetType();
 			Sync(dataToken, thisObj, this);
+			return true;
 		}
+
 		protected void Sync(JToken data, Type parentType, object var)
 		{
 			foreach (var token in data.Children())
@@ -106,6 +111,7 @@ namespace Inscription_Server
 				}
 			}
 		}
+
 		private void Sync(JProperty parent, JArray token, object var)
 		{
 			PropertyInfo pi = var.GetType().GetRuntimeProperty(parent.Name);
@@ -130,6 +136,7 @@ namespace Inscription_Server
 			else
 				Sync(parent.Name, token.Children(), var);
 		}
+
 		private void Sync(string name, object value, object var)
 		{
 			PropertyInfo pi = var.GetType().GetRuntimeProperty(name);
@@ -143,16 +150,19 @@ namespace Inscription_Server
 			if (value is INotifyValueChanged)
 				(value as INotifyValueChanged).OnValueChanged(new ValueChangedEventArgs(ValueChangedEventArgs.Action.Update, value));
 		}
+
 		public virtual JObject ToJObject()
 		{
 			JObject obj = JObject.Parse($"{{\"sceneName\":\"{SceneName}\"}}");
 			obj.Add("sceneData", JObject.FromObject(this, serializer));
 			return obj;
 		}
+
 		public static void RegisterScene(Scene scene)
 		{
 			scenes.Add(scene.GetType().FullName, scene);
 		}
+
 		public static Scene GetScene(JObject data)
 		{
 			Scene temp;
@@ -161,26 +171,42 @@ namespace Inscription_Server
 			temp.Sync(data);
 			return temp;
 		}
-		public static string GetActionName(Action<JObject> action)
+
+		public static string GetActionName(Func<JObject, bool> action)
 		{
 			return $"{action.Target.GetType().FullName}.{action.Method.Name}";
 		}
-		public void TryRunAction(Action<JObject> func, JObject data, Client sender = null)
+
+		public void TryRunAction(Func<JObject, bool> func, JObject data, Client sender = null)
 		{
 			Runnable action;
 			if (!actions.TryGetValue(GetActionName(func), out action))
 				throw new ActionNotFoundExceptionException();
-			OnActionRun(sender, new ActionRunEventData(action, data));
+			ActionRunEventData e = new ActionRunEventData(action, data);
+			App.Logger.Info($"Action {GetActionName(func)} run");
+			OnActionRun(e);
+			if(e.Executer == Runner.Server)
+			{
+				if(sender != null)
+					return;
+			}
+			e.Invoke();
 		}
-		public void TryRunAction( string func, JObject data, Client sender = null)
+
+		public void TryRunAction(string func, JObject data, Client sender)
 		{
 			Runnable action;
 			if (!actions.TryGetValue(func, out action))
 				throw new ActionNotFoundExceptionException();
-			OnActionRun(sender, new ActionRunEventData(action, data));
+			ActionRunEventData e = new ActionRunEventData(action, data);
+			App.Logger.Info($"Action {func.Split('.').Last()} recieved and run");
+			if (!e.Invoke())
+			{ sender.AddAction(Sync, ToJObject()); }
+			else
+			{ OnActionRun(e, sender); }
 		}
 
-		public void OnActionRun(Client sender, ActionRunEventData e)
+		public void OnActionRun(ActionRunEventData e, Client sender = null)
 		{
 			ActionRunEvent?.Invoke(sender, e);
 		}

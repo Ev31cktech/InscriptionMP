@@ -7,9 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Inscription_Server.Exceptions;
 using Inscription_Server.Events.INotifyEvent;
-using Inscription_Server.NetworkManagers;
 using Inscription_Server.DataTypes;
-using static Inscription_Server.DataTypes.Runnable;
 
 namespace Inscription_Server
 {
@@ -37,7 +35,7 @@ namespace Inscription_Server
 						new JProperty("ID", UserID),
 						new JProperty("IsHost", IsHost))
 					);
-			Loop();
+			DataSend();
 			DateTime endTime = DateTime.Now.AddSeconds(5);
 			while (true)
 			{
@@ -65,10 +63,11 @@ namespace Inscription_Server
 		{
 			nPacket.data.Add(new JObject(new JProperty(Name, data)));
 		}
-		public void AddAction(ActionRunEventData e)
+
+		public void AddAction(Func<JObject, bool> runnable, JObject data)
 		{
-			JObject action = JObject.Parse($"{{\"target\":\"{Scene.GetActionName(e.Runnable.Action)}\"}}");
-			action.Add("data", e.Data);
+			JObject action = JObject.Parse($"{{\"target\":\"{Scene.GetActionName(runnable)}\"}}");
+			action.Add("data", data);
 			nPacket.actions.Add(action);
 		}
 
@@ -94,19 +93,105 @@ namespace Inscription_Server
 			}
 			return packets.ToArray();
 		}
-		public virtual void RunAction(Client sender, String func, JObject data)
+		public void RunAction(String func, JObject data)
 		{
 			try
 			{
-				CurrentScene.TryRunAction(func, data, sender);
+				if(!func.StartsWith(CurrentScene.SceneName))
+					throw new Exception("NotForCurrentSceneException");
+				CurrentScene.TryRunAction(func, data, this);
 			}
 			catch (Exception e)
 			{
 				App.Logger.Error(e);
-				throw;
 			}
 		}
 		public void Loop()
+		{
+			DataRecieve();
+			//if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)
+			//{
+			//	LastSincDTM = DateTime.Now;
+			//	AddAction(CurrentScene.Sync, CurrentScene.ToJObject());
+			//}
+			DataSend();
+		}
+		public void HandleActions(NetworkPacket packet)
+		{
+			foreach (JObject i in packet.actions)
+			{
+				switch (i.Value<string>("target"))
+				{
+					case "Inscription_Server.Client.ChangeScene":
+						ChangeScene(i.Value<JObject>("data"));
+						break;
+					case "Inscription_Server.Client.KickPlayer":
+						App.Server.Player_Kick(i.Value<Player>("data"));
+						break;
+					default:
+						RunAction(i["target"].Value<string>(), i.Value<JObject>("data"));
+						break;
+				}
+			}
+		}
+		public void HandleData(NetworkPacket packet)
+		{/*TODO fix function*/}
+
+		protected virtual void CurrentScene_ActionRunEvent(Client sender, ActionRunEventData e)
+		{
+			if (sender != this && e.Executer == Runnable.Runner.Both)
+				AddAction(e.Runnable.Action, e.Data);
+		}
+		
+		public void ChangeScene(Scene scene)
+		{
+			CurrentScene = scene;
+			AddAction(ChangeScene, scene.ToJObject());
+			CurrentScene.ActionRunEvent += CurrentScene_ActionRunEvent;
+		}
+		public virtual bool ChangeScene(JObject data)
+		{
+			Scene scene = Scene.GetScene(data);
+			CurrentScene = scene;
+			CurrentScene.ActionRunEvent += CurrentScene_ActionRunEvent;
+			return true;
+		}
+
+		public void KickPlayer(Player player)
+		{
+			AddAction(TransferHost, player.ToJObject());
+		}
+		public void TransferHost(Player player)
+		{
+			IsHost = false;
+			AddAction(TransferHost, player.ToJObject());
+		}
+		public bool TransferHost(JObject data)
+		{
+			return true;
+		}
+		public void Shutdown()
+		{
+			socket.Close();
+			Connected = false;
+		}
+
+		public void AddMessage(string message)
+		{
+			AddData("message", message);
+		}
+
+		public void DataSend()
+		{
+			if (nPacket.data.Count > 0 | nPacket.actions.Count > 0)
+			{
+				writer.Write($"{nPacket}{ETX}");
+				App.Logger.Debug($"data send: {nPacket}");
+				nPacket = new NetworkPacket(nPacket.PacketN + 1);
+			}
+		}
+
+		public void DataRecieve()
 		{
 			if (Available)
 			{
@@ -117,69 +202,6 @@ namespace Inscription_Server
 					HandleActions(packet);
 				}
 			}
-			//if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)
-			//{
-			//	LastSincDTM = DateTime.Now;
-			//	AddAction(CurrentScene.Sync, CurrentScene.ToJObject());
-			//}
-			if (nPacket.data.Count > 0 | nPacket.actions.Count > 0)
-			{
-				writer.Write($"{nPacket}{ETX}");
-				App.Logger.Debug($"data send: {nPacket}");
-				nPacket = new NetworkPacket(nPacket.PacketN + 1);
-			}
-		}
-		public void HandleActions(NetworkPacket packet)
-		{
-			foreach (JObject i in packet.actions)
-			{
-				if (i.Value<string>("target") == "Inscription_Server.Client.ChangeScene")
-					ChangeScene(i["data"].Value<JObject>());
-				else
-					RunAction(this, i["target"].Value<string>(), i["data"].Value<JObject>());
-			}
-		}
-		public void HandleData(NetworkPacket packet)
-		{//TODO fix function
-
-		}
-		public virtual void ChangeScene(JObject data)
-		{
-			Scene scene = Scene.GetScene(data);
-			CurrentScene = scene;
-			CurrentScene.ActionRunEvent += CurrentScene_ActionRunEvent;
-		}
-
-		private void CurrentScene_ActionRunEvent(Client sender, ActionRunEventData e)
-		{
-			if (sender is Client)
-			{
-				if (e.Runnable.Executer == Runner.Client)
-				{
-					if (sender != this)
-					{ AddAction(e); }
-				}
-				e.Runnable.Action.Invoke(e.Data);
-			}
-			else if (Server.IsServer)
-			{
-				if (e.Runnable.Executer == Runner.Server)
-				{ AddAction(e); }
-				e.Runnable.Action.Invoke(e.Data);
-			}
-		}
-
-		public void ChangeScene(Scene scene)
-		{
-			CurrentScene = scene;
-			AddAction(new ActionRunEventData(new Runnable(ChangeScene), scene.ToJObject()));
-			CurrentScene.ActionRunEvent += CurrentScene_ActionRunEvent;
-		}
-
-		public void Shutdown()
-		{
-			socket.Close();
-			Connected = false;
 		}
 	}
 }

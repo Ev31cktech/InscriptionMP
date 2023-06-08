@@ -12,57 +12,57 @@ namespace Inscription_Server.NetworkManagers
 {
 	public abstract class Server
 	{
-		private static Server server;
+		public static Server ThisServer { get; private set;}
 		private MapGenerator mapGenerator = new MapGenerator();
-		public Timer looper;
+		private Timer looper;
 		private bool looping = false;
-		public bool SetupState { get; set; } = true;
-		public static bool IsServer { get => server != null; }
-		public Scene CommonScene { get; private set; }
-		public bool IsAllive { get { return looper != null; } }
-		protected List<Client> clients = new List<Client>();
-
 		private Player[] team1 = new Player[0];
 		private Player[] team2 = new Player[0];
+		protected List<Client> clients = new List<Client>();
+		public bool SetupState { get; set; } = true;
+		public static bool IsServer { get => ThisServer != null; }
+		public bool IsAllive { get { return looper != null; } }
+		public Scene CommonScene { get; private set; }
+
 		public Server()
 		{
-			server = this;
+			ThisServer = this;
 			CommonScene = new SetupScene();
 		}
 		public virtual void Start()
 		{
-			looper = new Timer((sender) => _Loop(), null, 0, 1);
+			looper = new Timer((sender) => Timer_Loop(), null, 0, 1);
 			App.Logger.Info("Server started");
 		}
-		public static void Start_Game(JObject data)
+		public void Start_Game(JObject data)
 		{
-			server.SetupState = false;
-			if (server == null) //ik ben geen server
+			ThisServer.SetupState = false;
+			if (!IsServer) //ik ben geen server
 				return;
 			JToken sceneData = data["sceneData"];
 			//server.team1 = sceneData.Values<Player>("Team1");
 			//server.team2 = sceneData.Value<Player[]>("Team2");
 			//generate new map
 			BoardScene scene = new BoardScene(sceneData.Value<JObject>("GameSettings"));
-			server.clients.ForEach( i => {i.ChangeScene(scene);});
+			ThisServer.clients.ForEach( i => {i.ChangeScene(scene);});
 		}
-		public void Stop()
+		public virtual void Stop()
 		{
 			App.Logger.Info("Shutting down server...");
-			if (looper != null)
-				looper.Dispose();
-			if(server != null)
-			server.Shutdown();
+			if (ThisServer.looper != null)
+				ThisServer.looper.Dispose();
+			if(ThisServer != null)
+			ThisServer.Shutdown();
 		}
 
-		private void _Loop()
+		private void Timer_Loop()
 		{
 			if (!looping)
 			{
 				try
 				{
 					looping = true;
-					server.Loop();
+					ThisServer.Loop();
 
 				}
 				catch (Exception e)
@@ -78,5 +78,11 @@ namespace Inscription_Server.NetworkManagers
 		}
 		public abstract void Loop();
 		public abstract void Shutdown();
+		public void Player_Kick(Player player)
+		{
+			Client client = clients.Find(i => i.UserID == player.UserID);
+			client.AddMessage("you have been kicked from the lobby");
+			client.DataSend();
+		}
 	}
 }

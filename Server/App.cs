@@ -22,20 +22,19 @@ namespace Inscription_Server
 	public class App
 	{
 		private static Server server;
+		public static Server Server { get => Server.ThisServer; }
 		private static bool shutdown = false;
 		public static ILog Logger { get { return LogManager.GetLogger("SERVER"); } }
 
-		public static Server Server { get; internal set; }
-
 		private static Command[] commands = new Command[]
-			{
-				new Command(Command_Exit,"exit"),
-				new Command(Command_Help,"help"),
-				new Command(Command_Send,"send", "input"),
-				new Command(Command_Start,"start", "IPAddress"),
-				new Command(Command_Stop,"stop"),
-				new Command(Command_Crash,"crash")
-			};
+		{
+			new Command(Command_Exit,"exit"),
+			new Command(Command_Help,"help"),
+			new Command(Command_Send,"send", "input"),
+			new Command(Command_Start,"start", "IPAddress"),
+			new Command(Command_Stop,"stop"),
+			new Command(Command_Crash,"crash")
+		};
 		public static void Main(string[] args)
 		{
 			//LoggingServices.DefaultBackend = InitializeBackend();
@@ -44,34 +43,28 @@ namespace Inscription_Server
 			Stack<string> argStack = new Stack<string>(args);
 			Scene.RegisterScene(new SetupScene());
 			if (argStack.Count > 1)
-			{
-				RunCommand(String.Join(" ", argStack), commands);
-			}
+			{ RunCommand(String.Join(" ", argStack), commands); }
 			try
 			{
 				while (!shutdown)
 				{
 					String inp = Console.ReadLine();
 					if (!RunCommand(inp, commands))
-					{
-						Logger.Warn("unknown command. Use help to see a list of commands");
-					}
+					{ Logger.Warn("unknown command. Use help to see a list of commands"); }
 				}
 				Console.WriteLine("Press any key to close the console");
 			}
 			catch (Exception e)
-			{
-				Console.Error.WriteLine(e.ToString());
-			}
+			{ Console.Error.WriteLine(e.ToString()); }
 			Console.ReadKey();
 		}
 		public static void InitializeBackend()
 		{
 			XmlConfigurator.Configure(new FileInfo("logger.config"));
 			var repo = (Hierarchy)LogManager.GetRepository();
-			#if DEBUG
+#if DEBUG
 			repo.Root.Level = log4net.Core.Level.All;
-			#endif
+#endif
 			XmlConfigurator.Configure(repo);
 		}
 
@@ -152,9 +145,7 @@ namespace Inscription_Server
 			return true;
 		}
 		private static bool Command_Send(String[] args)
-		{
-			return true;
-		}
+		{ return true; }
 		#endregion
 		/// <summary>
 		/// The command object that holds the command name, decsription, 
@@ -172,9 +163,7 @@ namespace Inscription_Server
 				arguments = _arguments;
 			}
 			public String ListArguments()
-			{
-				return String.Join("\n", arguments.Select(c => "\t-" + c));
-			}
+			{ return String.Join("\n", arguments.Select(c => "\t-" + c)); }
 		}
 	}
 }

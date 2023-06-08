@@ -30,11 +30,11 @@ namespace Inscription_mp.Views
 
 		public void SwitchTeam(PlayerDisplay pd)
 		{
-			thisScene.TryRunAction(thisScene.SwitchTeam, pd.Player.ToJObject());
+			thisScene.TryRunAction(thisScene.SwitchTeam, pd.Player.ToJObject(), App.Client);
 		}
 		private void StartGameBTN_Click(object sender, RoutedEventArgs e)
 		{
-			thisScene.TryRunAction(thisScene.StartGame, thisScene.ToJObject());
+			thisScene.TryRunAction(thisScene.StartGame, thisScene.ToJObject(), App.Client);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 [plantuml, sequance-diagram, svg]
 ----
 @startuml
-Title summon
+Title Summon
 
 !pragma teoz true
 

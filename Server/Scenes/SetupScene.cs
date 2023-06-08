@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using Inscription_Server.NetworkManagers;
 using Inscription_Server.DataTypes;
+using static Inscription_Server.DataTypes.Runnable;
 
 namespace Inscription_Server.Scenes
 {
@@ -14,17 +14,17 @@ namespace Inscription_Server.Scenes
 			InitializeScene(
 				new Runnable(AddPlayer),
 				new Runnable(SwitchTeam),
-				new Runnable(StartGame)
+				new Runnable(StartGame, Runner.Server)
 			);
 		}
-		public void AddPlayer(uint id, string name)
+		public void AddPlayer(Client client)
 		{
 			if (Team2.Count >= Team1.Count)
-			{ TryRunAction(AddPlayer, new Player(id, name, Team.one).ToJObject()); }
+			{ TryRunAction(AddPlayer, new Player(client.UserID, client.Username, Team.one).ToJObject()); }
 			else
-			{ TryRunAction(AddPlayer, new Player(id, name, Team.two).ToJObject()); }
+			{ TryRunAction(AddPlayer, new Player(client.UserID, client.Username, Team.two).ToJObject()); }
 		}
-		public void AddPlayer(JObject data)
+		public bool AddPlayer(JObject data)
 		{
 			Player pData = new Player(data);
 			switch (pData.Team)
@@ -36,8 +36,9 @@ namespace Inscription_Server.Scenes
 					Team2.Add(pData);
 					break;
 			}
+			return true;
 		}
-		public void SwitchTeam(JObject data)
+		public bool SwitchTeam(JObject data)
 		{
 			Player pData = new Player(data);
 			switch (pData.Team)
@@ -53,11 +54,12 @@ namespace Inscription_Server.Scenes
 					Team1.Add(pData);
 					break;
 			}
+			return true;
 		}
-		public void StartGame(JObject data)
+		public bool StartGame(JObject data)
 		{
-			Server.Start_Game(this.ToJObject());
+			App.Server.Start_Game(ToJObject());
+			return true;
 		}
-		
 	}
 }

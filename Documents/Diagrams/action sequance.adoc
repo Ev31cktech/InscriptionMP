@@ -2,30 +2,37 @@
 ----
 @startuml
 
-Participant Clients
 Participant Server
-Participant Client
-==from server, server first==
-Server -> Server : invoke()
-Server -> Clients : addAction()
-Clients -> Client : action
-Client -> Client : invoke()
-==from client, server first==
-Client -> Server : action
-Server -> Server : invoke()
-Server -> Clients : addAction()
-Clients -> Client : action
-Client -> Client : invoke()
+Participant Server.Client as Clients
+Participant Client.Client as Client
 
-==from Client, client first==
-Client -> Client : invoke()
-Client -> Client : addAction()
+==from server, server only==
+Server -> Server : invoke()
+==from client, server only==
+Client -> Client : AddAction()
 Client -> Server : action
 Server -> Server : invoke()
-Server -> Clients : addAction()
-alt Client is not sender
-	Clients -> Client : action
-	Client -> Client : invoke()
+==from server, both==
+Server -> Server : invoke()
+Server -> Server : OnActionRun()
+Server -> Clients : AddAction()
+Clients -> Client : action
+Client -> Client : Invoke()
+==From Client, both==
+Client -> Client : invoke()
+Client -> Client : AddAction()
+Client -> Server : action
+Server -> Server : Invoke()
+alt Action could not be run succesfully
+	Server -> Client : Sync()
+else
+	alt Client != sender
+	Server -> Server : AddAction()
+		Server -> Clients : action
+		Clients -> Clients : Invoke 
+	end
 end
+
+
 @endumnl
 ----
