@@ -143,6 +143,6 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy /Y $(SolutionDir)logger.config $(TargetDir)logger.config</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(SolutionDir)logger.config" "$(TargetDir)logger.config"</PostBuildEvent>
   </PropertyGroup>
 </Project>
