@@ -7,16 +7,15 @@ namespace Inscription_Server.DataTypes
 	public class Runnable
 	{
 		public Runner Executer { get; }
-		public Action<JObject> Action { get; private set; }
-		public Runnable(Action<JObject> _action,Runner executer = Runner.Server)
+		public Func<JObject, bool> Action { get; private set; }
+		public Runnable(Func<JObject, bool> _action,Runner executer = Runner.Both)
 		{
 			Action = _action;
 			Executer = executer;
 		}
 		public enum Runner
 		{
-			Server,
-			Client,
+			Server,	
 			Both
 		}
 	}

@@ -19,12 +19,18 @@ namespace Inscription_Server.Scenes
 				new Runnable(Attack)
 			);
 		}
-		public void Attack(JObject data)
-		{ }
-		public void Summon(JObject data)
-		{ }
-		public void Destroy(JObject data)
-		{ }
+		public bool Attack(JObject data)
+		{
+			return false;
+		}
+		public bool Summon(JObject data)
+		{
+			return false;
+		}
+		public bool Destroy(JObject data)
+		{
+			return false;
+		}
 
 		public enum GameStates
 		{

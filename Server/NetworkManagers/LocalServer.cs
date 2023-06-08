@@ -1,5 +1,4 @@
-﻿using Inscription_Server.Exceptions;
-using Inscription_Server.Scenes;
+﻿using Inscription_Server.Scenes;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -16,14 +15,6 @@ namespace Inscription_Server.NetworkManagers
 			tcpListener = new TcpListener(ip, 5801);
 		}
 
-		public override void Shutdown()
-		{
-			foreach (Client client in clients)
-			{
-				client.Shutdown();
-			}
-			tcpListener.Stop();
-		}
 		public override void Start()
 		{
 			tcpListener.Start();
@@ -49,7 +40,7 @@ namespace Inscription_Server.NetworkManagers
 					}
 					SetupScene setupScene = CommonScene as SetupScene;
 					client.ChangeScene(setupScene);
-					setupScene.AddPlayer(client.UserID,client.Username);
+					setupScene.AddPlayer(client);
 					clients.Add(client);
 				}
 				else
@@ -69,6 +60,14 @@ namespace Inscription_Server.NetworkManagers
 				}
 				client.Loop();
 			}
+		}
+		public override void Shutdown()
+		{
+			foreach (Client client in clients)
+			{
+				client.Shutdown();
+			}
+			tcpListener.Stop();
 		}
 	}
 }

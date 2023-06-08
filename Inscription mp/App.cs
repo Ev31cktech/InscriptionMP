@@ -42,7 +42,7 @@ namespace Inscription_mp
 				Inscription_mp.Properties.Settings.Default.Save();
 			}
 		}
-		public static Server Server { get; private set; }
+		private static Server server;
 		public static Client Client { get; private set; }
 		public static ILog Logger { get { return LogManager.GetLogger("CLIENT"); } }
 		private static Timer looper;
@@ -92,8 +92,8 @@ namespace Inscription_mp
 		}
 		public static void StartLocalServer()
 		{
-			Server = new LocalServer(IPAddress.Any);
-			Server.Start();
+			server = new LocalServer(IPAddress.Any);
+			server.Start();
 			JoinDedicatedServer(IPAddress.Loopback);
 		}
 		public static void JoinDedicatedServer(IPAddress ip)
@@ -125,7 +125,6 @@ namespace Inscription_mp
 					looping = true;
 					if(Client.Connected)
 						Client.Loop();
-
 				}
 				catch (Exception e)
 				{
@@ -140,8 +139,8 @@ namespace Inscription_mp
 		}
 		public static void Close()
 		{
-			if (Server != null)
-				Server.Stop();
+			if (server != null)
+				server.Stop();
 			if(looper != null)
 				looper.Dispose();
 			if (Client != null)

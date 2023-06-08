@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Inscription_Server.DataTypes;
+using Inscription_Server.Events.INotifyEvent;
+using static Inscription_Server.DataTypes.Runnable;
 
 namespace Inscription_mp
 {
@@ -60,13 +62,20 @@ namespace Inscription_mp
 			}
 			Username = $"{App.Settings.Username}P{UserID}";
 			AddData("Username", Username);
-			Loop();
+			DataSend();
 		}
-		public override void ChangeScene(JObject data)
+		public override bool ChangeScene(JObject data)
 		{
 			base.ChangeScene(data);
 			CurrentView = App.GetView(CurrentScene);
 			MainWindow.MainWindow_ShowView(CurrentView);
+			return true;
+		}
+		protected override void CurrentScene_ActionRunEvent(Inscription_Server.Client sender, ActionRunEventData e)
+		{
+			//Client side
+			if(sender == null)
+			{ AddAction(e.Runnable.Action, e.Data); }
 		}
 	}
 }
