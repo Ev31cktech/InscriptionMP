@@ -1,5 +1,4 @@
-﻿using Inscription_Server;
-using Inscription_Server.DataTypes;
+﻿using Inscription_Server.DataTypes;
 using Inscription_Server.Events.ValueChanged;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -19,6 +18,9 @@ namespace Inscription_mp.Views.BoardScene
 		public BoardView(Inscription_Server.Scenes.BoardScene scene) : base(scene)
 		{
 			InitializeComponent();
+		}
+		public override void Initialize()
+		{
 			uint columnCount = thisScene.settings.Board.ColumnCount;
 			opponentSlots= new CardSlot[columnCount];
 			opponentSlots= new CardSlot[columnCount];
@@ -43,16 +45,16 @@ namespace Inscription_mp.Views.BoardScene
 				PlayerSTP.Children.Add(pSlot);
 			}
 		}
-		internal void plyerSlots_Update(object sender, ValueChangedEventArgs e)
+		public void plyerSlots_Update(object sender, ValueChangedEventArgs e)
 		{
 
 		}
-		internal void opponentSlots_Update(object sender, ValueChangedEventArgs e)
+		public void opponentSlots_Update(object sender, ValueChangedEventArgs e)
 		{
 
 		}
 
-		internal void SetActive(CardSlot cardSlot)
+		public void SetActive(CardSlot cardSlot)
 		{
 			activeslot = cardSlot;
 		}

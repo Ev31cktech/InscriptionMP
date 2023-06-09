@@ -15,6 +15,8 @@ namespace Inscription_mp.Views
 			scene.Team1.ValueChanged += (s,e) => { Dispatcher.Invoke(Team1_Update);};
 			scene.Team2.ValueChanged += (s,e) => { Dispatcher.Invoke(Team2_Update);};
 		}
+		public override void Initialize()
+		{}
 		public void Team1_Update()
 		{
 			Team1STP.Children.Clear();

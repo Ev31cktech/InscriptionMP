@@ -11,5 +11,7 @@ namespace Inscription_mp.Views
 		{
 			InitializeComponent();
 		}
+		public override void Initialize()
+		{}
 	}
 }

@@ -13,6 +13,10 @@ namespace Inscription_mp.Views
 		{
 			InitializeComponent();
 		}
+
+		public override void Initialize()
+		{
+		}
 		
 		public void Settings_KeyDown(object sender, KeyEventArgs e)
 		{

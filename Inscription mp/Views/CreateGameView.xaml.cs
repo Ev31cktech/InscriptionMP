@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 namespace Inscription_mp.Views
 {
@@ -10,6 +11,9 @@ namespace Inscription_mp.Views
 		public CreateGameView()
 		{
 			InitializeComponent();
+		}
+		public override void Initialize()
+		{
 		}
 	}
 }
