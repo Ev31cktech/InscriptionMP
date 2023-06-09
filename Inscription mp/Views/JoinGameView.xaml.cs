@@ -39,5 +39,7 @@ namespace Inscription_mp.Views
         {
             MainWindow.ViewPrevious();
         }
-    }
+		public override void Initialize()
+		{}
+	}
 }

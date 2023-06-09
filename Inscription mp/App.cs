@@ -153,6 +153,7 @@ namespace Inscription_mp
 			View view;
 			if (!sceneViewList.TryGetValue(scene.GetType().FullName, out view))
 			{ throw new UnknownViewException("No view associated with Scene"); }
+			view.Initialize();
 			return view;
 		}
 	}

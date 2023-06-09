@@ -19,6 +19,8 @@ namespace Inscription_mp.Views
 		{
 			App.SoundEngine.PlaySound(Sfx.Click);
 		}
+		public override void Initialize()
+		{}
 
 		private void CreateGameButton_Click(object sender, RoutedEventArgs e)
 		{

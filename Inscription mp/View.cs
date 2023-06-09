@@ -20,5 +20,6 @@ namespace Inscription_mp
 	{
 		public View()
 		{ Focusable = true; }
+		public abstract void Initialize();
 	}
 }
