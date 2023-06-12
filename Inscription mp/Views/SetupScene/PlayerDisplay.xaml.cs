@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Inscription_Server.DataTypes;
+using Inscryption_Server.DataTypes;
 
-namespace Inscription_mp.Views.SetupScene
+namespace Inscryption_mp.Views.SetupScene
 {
 	/// <summary>
 	/// Interaction logic for PlayerDisplay.xaml

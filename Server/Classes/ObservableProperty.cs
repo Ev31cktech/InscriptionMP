@@ -1,7 +1,7 @@
-﻿using Inscription_Server.Events.ValueChanged;
-using static Inscription_Server.Events.ValueChanged.ValueChangedEventArgs;
+﻿using Inscryption_Server.Events.ValueChanged;
+using static Inscryption_Server.Events.ValueChanged.ValueChangedEventArgs;
 
-namespace Inscription_Server
+namespace Inscryption_Server
 {
 	public class ObservableProperty<T> : INotifyValueChanged
 	{

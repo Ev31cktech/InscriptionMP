@@ -1,9 +1,9 @@
-﻿using Inscription_Server.Serialization;
+﻿using Inscryption_Server.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace Inscription_Server.DataTypes
+namespace Inscryption_Server.DataTypes
 {
 	public struct CardData : IToJObject
 	{

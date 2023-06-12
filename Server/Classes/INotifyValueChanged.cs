@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Inscription_Server.Events.ValueChanged
+namespace Inscryption_Server.Events.ValueChanged
 {
 	public interface INotifyValueChanged
 	{

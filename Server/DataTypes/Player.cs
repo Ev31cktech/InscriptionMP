@@ -1,8 +1,8 @@
-﻿using Inscription_Server.DataTypes;
-using Inscription_Server.Serialization;
+﻿using Inscryption_Server.DataTypes;
+using Inscryption_Server.Serialization;
 using Newtonsoft.Json.Linq;
 
-namespace Inscription_Server.DataTypes
+namespace Inscryption_Server.DataTypes
 {
 	public struct Player : IToJObject
 	{

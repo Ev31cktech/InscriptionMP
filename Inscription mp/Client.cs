@@ -1,6 +1,6 @@
-﻿using Inscription_Server;
+﻿using Inscryption_Server;
 using Newtonsoft.Json.Linq;
-using Inscription_Server.Exceptions;
+using Inscryption_Server.Exceptions;
 using System;
 using System.Net.Sockets;
 using System.Threading;
@@ -8,13 +8,13 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using Inscription_Server.DataTypes;
-using Inscription_Server.Events.INotifyEvent;
-using static Inscription_Server.DataTypes.Runnable;
+using Inscryption_Server.DataTypes;
+using Inscryption_Server.Events.INotifyEvent;
+using static Inscryption_Server.DataTypes.Runnable;
 
-namespace Inscription_mp
+namespace Inscryption_mp
 {
-	public class Client : Inscription_Server.Client
+	public class Client : Inscryption_Server.Client
 	{
 		public View CurrentView { get; private set; }
 
@@ -67,11 +67,11 @@ namespace Inscription_mp
 		public override bool ChangeScene(JObject data)
 		{
 			base.ChangeScene(data);
-			CurrentView = App.GetView(CurrentScene);
+			CurrentView = View.GetView(CurrentScene);
 			MainWindow.MainWindow_ShowView(CurrentView);
 			return true;
 		}
-		protected override void CurrentScene_ActionRunEvent(Inscription_Server.Client sender, ActionRunEventData e)
+		protected override void CurrentScene_ActionRunEvent(Inscryption_Server.Client sender, ActionRunEventData e)
 		{
 			//Client side
 			if(sender == null)

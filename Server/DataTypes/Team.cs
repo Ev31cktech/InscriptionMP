@@ -1,4 +1,4 @@
-﻿namespace Inscription_Server.DataTypes
+﻿namespace Inscryption_Server.DataTypes
 {
 	public enum Team
 	{

@@ -4,20 +4,21 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using Inscription_Server.NetworkManagers;
-using Inscription_Server.Scenes;
+using Inscryption_Server.NetworkManagers;
+using Inscryption_Server.Scenes;
 using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
-//using PostSharp.Patterns.Diagnostics;
-//using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
+using PostSharp.Patterns.Diagnostics;
+using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
 
-//[assembly: Log(AttributePriority = 1)]
-//[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
-//[assembly: Log(AttributeTargetMembers = "regex:^..ctor", AttributeExclude = true, AttributePriority = 2)]
-//[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
+[assembly: Log]
+[assembly: Log(AttributePriority = 1)]
+[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
+[assembly: Log(AttributeTargetMembers = "regex:^..ctor", AttributeExclude = true, AttributePriority = 2)]
+[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
 
-namespace Inscription_Server
+namespace Inscryption_Server
 {
 	public class App
 	{
@@ -37,8 +38,7 @@ namespace Inscription_Server
 		};
 		public static void Main(string[] args)
 		{
-			//LoggingServices.DefaultBackend = InitializeBackend();
-			InitializeBackend();
+			LoggingServices.DefaultBackend = InitializeBackend();
 			Logger.Info("Server Logging Enabled");
 			Stack<string> argStack = new Stack<string>(args);
 			Scene.RegisterScene(new SetupScene());
@@ -58,22 +58,18 @@ namespace Inscription_Server
 			{ Console.Error.WriteLine(e.ToString()); }
 			Console.ReadKey();
 		}
-		public static void InitializeBackend()
+
+
+		public static Log4NetLoggingBackend InitializeBackend()
 		{
 			XmlConfigurator.Configure(new FileInfo("logger.config"));
 			var repo = (Hierarchy)LogManager.GetRepository();
 #if DEBUG
 			repo.Root.Level = log4net.Core.Level.All;
 #endif
-			XmlConfigurator.Configure(repo);
+			//XmlConfigurator.Configure(repo);
+			return new Log4NetLoggingBackend();
 		}
-
-
-		//public static Log4NetLoggingBackend InitializeBackend()
-		//{
-		//	XmlConfigurator.Configure(new FileInfo("logger.config"));
-		//	return new Log4NetLoggingBackend();
-		//}
 
 		private static bool RunCommand(String inp, Command[] commands)
 		{

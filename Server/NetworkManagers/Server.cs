@@ -1,6 +1,6 @@
-﻿using Inscription_mp;
-using Inscription_Server.DataTypes;
-using Inscription_Server.Scenes;
+﻿using Inscryption_mp;
+using Inscryption_Server.DataTypes;
+using Inscryption_Server.Scenes;
 using Newtonsoft.Json.Linq;
 //using PostSharp.Patterns.Diagnostics;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Threading;
 
 //[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_|^.?Loop", AttributeExclude = true, AttributePriority = 3)]
-namespace Inscription_Server.NetworkManagers
+namespace Inscryption_Server.NetworkManagers
 {
 	public abstract class Server
 	{
@@ -43,7 +43,8 @@ namespace Inscription_Server.NetworkManagers
 			//server.team1 = sceneData.Values<Player>("Team1");
 			//server.team2 = sceneData.Value<Player[]>("Team2");
 			//generate new map
-			BoardScene scene = new BoardScene(sceneData.Value<JObject>("GameSettings"));
+			BoardScene scene = new BoardScene();
+			scene.Initialize(sceneData);
 			ThisServer.clients.ForEach( i => {i.ChangeScene(scene);});
 		}
 		public virtual void Stop()

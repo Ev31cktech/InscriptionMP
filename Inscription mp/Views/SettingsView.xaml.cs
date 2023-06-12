@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Inscription_mp.Views
+namespace Inscryption_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for SettingsView.xaml

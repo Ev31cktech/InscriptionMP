@@ -1,14 +1,13 @@
-﻿using Inscription_mp.Views.SetupScene;
-using System.Windows;
+﻿using System.Windows;
 
-namespace Inscription_mp.Views
+namespace Inscryption_mp.Views.SetupScene
 {
 	/// <summary>
 	/// Interaction logic for SetupView.xaml
 	/// </summary>
-	public partial class SetupView : View<Inscription_Server.Scenes.SetupScene>
+	public partial class SetupView : View<Inscryption_Server.Scenes.SetupScene>
 	{
-		public SetupView(Inscription_Server.Scenes.SetupScene scene) : base(scene)
+		public SetupView(Inscryption_Server.Scenes.SetupScene scene) : base(scene)
 		{
 			InitializeComponent();
 			Loaded += (s, e) => { StartGameBTN.IsEnabled = App.Client.IsHost; };

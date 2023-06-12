@@ -1,7 +1,7 @@
 
-using Inscription_Server.DataTypes;
+using Inscryption_Server.DataTypes;
 
-namespace Inscription_Server.Scenes
+namespace Inscryption_Server.Scenes
 {
 	class MapScenes : Scene
 	{

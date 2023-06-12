@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Inscription_Server.DataTypes
+namespace Inscryption_Server.DataTypes
 {
 	abstract class Card
 	{

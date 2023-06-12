@@ -1,9 +1,9 @@
-﻿using Inscription_Server.Events.ValueChanged;
+﻿using Inscryption_Server.Events.ValueChanged;
 using System.Collections.Generic;
 using System.Linq;
-using static Inscription_Server.Events.ValueChanged.ValueChangedEventArgs;
+using static Inscryption_Server.Events.ValueChanged.ValueChangedEventArgs;
 
-namespace Inscription_Server
+namespace Inscryption_Server
 {
 	public class ObservableList<T> : List<T>, INotifyValueChanged
 	{

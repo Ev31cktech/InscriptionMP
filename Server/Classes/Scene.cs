@@ -4,16 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Inscription_Server.Events.ValueChanged;
-using Inscription_Server.Events.INotifyEvent;
-using Inscription_Server.Serialization;
-using Inscription_Server.Exceptions.SceneExceptions;
+using Inscryption_Server.Events.ValueChanged;
+using Inscryption_Server.Events.INotifyEvent;
+using Inscryption_Server.Serialization;
+using Inscryption_Server.Exceptions.SceneExceptions;
 using System.Linq;
-using Inscription_Server.Exceptions;
-using Inscription_Server.DataTypes;
-using static Inscription_Server.DataTypes.Runnable;
+using Inscryption_Server.Exceptions;
+using Inscryption_Server.DataTypes;
+using static Inscryption_Server.DataTypes.Runnable;
 
-namespace Inscription_Server
+namespace Inscryption_Server
 {
 	public abstract class Scene : INotifyActionRun, IToJObject
 	{

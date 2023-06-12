@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Inscription_mp.Exceptions
+namespace Inscryption_mp.Exceptions
 {
 
 	[Serializable]

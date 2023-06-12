@@ -5,11 +5,11 @@ using System.Net.Sockets;
 using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Inscription_Server.Exceptions;
-using Inscription_Server.Events.INotifyEvent;
-using Inscription_Server.DataTypes;
+using Inscryption_Server.Exceptions;
+using Inscryption_Server.Events.INotifyEvent;
+using Inscryption_Server.DataTypes;
 
-namespace Inscription_Server
+namespace Inscryption_Server
 {
 	public class Client
 	{
@@ -122,10 +122,10 @@ namespace Inscription_Server
 			{
 				switch (i.Value<string>("target"))
 				{
-					case "Inscription_Server.Client.ChangeScene":
+					case "Inscryption_Server.Client.ChangeScene":
 						ChangeScene(i.Value<JObject>("data"));
 						break;
-					case "Inscription_Server.Client.KickPlayer":
+					case "Inscryption_Server.Client.KickPlayer":
 						App.Server.Player_Kick(i.Value<Player>("data"));
 						break;
 					default:

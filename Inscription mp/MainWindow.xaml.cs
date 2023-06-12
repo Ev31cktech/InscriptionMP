@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
-using Inscription_mp.Views;
+using Inscryption_mp.Views;
 
-namespace Inscription_mp
+namespace Inscryption_mp
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -15,6 +16,7 @@ namespace Inscription_mp
 		public MainWindow()
 		{
 			InitializeComponent();
+			Loaded += (s,e) => { App.Initializer.InitalizeAssembly(Assembly.GetAssembly(typeof(Inscryption_Server.App)));}; //TODO progress bar
 			mw = this;
 			
 			settingsView = new SettingsView();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace Inscription_mp.Views.BoardScene
+namespace Inscryption_mp.Views.BoardScene
 {
 	/// <summary>
 	/// Interaction logic for CardSlot.xaml

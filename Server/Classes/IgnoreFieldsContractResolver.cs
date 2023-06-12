@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System;
 
-namespace Inscription_Server
+namespace Inscryption_Server
 {
 	public class IgnoreFieldsContractResolver : DefaultContractResolver
 	{

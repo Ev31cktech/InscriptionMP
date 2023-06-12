@@ -1,8 +1,8 @@
-﻿using Inscription_Server.DataTypes;
+﻿using Inscryption_Server.DataTypes;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace Inscription_Server.Events.INotifyEvent
+namespace Inscryption_Server.Events.INotifyEvent
 {
 	public interface INotifyActionRun
 	{

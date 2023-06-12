@@ -1,9 +1,9 @@
-﻿using Inscription_Server.Scenes;
+﻿using Inscryption_Server.Scenes;
 using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Inscription_Server.NetworkManagers
+namespace Inscryption_Server.NetworkManagers
 {
 	public class LocalServer : Server
 	{
