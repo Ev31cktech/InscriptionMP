@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using Inscription_Server.DataTypes;
-using static Inscription_Server.DataTypes.Runnable;
+using Inscryption_Server.DataTypes;
+using static Inscryption_Server.DataTypes.Runnable;
 
-namespace Inscription_Server.Scenes
+namespace Inscryption_Server.Scenes
 {
 	public class SetupScene : Scene
 	{

@@ -1,6 +1,6 @@
 using System;
 
-namespace Inscription_Server.Exceptions
+namespace Inscryption_Server.Exceptions
 {
 	[Serializable]
 	public class ActionNotFoundExceptionException : System.Exception

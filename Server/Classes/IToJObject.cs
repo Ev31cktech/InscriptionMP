@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Inscription_Server.Serialization
+namespace Inscryption_Server.Serialization
 {
 	public interface IToJObject
 	{

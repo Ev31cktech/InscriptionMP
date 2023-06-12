@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Inscription_Server.DataTypes
+namespace Inscryption_Server.DataTypes
 {
 	public class NetworkPacket
 	{

@@ -1,9 +1,9 @@
 ﻿#define DEBUG_CONSOLE
 
-using Inscription_mp.Exceptions;
-using Inscription_mp.Views;
-using Inscription_Server.NetworkManagers;
-using Inscription_Server.Scenes;
+using Inscryption_mp.Exceptions;
+using Inscryption_mp.Views;
+using Inscryption_Server.NetworkManagers;
+using Inscryption_Server.Scenes;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -11,17 +11,22 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using log4net;
-//using PostSharp.Patterns.Diagnostics;
+using PostSharp.Patterns.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
 using Newtonsoft.Json.Linq;
-using Inscription_mp.Views.BoardScene;
-using Inscription_Server;
+using Inscryption_mp.Views.BoardScene;
+using Inscryption_Server;
+using System.IO;
+using System.Reflection;
+using Inscryption_Server.Exceptions;
+using System.Linq.Expressions;
+using PostSharp.Patterns.Diagnostics.Custom;
 
-//[assembly: Log]
-//[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributePriority = 3)]
-//[assembly: Log( AttributeExclude = true, AttributeTargetMembers = "regex:\\.\\.ctor\\(\\)$")]
-namespace Inscription_mp
+[assembly: Log]
+[assembly: Log(AttributeExclude = true, AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributePriority = 3)]
+[assembly: Log(AttributeExclude = true, AttributeTargetMembers = "regex:\\.\\.ctor\\(\\)$")]
+namespace Inscryption_mp
 {
 	public class App : Application
 	{
@@ -30,22 +35,22 @@ namespace Inscription_mp
 		{
 			get
 			{
-				if (Inscription_mp.Properties.Settings.Default.AllSettings != "")
-				{ app.settings = JsonConvert.DeserializeObject<Settings>(Inscription_mp.Properties.Settings.Default.AllSettings); }
+				if (Inscryption_mp.Properties.Settings.Default.AllSettings != "")
+				{ app.settings = JsonConvert.DeserializeObject<Settings>(Inscryption_mp.Properties.Settings.Default.AllSettings); }
 				return app.settings;
 			}
 			set
 			{
 				app.settings = value;
-				Inscription_mp.Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(value);
-				Inscription_mp.Properties.Settings.Default.Save();
+				Inscryption_mp.Properties.Settings.Default.AllSettings = JsonConvert.SerializeObject(value);
+				Inscryption_mp.Properties.Settings.Default.Save();
 			}
 		}
 		private static Server server;
 		public static Client Client { get; private set; }
 		public static ILog Logger { get { return LogManager.GetLogger("CLIENT"); } }
 		private static Timer looper;
-		private static Dictionary<string, View> sceneViewList = new Dictionary<string, View>();
+		public static Initializer Initializer {get; } = new Initializer();
 		private Settings settings;
 		private bool _contentLoaded;
 		private static bool looping = false;
@@ -75,16 +80,15 @@ namespace Inscription_mp
 			if (!(_consoleAttached = AttachConsole(ATTACH_PARENT_PROCESS)))
 			{ Logger.Warn("Could not find Console to attach to."); }
 
-			//LoggingServices.DefaultBackend = 
-				Inscription_Server.App.InitializeBackend();
-			SetupScene setupScene = new SetupScene();
-			Scene.RegisterScene(setupScene);
-			BoardScene boardScene = new BoardScene(new JObject());
-			Scene.RegisterScene(boardScene);
-			sceneViewList.Add(typeof(SetupScene).FullName, new SetupView(setupScene));
-			sceneViewList.Add(typeof(BoardScene).FullName, new BoardView(boardScene));
-			app.InitializeComponent();
+			LoggingServices.DefaultBackend = Inscryption_Server.App.InitializeBackend();
+			//SetupScene setupScene = new SetupScene();
+			//Scene.RegisterScene(setupScene);
+			//BoardScene boardScene = new BoardScene(new JObject());
+			//Scene.RegisterScene(boardScene);
+			//sceneViewList.Add(typeof(SetupScene).FullName, new SetupView(setupScene));
+			//sceneViewList.Add(typeof(BoardScene).FullName, new BoardView(boardScene));
 			app.Resources.MergedDictionaries.Add(Application.LoadComponent(new Uri("/AppRecourceDictionary.xaml", UriKind.Relative)) as ResourceDictionary);
+			app.InitializeComponent();
 			app.Run();
 			FreeConsole();
 			Close();
@@ -107,12 +111,12 @@ namespace Inscription_mp
 			catch (SocketException e)
 			{
 				Logger.Error($"Could not connect. Are you a server is running on that IP?\n{e.Message}");
-				Inscription_mp.MainWindow.ShowMainView();
+				Inscryption_mp.MainWindow.ShowMainView();
 			}
 			catch (Exception e)
 			{
 				Logger.Error($"{e.Message}\n\n{e.StackTrace}");
-				Inscription_mp.MainWindow.ShowMainView();
+				Inscryption_mp.MainWindow.ShowMainView();
 			}
 		}
 		public void Loop(object sender)
@@ -122,7 +126,7 @@ namespace Inscription_mp
 				try
 				{
 					looping = true;
-					if(Client.Connected)
+					if (Client.Connected)
 						Client.Loop();
 				}
 				catch (Exception e)
@@ -140,20 +144,11 @@ namespace Inscription_mp
 		{
 			if (server != null)
 				server.Stop();
-			if(looper != null)
+			if (looper != null)
 				looper.Dispose();
 			if (Client != null)
 				Client.Shutdown();
 			app.Shutdown();
-		}
-
-		internal static View GetView(Scene scene)
-		{
-			View view;
-			if (!sceneViewList.TryGetValue(scene.GetType().FullName, out view))
-			{ throw new UnknownViewException("No view associated with Scene"); }
-			view.Initialize();
-			return view;
 		}
 	}
 }

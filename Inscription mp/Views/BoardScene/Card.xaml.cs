@@ -1,9 +1,9 @@
-﻿using Inscription_mp.Views.BoardScene;
-using Inscription_Server;
-using Inscription_Server.DataTypes;
+﻿using Inscryption_mp.Views.BoardScene;
+using Inscryption_Server;
+using Inscryption_Server.DataTypes;
 using System.Windows.Controls;
 
-namespace Inscription_mp
+namespace Inscryption_mp
 {
 	/// <summary>
 	/// Interaction logic for Card.xaml

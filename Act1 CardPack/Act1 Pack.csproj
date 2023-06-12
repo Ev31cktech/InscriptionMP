@@ -54,11 +54,11 @@
     <Folder Include="Sigils\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cards\Texture\Portrait_Opposum.svg" />
+    <EmbeddedResource Include="Cards\Texture\Portrait_Opposum.svg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="MetaData.json" />
+    <EmbeddedResource Include="MetaData.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

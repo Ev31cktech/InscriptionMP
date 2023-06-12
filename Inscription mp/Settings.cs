@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Inscription_mp
+namespace Inscryption_mp
 {
 	public struct Settings
 	{

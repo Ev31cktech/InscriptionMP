@@ -1,8 +1,8 @@
-﻿using Inscription_Server.DataTypes;
+﻿using Inscryption_Server.DataTypes;
 using System.Collections.Generic;
 
 
-namespace Inscription_mp
+namespace Inscryption_mp
 {
 	class Card_OLD
 	{

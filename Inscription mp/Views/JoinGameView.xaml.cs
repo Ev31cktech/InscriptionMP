@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Inscription_mp.Views
+namespace Inscryption_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for JoinGameView.xaml

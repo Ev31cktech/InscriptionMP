@@ -1,4 +1,4 @@
-﻿namespace Inscription_Server.Exceptions
+﻿namespace Inscryption_Server.Exceptions
 {
 
 	[System.Serializable]

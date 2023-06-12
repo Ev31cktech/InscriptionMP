@@ -2,7 +2,7 @@
 using System;
 using System.CodeDom.Compiler;
 
-namespace Inscription_Server.DataTypes
+namespace Inscryption_Server.DataTypes
 {
 	public class Runnable
 	{

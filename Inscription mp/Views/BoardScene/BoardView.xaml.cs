@@ -1,21 +1,21 @@
-﻿using Inscription_Server.DataTypes;
-using Inscription_Server.Events.ValueChanged;
+﻿using Inscryption_Server.DataTypes;
+using Inscryption_Server.Events.ValueChanged;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Inscription_mp.Views.BoardScene
+namespace Inscryption_mp.Views.BoardScene
 {
 	/// <summary>
 	/// Interaction logic for BoardView.xaml
 	/// </summary>
-	public partial class BoardView : View<Inscription_Server.Scenes.BoardScene>
+	public partial class BoardView : View<Inscryption_Server.Scenes.BoardScene>
 	{
 		CardSlot activeslot;
 		CardSlot[] opponentSlots;
 		CardSlot[] playerSlots;
 		Stack<CardData> cards;
 
-		public BoardView(Inscription_Server.Scenes.BoardScene scene) : base(scene)
+		public BoardView(Inscryption_Server.Scenes.BoardScene scene) : base(scene)
 		{
 			InitializeComponent();
 		}

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{18577B7D-2A22-4BA6-AF4F-4BF9027C0522}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Inscription_Server</RootNamespace>
-    <AssemblyName>Inscription_Server</AssemblyName>
+    <RootNamespace>Inscryption_Server</RootNamespace>
+    <AssemblyName>Inscryption_Server</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -73,6 +73,18 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PostSharp, Version=2023.0.5.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Redist.2023.0.5\lib\net45\PostSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Patterns.Common, Version=2023.0.5.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Patterns.Common.Redist.2023.0.5\lib\net47\PostSharp.Patterns.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Patterns.Diagnostics, Version=2023.0.5.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Patterns.Diagnostics.Redist.2023.0.5\lib\net47\PostSharp.Patterns.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Patterns.Diagnostics.Backends.Log4Net, Version=2023.0.5.0, Culture=neutral, PublicKeyToken=e7f631e6ce13f078, processorArchitecture=MSIL">
+      <HintPath>..\packages\PostSharp.Patterns.Diagnostics.Log4Net.2023.0.5\lib\net45\PostSharp.Patterns.Diagnostics.Backends.Log4Net.dll</HintPath>
+    </Reference>
     <Reference Include="Steamworks.NET">
       <HintPath>..\Includes\Steam API\Steamworks.NET.dll</HintPath>
     </Reference>
@@ -88,12 +100,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\AssemblyData.cs" />
     <Compile Include="DataTypes\Player.cs" />
     <Compile Include="DataTypes\Runnable.cs" />
     <Compile Include="DataTypes\Card.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Exceptions\ActionNotFoundException.cs" />
     <Compile Include="Exceptions\ClientDisconnectedException.cs" />
+    <Compile Include="Exceptions\InvalidAssemblyException.cs" />
     <Compile Include="Exceptions\SceneExceptions\SceneException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownActionException.cs" />
     <Compile Include="Exceptions\SceneExceptions\UnknownPropertyException.cs" />
@@ -104,6 +118,7 @@
     <Compile Include="Classes\INotifyValueChanged.cs" />
     <Compile Include="Classes\IToJObject.cs" />
     <Compile Include="Classes\MapGenerator.cs" />
+    <Compile Include="Initializer.cs" />
     <Compile Include="NetworkManagers\Server.cs" />
     <Compile Include="NetworkManagers\LocalServer.cs" />
     <Compile Include="NetworkManagers\SteamServer.cs" />
@@ -123,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="MetaData.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

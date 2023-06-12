@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Inscription_mp.Views
+namespace Inscryption_mp.Views
 {
 	/// <summary>
 	/// Interaction logic for MainView.xaml

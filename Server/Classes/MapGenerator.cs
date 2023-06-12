@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json.Linq;
 
-namespace Inscription_mp
+namespace Inscryption_mp
 {
 	public class MapGenerator
 	{

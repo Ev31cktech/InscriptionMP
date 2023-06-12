@@ -1,5 +1,29 @@
 {
   "Name": "Act1 Pack",
   "GameVersion": "0.0.0.1",
-  "Authors": [ "Ev31cktech(Game author)", "Jules" ]
+  "Version": "0",
+  "Authors": [ "Ev31cktech(Game author)", "Jules" ],
+  "Cards": [
+    {
+      "Name": "Opposum",
+      "Health": 0,
+      "Damage": 0,
+      "Portrait": "/Cards/Texture/Portrait_Opposum.svg"
+    }
+    /*
+    {
+      required:
+      "Name" : "",
+      "Health" : 0,
+      "Damage" : 0,
+      "Portrait" : "",
+      "Cost" : {
+        "Type" : ""
+        "Amount" : 0
+      },
+    */
+  ],
+  "Sigils": [],
+  "Costs": [],
+  "Scenes": []
 }

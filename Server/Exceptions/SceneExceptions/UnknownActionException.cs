@@ -1,4 +1,4 @@
-﻿namespace Inscription_Server.Exceptions.SceneExceptions
+﻿namespace Inscryption_Server.Exceptions.SceneExceptions
 {
 	[System.Serializable]
 	public class UnknownActionException : SceneException

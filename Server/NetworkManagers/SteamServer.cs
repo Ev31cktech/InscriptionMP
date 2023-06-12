@@ -1,6 +1,6 @@
 ﻿using Steamworks;
 
-namespace Inscription_Server.NetworkManagers
+namespace Inscryption_Server.NetworkManagers
 {
 	public class SteamServer : Server
 	{
