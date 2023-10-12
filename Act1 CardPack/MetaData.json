@@ -2,28 +2,65 @@
   "Name": "Act1 Pack",
   "GameVersion": "0.0.0.1",
   "Version": "0",
-  "Authors": [ "Ev31cktech(Game author)", "Jules" ],
-  "Cards": [
-    {
-      "Name": "Opposum",
-      "Health": 0,
-      "Damage": 0,
-      "Portrait": "/Cards/Texture/Portrait_Opposum.svg"
-    }
-    /*
-    {
-      required:
-      "Name" : "",
-      "Health" : 0,
-      "Damage" : 0,
-      "Portrait" : "",
-      "Cost" : {
-        "Type" : ""
-        "Amount" : 0
-      },
-    */
+  "Authors": [
+    "Ev31cktech(Game author)",
+    "Jules"
   ],
-  "Sigils": [],
-  "Costs": [],
-  "Scenes": []
+  "Initializer":"Act1_CardPack.Initializer",
+  "Content": {
+    "Cards": [
+      {
+        "Name": "Opposum",
+        "Health": 1,
+        "Power": 1,
+        "Portrait": "/Cards/Texture/Portrait_Opposum.xaml",
+        "Cost": {
+          "Type": "Bone", //can be empty for free units
+          "Amount": 2
+        }
+      }
+        /*
+      {
+        "Name": "Hodag",
+        "Health": 5,
+        "Power": 1,
+        "Portrait": "/Cards/Texture/portrait_hodag.xaml",
+        "Cost": {
+          "Type": "Act",
+          "Amount": 0
+        },
+        "Sigil": [
+
+        ]
+      },
+      {
+        "Name": "Ringworm",
+        "Health": 1,
+        "Power" 0,
+        "Cost": {
+          "Type": "", //can be empty for free units
+          "Amount": 0
+        }
+      */
+        /*
+      {
+        "Name" : "",
+        "Health" : 0,
+        "Power" : 0,
+        "Portrait" : "",
+        "Cost" : {
+          "Type" : "" //can be empty for free units
+          "Amount" : 0
+      },
+      */
+    ],
+    "Sigils": [],
+    "Costs": [
+      {
+        "Name": "Bone",
+        "Type": "Act1_CardPack.BoneCard"
+      }
+    ],
+    "Scenes": []
+  }
 }
