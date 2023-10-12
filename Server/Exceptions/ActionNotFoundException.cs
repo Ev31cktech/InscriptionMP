@@ -3,7 +3,7 @@ using System;
 namespace Inscryption_Server.Exceptions
 {
 	[Serializable]
-	public class ActionNotFoundExceptionException : System.Exception
+	internal class ActionNotFoundExceptionException : System.Exception
 	{
 		public ActionNotFoundExceptionException() { }
 		public ActionNotFoundExceptionException(string message) : base(message) { }

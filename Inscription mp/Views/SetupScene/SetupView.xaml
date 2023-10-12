@@ -1,5 +1,6 @@
 ﻿<inscryption_mp:View
-    x:Class="Inscryption_mp.Views.SetupScene.SetupView"
+      x:Class="Inscryption_mp.Views.SetupScene.SetupView"
+      x:ClassModifier="internal"
       x:TypeArguments="inscryption_scenes:SetupScene" 
       xmlns:inscryption_mp="clr-namespace:Inscryption_mp"
       xmlns:inscryption_scenes="clr-namespace:Inscryption_Server.Scenes;assembly=Inscryption_Server"
@@ -38,11 +39,14 @@
             <Border.Background>
                 <SolidColorBrush Color="#aaa" Opacity="0.25" />
             </Border.Background>
-            <StackPanel>
-                <Label Content="Settings"/>
+            <Grid>
+                <StackPanel>
+                    <Label Content="Settings" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="ProfileCMB" Margin="10 0" VerticalAlignment="Top"/>
+                </StackPanel>
                 <StackPanel Name="SettingsSTP"/>
-                <Button Name="StartGameBTN" Click="StartGameBTN_Click" Width="100" Content="start game"/>
-            </StackPanel>
+                <Button Name="StartGameBTN" Click="StartGameBTN_Click" Width="150" Content="start game" VerticalAlignment="Bottom"/>
+            </Grid>
         </Border>
         <Border Grid.Column="2" BorderBrush="#00F" BorderThickness="4">
             <Border.Background>

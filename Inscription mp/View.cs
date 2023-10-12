@@ -5,18 +5,18 @@ using System.Windows.Controls;
 
 namespace Inscryption_mp
 {
-	public abstract class View<T>  : View where T : Scene
+	internal abstract class View<T>  : View where T : Scene<T>
 	{
 		public T thisScene{ get; private set; }
 		public View<T> thisView { get; private set; }
-		public View( T scene)
+		public View(T scene)
 		{
 			DataContext = scene;
 			thisScene = scene;
 			thisView = this;
 		}
 	}
-	public abstract class View : UserControl
+	internal abstract class View : UserControl
 	{
 		private static Dictionary<string, View> sceneViewList = new Dictionary<string, View>();
 		public View()

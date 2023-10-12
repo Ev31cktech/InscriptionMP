@@ -1,14 +1,14 @@
 ﻿using Inscryption_mp.Views.BoardScene;
-using Inscryption_Server;
-using Inscryption_Server.DataTypes;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace Inscryption_mp
 {
 	/// <summary>
 	/// Interaction logic for Card.xaml
 	/// </summary>
-	public partial class Card : UserControl
+	internal partial class Card : UserControl
 	{
 		private CardSlot slot;
 		//EventHandler<CardEventArgs> OnSummon;
@@ -20,6 +20,7 @@ namespace Inscryption_mp
 			CardName.Content = card.Name;
 			HealthPNL.Content = card.Health;
 			PowerPNL.Content = card.Power;
+			CardPortrait.Child = XamlReader.Parse(XamlWriter.Save(card.Portrait)) as UIElement;
 		}
 		public void Summon()
 		{

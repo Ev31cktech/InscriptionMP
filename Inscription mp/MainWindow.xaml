@@ -1,4 +1,5 @@
 ﻿<Window x:Class="Inscryption_mp.MainWindow"
+        x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,6 +9,7 @@
         Title="Inscription mp" Height="450" Width="800"
         FontFamily="{StaticResource inscriptionfont}"
         Background="#1e1e28"
+        FontSize="20pt"
         MinWidth="600" MinHeight="338">
     <views:MainView/>
 </Window>

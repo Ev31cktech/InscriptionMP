@@ -1,7 +1,7 @@
 ﻿namespace Inscryption_Server.Exceptions.SceneExceptions
 {
 	[System.Serializable]
-	public class UnknownActionException : SceneException
+	internal class UnknownActionException : SceneException
 	{
 		public UnknownActionException() { }
 		public UnknownActionException(string message) : base(message) { }

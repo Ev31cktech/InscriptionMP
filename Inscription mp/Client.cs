@@ -1,5 +1,4 @@
-﻿using Inscryption_Server;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Inscryption_Server.Exceptions;
 using System;
 using System.Net.Sockets;
@@ -10,15 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Inscryption_Server.DataTypes;
 using Inscryption_Server.Events.INotifyEvent;
-using static Inscryption_Server.DataTypes.Runnable;
 
 namespace Inscryption_mp
 {
-	public class Client : Inscryption_Server.Client
+	internal class Client : Inscryption_Server.Client
 	{
 		public View CurrentView { get; private set; }
 
-		public Client(TcpClient socket) : base(socket)
+		internal Client(TcpClient socket) : base(socket)
 		{
 			WaitForMOTD();
 		}

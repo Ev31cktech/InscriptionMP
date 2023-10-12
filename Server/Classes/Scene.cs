@@ -30,13 +30,12 @@ namespace Inscryption_Server
 		{
 			actions.Add(GetActionName(Sync), new Runnable(Sync));
 		}
-
 		protected void InitializeScene(params Runnable[] funcs)
 		{
 			funcs.ToList().ForEach(i => this.actions.Add(GetActionName(i.Action), i));
 		}
 
-		public bool Sync(JObject data)
+		internal bool Sync(JObject data)
 		{
 			JToken nameToken = null;
 			JToken dataToken = null;
@@ -49,7 +48,7 @@ namespace Inscryption_Server
 			return true;
 		}
 
-		protected void Sync(JToken data, Type parentType, object var)
+		internal void Sync(JToken data, Type parentType, object var)
 		{
 			foreach (var token in data.Children())
 			{
@@ -112,29 +111,40 @@ namespace Inscryption_Server
 			}
 		}
 
-		private void Sync(JProperty parent, JArray token, object var)
+		private void Sync(JProperty parent, JArray jarr, object var)
 		{
 			PropertyInfo pi = var.GetType().GetRuntimeProperty(parent.Name);
-			if (pi.PropertyType.IsGenericType)
-			{
-				Type elementType = pi.PropertyType.GenericTypeArguments[0];
+			if (!pi.PropertyType.IsGenericType) //TODO does this include Array's?
+			{ Sync(parent.Name, jarr.Children(), var); }
+			else
+			{   //Property is a list
+
+				Type elementType = pi.PropertyType.GenericTypeArguments[0];                 //find the element Type of the list
 				object element = null;
-				if (!elementType.IsPrimitive && !(elementType == typeof(string)))
-					element = Activator.CreateInstance(elementType);
-				IList genericArray = (IList)pi.GetValue(this);
-				genericArray.Clear();
-				foreach (JToken i in token.Children())
+				IList genericArray = (IList)pi.GetValue(this);                              //copy the existing list
+				genericArray.Clear();                                                       //clear the existing list
+				foreach (JToken token in jarr.Children())
 				{
-					if (element != null)
-						Sync(i, elementType, element);
+					if ((token as JValue).Value == null)                                    //check if there is a value in the first place
+					{ }
+					else if (elementType.IsPrimitive || (elementType == typeof(string)))    //check if the element is a primative
+					{ element = (token as JValue).Value; }
+					//else if (elementType.GetInterfaces().Contains(typeof(IToJObject)))		//if implements IToObject, it has a constructor with 1 paramater of type JObject
+					//{ 
+					//	if(elementType.GetContrustor(new Type[] {typeof(JObject)}))
+					//		{ throw new UnknownActionException($"{elementType.GetType()} implemented {nameof(IToJObject)} but did not implement a constructor with constructor signatur: ..ctor(JObject). this is a must but can't be enforced by C#"); }
+					//	element = Activator.CreateInstance(elementType, token as JObject); //TODO test if this works
+					//	Sync(token, elementType, element);
+					//}
 					else
-						element = (i as JValue).Value;
+					{
+						element = Activator.CreateInstance(elementType);
+						Sync(token, elementType, element);
+					}
 					genericArray.Add(element);
 				}
 				Sync(parent.Name, genericArray, var);
 			}
-			else
-				Sync(parent.Name, token.Children(), var);
 		}
 
 		private void Sync(string name, object value, object var)
@@ -163,7 +173,7 @@ namespace Inscryption_Server
 			scenes.Add(scene.GetType().FullName, scene);
 		}
 
-		public static Scene GetScene(JObject data)
+		internal static Scene GetScene(JObject data)
 		{
 			Scene temp;
 			if (!scenes.TryGetValue(data["sceneName"].Value<string>(), out temp))
@@ -171,13 +181,11 @@ namespace Inscryption_Server
 			temp.Sync(data);
 			return temp;
 		}
-
-		public static string GetActionName(Func<JObject, bool> action)
+		internal static string GetActionName(Func<JObject, bool> action)
 		{
-			return $"{action.Target.GetType().FullName}.{action.Method.Name}";
+			return $"{action.Method.DeclaringType.FullName}.{action.Method.Name}";
 		}
-
-		public void TryRunAction(Func<JObject, bool> func, JObject data, Client sender = null)
+		internal void TryRunAction(Func<JObject, bool> func, JObject data, Client sender = null)
 		{
 			Runnable action;
 			if (!actions.TryGetValue(GetActionName(func), out action))
@@ -185,15 +193,15 @@ namespace Inscryption_Server
 			ActionRunEventData e = new ActionRunEventData(action, data);
 			App.Logger.Info($"Action {GetActionName(func)} run");
 			OnActionRun(e);
-			if(e.Executer == Runner.Server)
+			if (e.Executer == Runner.Server)
 			{
-				if(sender != null)
+				if (sender != null)
 					return;
 			}
 			e.Invoke();
 		}
 
-		public void TryRunAction(string func, JObject data, Client sender)
+		internal void TryRunAction(string func, JObject data, Client sender)
 		{
 			Runnable action;
 			if (!actions.TryGetValue(func, out action))
@@ -210,5 +218,11 @@ namespace Inscryption_Server
 		{
 			ActionRunEvent?.Invoke(sender, e);
 		}
+	}
+	public abstract class Scene<T> : Scene where T : Scene
+	{
+		public static T thisScene { get; private set; }
+		public Scene()
+		{ thisScene = this as T; }
 	}
 }

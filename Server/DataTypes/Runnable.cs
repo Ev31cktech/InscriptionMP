@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.CodeDom.Compiler;
 
 namespace Inscryption_Server.DataTypes
 {
@@ -8,14 +7,14 @@ namespace Inscryption_Server.DataTypes
 	{
 		public Runner Executer { get; }
 		public Func<JObject, bool> Action { get; private set; }
-		public Runnable(Func<JObject, bool> _action,Runner executer = Runner.Both)
+		public Runnable(Func<JObject, bool> _action, Runner executer = Runner.Both)
 		{
 			Action = _action;
 			Executer = executer;
 		}
 		public enum Runner
 		{
-			Server,	
+			Server,
 			Both
 		}
 	}

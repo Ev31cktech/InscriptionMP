@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Inscryption_mp
 {
-	public class MapGenerator
+	internal class MapGenerator
 	{
 		public JObject GenerateMap(JObject data)
 		{

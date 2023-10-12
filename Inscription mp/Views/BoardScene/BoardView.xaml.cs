@@ -8,7 +8,7 @@ namespace Inscryption_mp.Views.BoardScene
 	/// <summary>
 	/// Interaction logic for BoardView.xaml
 	/// </summary>
-	public partial class BoardView : View<Inscryption_Server.Scenes.BoardScene>
+	internal partial class BoardView : View<Inscryption_Server.Scenes.BoardScene>
 	{
 		CardSlot activeslot;
 		CardSlot[] opponentSlots;
@@ -22,8 +22,8 @@ namespace Inscryption_mp.Views.BoardScene
 		public override void Initialize()
 		{
 			uint columnCount = thisScene.settings.Board.ColumnCount;
-			opponentSlots= new CardSlot[columnCount];
-			opponentSlots= new CardSlot[columnCount];
+			playerSlots = new CardSlot[columnCount];
+			opponentSlots = new CardSlot[columnCount];
 			if (thisScene.Team == Team.one)
 			{
 				thisScene.Team1Slots.ValueChanged += plyerSlots_Update;
@@ -63,7 +63,9 @@ namespace Inscryption_mp.Views.BoardScene
 			//thisScene.RunAction(thisScene.Summon,new CardData("test", 2, 2));
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
-				activeslot.Card = new Card(new CardData("test", 2, 2));
+				Inscryption_Server.DataTypes.CardData data;
+				Inscryption_Server.DataTypes.Card.TryGetCard("Act1 Pack.Hodag", out data);
+				activeslot.Card = new Card(data as CardData);
 			}
 		}
 	}

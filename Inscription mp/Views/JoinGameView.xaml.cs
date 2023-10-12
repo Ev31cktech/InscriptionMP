@@ -5,7 +5,7 @@ namespace Inscryption_mp.Views
 	/// <summary>
 	/// Interaction logic for JoinGameView.xaml
 	/// </summary>
-	public partial class JoinGameView : View
+	internal partial class JoinGameView : View
 	{
 		public JoinGameView()
 		{

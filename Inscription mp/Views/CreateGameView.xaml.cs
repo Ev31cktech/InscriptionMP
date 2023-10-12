@@ -6,7 +6,7 @@ namespace Inscryption_mp.Views
 	/// <summary>
 	/// Interaction logic for CreateGameView.xaml
 	/// </summary>
-	public partial class CreateGameView : View
+	internal partial class CreateGameView : View
 	{
 		public CreateGameView()
 		{

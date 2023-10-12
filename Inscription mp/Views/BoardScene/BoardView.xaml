@@ -1,5 +1,6 @@
 ﻿<inscryption_mp:View
-    x:Class="Inscryption_mp.Views.BoardScene.BoardView" 
+    x:Class="Inscryption_mp.Views.BoardScene.BoardView"
+    x:ClassModifier="internal"
 	x:TypeArguments="inscryption_scenes:BoardScene" 
 	xmlns:inscryption_mp="clr-namespace:Inscryption_mp"
 	xmlns:inscryption_scenes="clr-namespace:Inscryption_Server.Scenes;assembly=Inscryption_Server"

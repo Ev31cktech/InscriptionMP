@@ -1,5 +1,4 @@
-﻿using Inscryption_Server.DataTypes;
-using Inscryption_Server.Serialization;
+﻿using Inscryption_Server.Serialization;
 using Newtonsoft.Json.Linq;
 
 namespace Inscryption_Server.DataTypes

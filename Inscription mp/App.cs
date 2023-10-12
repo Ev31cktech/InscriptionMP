@@ -1,27 +1,16 @@
 ﻿#define DEBUG_CONSOLE
 
-using Inscryption_mp.Exceptions;
-using Inscryption_mp.Views;
 using Inscryption_Server.NetworkManagers;
-using Inscryption_Server.Scenes;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using log4net;
 using PostSharp.Patterns.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
-using Newtonsoft.Json.Linq;
-using Inscryption_mp.Views.BoardScene;
-using Inscryption_Server;
-using System.IO;
 using System.Reflection;
-using Inscryption_Server.Exceptions;
-using System.Linq.Expressions;
-using PostSharp.Patterns.Diagnostics.Custom;
 
 [assembly: Log]
 [assembly: Log(AttributeExclude = true, AttributeTargetMembers = "regex:^get_|^set_|^Loop", AttributePriority = 3)]
@@ -47,10 +36,10 @@ namespace Inscryption_mp
 			}
 		}
 		private static Server server;
-		public static Client Client { get; private set; }
+		internal static Client Client { get; private set; }
 		public static ILog Logger { get { return LogManager.GetLogger("CLIENT"); } }
 		private static Timer looper;
-		public static Initializer Initializer {get; } = new Initializer();
+		internal static Initializer Initializer { get; } = new Initializer();
 		private Settings settings;
 		private bool _contentLoaded;
 		private static bool looping = false;
@@ -75,7 +64,7 @@ namespace Inscryption_mp
 
 
 		[STAThread]
-		public static void Main(string[] args)
+		internal static void Main(string[] args)
 		{
 			if (!(_consoleAttached = AttachConsole(ATTACH_PARENT_PROCESS)))
 			{ Logger.Warn("Could not find Console to attach to."); }
@@ -87,19 +76,21 @@ namespace Inscryption_mp
 			//Scene.RegisterScene(boardScene);
 			//sceneViewList.Add(typeof(SetupScene).FullName, new SetupView(setupScene));
 			//sceneViewList.Add(typeof(BoardScene).FullName, new BoardView(boardScene));
+
+			Assembly.GetExecutingAssembly();
 			app.Resources.MergedDictionaries.Add(Application.LoadComponent(new Uri("/AppRecourceDictionary.xaml", UriKind.Relative)) as ResourceDictionary);
 			app.InitializeComponent();
 			app.Run();
 			FreeConsole();
 			Close();
 		}
-		public static void StartLocalServer()
+		internal static void StartLocalServer()
 		{
 			server = new LocalServer(IPAddress.Any);
 			server.Start();
 			JoinDedicatedServer(IPAddress.Loopback);
 		}
-		public static void JoinDedicatedServer(IPAddress ip)
+		internal static void JoinDedicatedServer(IPAddress ip)
 		{
 			TcpClient tcpc = new TcpClient();
 			try
@@ -119,7 +110,7 @@ namespace Inscryption_mp
 				Inscryption_mp.MainWindow.ShowMainView();
 			}
 		}
-		public void Loop(object sender)
+		internal void Loop(object sender)
 		{
 			if (!looping)
 			{
@@ -140,7 +131,7 @@ namespace Inscryption_mp
 				}
 			}
 		}
-		public static void Close()
+		internal static void Close()
 		{
 			if (server != null)
 				server.Stop();

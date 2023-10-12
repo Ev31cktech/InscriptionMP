@@ -1,34 +1,36 @@
 ﻿using Inscryption_Server.Serialization;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
 namespace Inscryption_Server.DataTypes
 {
-	public struct CardData : IToJObject
+	public abstract class CardData : IToJObject
 	{
-		public String Name {get; private set;}
-		public String Species {get; private set;}
-		//public CostData Cost {get; }
-		public uint Health {get; set;}
-		public uint Power {get; set;}
+		public string CardId { get; private set; }
+		public String Name { get; private set; }
+		public String Species { get; private set; }
+		public uint Health { get; private set; }
+		public uint Power { get; private set; }
+		public CostData Cost { get; private set; }
+		public Sigil[] Sigils { get; private set; }
+		public CardData()
+		{ }
 
-		public CardData(String name, uint health, uint power) : this(name,null,health,power){}
-		public CardData(String name,String species,uint health, uint power)
+		internal void Initialize(string cardID, String name, uint health, uint power, CostData cost, Sigil[] sigils = null, String species = "")
 		{
+			CardId = cardID;
 			Name = name;
 			Species = species;
 			Health = health;
 			Power = power;
-			//Cost = 
+			Cost = cost;
+			Sigils = sigils;
 		}
 		public JObject ToJObject()
 		{
 			return JObject.FromObject(this);
 		}
-
-		public void FromObject(JObject data)
-		{
-		}
+		public virtual bool CanPlay(CardData card) { throw new NotImplementedException(""); }
+		public virtual void PlayCard() { throw new NotImplementedException(""); }
 	}
 }

@@ -4,7 +4,7 @@ namespace Inscryption_Server.Exceptions
 {
 
 	[Serializable]
-	public class ClientDisconnectedException : Exception
+	internal class ClientDisconnectedException : Exception
 	{
 		public ClientDisconnectedException() : base("Client disconnected") { }
 		public ClientDisconnectedException(string message) : base(message) { }

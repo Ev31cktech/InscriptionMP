@@ -4,7 +4,7 @@ namespace Inscryption_Server.Exceptions.SceneExceptions
 {
 
 	[Serializable]
-	public class UnknownSceneException : SceneException
+	internal class UnknownSceneException : SceneException
 	{
 		public UnknownSceneException() :base("unknown scene encountered") { }
 		public UnknownSceneException(string message) : base(message) { }

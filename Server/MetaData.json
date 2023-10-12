@@ -1,25 +1,27 @@
 {
   "Name": "BaseGame",
   "GameVersion": "0.0.0.1",
-  "Version" : "1",
+  "Version": "1",
   "Authors": [
     "Ev31cktech(Game author)",
     "Jules"
   ],
-  "Scenes": [
-    {
-      "SceneClass": "Inscryption_Server.Scenes.SetupScene",
-      "ViewClass": "Inscryption_mp.Views.SetupScene.SetupView"
-    },
-    {
-      "SceneClass": "Inscryption_Server.Scenes.BoardScene",
-      "ViewClass": "Inscryption_mp.Views.BoardScene.BoardView"
-    }
-    /*
+  "Content": {
+    "Scenes": [
+      {
+        "SceneClass": "Inscryption_Server.Scenes.SetupScene",
+        "ViewClass": "Inscryption_mp.Views.SetupScene.SetupView"
+      },
+      {
+        "SceneClass": "Inscryption_Server.Scenes.BoardScene",
+        "ViewClass": "Inscryption_mp.Views.BoardScene.BoardView"
+      }
+      /*
     {
       "ScenePath": "Inscryption_Server.Scenes.MapScene",
       "ViewPath": "Inscryption_mp.Views.MapView"
     },
  */
-  ]
+    ]
+  }
 }

@@ -4,7 +4,7 @@ namespace Inscryption_Server.Exceptions
 {
 
 	[Serializable]
-	public class InvalidAssemblyException : Exception
+	internal class InvalidAssemblyException : Exception
 	{
 		public InvalidAssemblyException() { }
 		public InvalidAssemblyException(string message) : base(message) { }

@@ -5,9 +5,9 @@ namespace Inscryption_mp
 {
 	public struct Settings
 	{
-		public String Username { get; set; }
-		public Window window { get; set; }
-		public struct Window
+		public String Username { get; internal set; }
+		internal Window window { get; set; }
+		internal struct Window
 		{
 			public WindowState State { get; set; }
 			public uint Left { get; set; }

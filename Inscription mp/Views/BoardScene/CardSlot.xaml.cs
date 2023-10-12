@@ -6,7 +6,7 @@ namespace Inscryption_mp.Views.BoardScene
 	/// <summary>
 	/// Interaction logic for CardSlot.xaml
 	/// </summary>
-	public partial class CardSlot : UserControl
+	internal partial class CardSlot : UserControl
 	{
 		BoardView boardView;
 		public bool HasCard { get { return cardSlot.Child != null; } }

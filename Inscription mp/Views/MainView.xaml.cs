@@ -8,7 +8,7 @@ namespace Inscryption_mp.Views
 	/// <summary>
 	/// Interaction logic for MainView.xaml
 	/// </summary>
-	public partial class MainView : View
+	internal partial class MainView : View
 	{
 		public MainView()
 		{
@@ -44,7 +44,7 @@ namespace Inscryption_mp.Views
 
 		private void SettingsButton_Click(object sender, RoutedEventArgs e)
 		{
-			MainWindow.Mainwindow_ShowSettingsView();
+			MainWindow.MainWindow_ShowSettingsView();
 		}
 
 		private void ExitButton_Click(object sender, RoutedEventArgs e)

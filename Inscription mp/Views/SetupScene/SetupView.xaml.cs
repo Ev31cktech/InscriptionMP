@@ -5,7 +5,7 @@ namespace Inscryption_mp.Views.SetupScene
 	/// <summary>
 	/// Interaction logic for SetupView.xaml
 	/// </summary>
-	public partial class SetupView : View<Inscryption_Server.Scenes.SetupScene>
+	internal partial class SetupView : View<Inscryption_Server.Scenes.SetupScene>
 	{
 		public SetupView(Inscryption_Server.Scenes.SetupScene scene) : base(scene)
 		{

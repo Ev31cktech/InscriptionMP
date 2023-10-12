@@ -8,7 +8,7 @@ namespace Inscryption_mp.Views.SetupScene
 	/// <summary>
 	/// Interaction logic for PlayerDisplay.xaml
 	/// </summary>
-	public partial class PlayerDisplay : UserControl
+	internal partial class PlayerDisplay : UserControl
 	{
 		private SetupView SetupView { get; }
 		public Player Player { get; }

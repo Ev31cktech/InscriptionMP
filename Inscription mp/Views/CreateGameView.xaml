@@ -1,4 +1,6 @@
-﻿<inscription_mp:View x:Class="Inscryption_mp.Views.CreateGameView"
+﻿<inscription_mp:View 
+    x:Class="Inscryption_mp.Views.CreateGameView"
+    x:ClassModifier="internal"
 	xmlns:inscription_mp="clr-namespace:Inscryption_mp"
 	xmlns:inscription_scenes="clr-namespace:Inscryption_Server.Scenes;assembly=Inscription_Server"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

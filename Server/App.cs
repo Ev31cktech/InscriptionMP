@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Inscryption_Server.NetworkManagers;
 using Inscryption_Server.Scenes;
@@ -10,21 +12,24 @@ using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
 using PostSharp.Patterns.Diagnostics;
+using PostSharp.Patterns.Diagnostics.Backends.Console;
 using PostSharp.Patterns.Diagnostics.Backends.Log4Net;
 
 [assembly: Log]
 [assembly: Log(AttributePriority = 1)]
-[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
-[assembly: Log(AttributeTargetMembers = "regex:^..ctor", AttributeExclude = true, AttributePriority = 2)]
-[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
+//[assembly: Log(AttributeTargetMembers = "regex:^Loop", AttributeExclude = true, AttributePriority = 2)]
+//[assembly: Log(AttributeTargetMembers = "regex:^..ctor", AttributeExclude = true, AttributePriority = 2)]
+//[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_", AttributeExclude = true, AttributePriority = 3)]
+[assembly: InternalsVisibleTo("Inscryption mp")]
 
 namespace Inscryption_Server
 {
-	public class App
+	internal class App
 	{
 		private static Server server;
-		public static Server Server { get => Server.ThisServer; }
 		private static bool shutdown = false;
+		private static Initializer initializer = new Initializer();
+		public static Server Server { get => Server.ThisServer; }
 		public static ILog Logger { get { return LogManager.GetLogger("SERVER"); } }
 
 		private static Command[] commands = new Command[]
@@ -36,9 +41,10 @@ namespace Inscryption_Server
 			new Command(Command_Stop,"stop"),
 			new Command(Command_Crash,"crash")
 		};
-		public static void Main(string[] args)
+		internal static void Main(string[] args)
 		{
-			LoggingServices.DefaultBackend = InitializeBackend();
+			initializer.Initialize();
+			LoggingServices.DefaultBackend = new ConsoleLoggingBackend();//InitializeBackend();
 			Logger.Info("Server Logging Enabled");
 			Stack<string> argStack = new Stack<string>(args);
 			Scene.RegisterScene(new SetupScene());
@@ -60,14 +66,14 @@ namespace Inscryption_Server
 		}
 
 
-		public static Log4NetLoggingBackend InitializeBackend()
+		internal static Log4NetLoggingBackend InitializeBackend()
 		{
-			XmlConfigurator.Configure(new FileInfo("logger.config"));
 			var repo = (Hierarchy)LogManager.GetRepository();
 #if DEBUG
 			repo.Root.Level = log4net.Core.Level.All;
 #endif
 			//XmlConfigurator.Configure(repo);
+			XmlConfigurator.Configure(new FileInfo("logger.config"));
 			return new Log4NetLoggingBackend();
 		}
 

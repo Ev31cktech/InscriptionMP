@@ -13,7 +13,7 @@ namespace Inscryption_Server
 {
 	public class Client
 	{
-		public const char ETX = (char)3;
+		private const char ETX = (char)3;
 		public uint UserID { get; protected set; }
 		public bool Available { get { return socket.Available > 0; } }
 		public bool IsHost { get; protected set; }
@@ -26,7 +26,7 @@ namespace Inscryption_Server
 		protected TcpClient socket;
 		private NetworkPacket nPacket = new NetworkPacket(0);
 		private DateTime LastSyncDTM = DateTime.Now;
-		public Client(TcpClient socket, uint iD) : this(socket)
+		internal Client(TcpClient socket, uint iD) : this(socket)
 		{
 			UserID = iD;
 			IsHost = UserID == 0;
@@ -52,21 +52,21 @@ namespace Inscryption_Server
 					Username = data.Value<string>("Username");
 			}
 		}
-		public Client(TcpClient socket)
+		internal Client(TcpClient socket)
 		{
 			this.socket = socket;
 			writer = new StreamWriter(socket.GetStream()) { AutoFlush = true };
 			reader = new StreamReader(socket.GetStream());
 		}
 
-		public void AddData(string Name, object data)
+		internal void AddData(string Name, object data)
 		{
 			nPacket.data.Add(new JObject(new JProperty(Name, data)));
 		}
 
-		public void AddAction(Func<JObject, bool> runnable, JObject data)
+		internal void AddAction(Func<JObject, bool> func, JObject data)
 		{
-			JObject action = JObject.Parse($"{{\"target\":\"{Scene.GetActionName(runnable)}\"}}");
+			JObject action = JObject.Parse($"{{\"target\":\"{Scene.GetActionName(func)}\"}}");
 			action.Add("data", data);
 			nPacket.actions.Add(action);
 		}
@@ -93,7 +93,7 @@ namespace Inscryption_Server
 			}
 			return packets.ToArray();
 		}
-		public void RunAction(String func, JObject data)
+		private void RunAction(String func, JObject data)
 		{
 			try
 			{
@@ -106,7 +106,7 @@ namespace Inscryption_Server
 				App.Logger.Error(e);
 			}
 		}
-		public void Loop()
+		internal virtual void Loop()
 		{
 			DataRecieve();
 			//if (LastSincDTM.AddSeconds(1) < DateTime.Now && CurrentScene != null)

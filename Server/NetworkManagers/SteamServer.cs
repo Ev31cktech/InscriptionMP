@@ -2,7 +2,7 @@
 
 namespace Inscryption_Server.NetworkManagers
 {
-	public class SteamServer : Server
+	internal class SteamServer : Server
 	{
 		public string user
 		{

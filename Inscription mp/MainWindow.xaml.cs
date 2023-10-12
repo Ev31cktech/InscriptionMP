@@ -2,22 +2,31 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using Inscryption_mp.Views;
+using Inscryption_mp.Views.BoardScene;
+using Inscryption_Server.Scenes;
 
 namespace Inscryption_mp
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	internal partial class MainWindow : Window
 	{
 		private static MainWindow mw;
 		private static SettingsView settingsView;
 		private static Stack<View> viewStack = new Stack<View>();
 		public MainWindow()
 		{
-			InitializeComponent();
-			Loaded += (s,e) => { App.Initializer.InitalizeAssembly(Assembly.GetAssembly(typeof(Inscryption_Server.App)));}; //TODO progress bar
 			mw = this;
+			InitializeComponent();
+			BoardScene boardScene = new BoardScene();
+			boardScene.settings.Board.ColumnCount = 4;
+			BoardView boardView = new BoardView(boardScene);
+			boardView.Initialize();
+			MainWindow_ShowView(boardView);
+			Loaded += (s,e) => { 
+				App.Initializer.Initialize();
+			}; //TODO progress bar
 			
 			settingsView = new SettingsView();
 			Left = App.Settings.window.Left; Top = App.Settings.window.Top;
@@ -28,12 +37,12 @@ namespace Inscryption_mp
 		/// shows the settings window
 		/// <remark value="has it's own function because settings is difficult" />
 		/// </summary>
-		public static void Mainwindow_ShowSettingsView()
+		internal static void MainWindow_ShowSettingsView()
 		{
 			viewStack.Push(settingsView);
 			mw.ShowView();
 		}
-		public static void MainWindow_ShowView(View view)
+		internal static void MainWindow_ShowView(View view)
 		{
 			viewStack.Push(view);
 			mw.Dispatcher.InvokeAsync(mw.ShowView);

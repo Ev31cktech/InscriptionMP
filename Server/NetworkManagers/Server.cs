@@ -10,7 +10,7 @@ using System.Threading;
 //[assembly: Log(AttributeTargetMembers = "regex:^get_|^set_|^.?Loop", AttributeExclude = true, AttributePriority = 3)]
 namespace Inscryption_Server.NetworkManagers
 {
-	public abstract class Server
+	internal abstract class Server
 	{
 		public static Server ThisServer { get; private set;}
 		private MapGenerator mapGenerator = new MapGenerator();

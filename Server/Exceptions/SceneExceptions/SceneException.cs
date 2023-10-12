@@ -2,7 +2,7 @@
 {
 
 	[System.Serializable]
-	public class SceneException : System.Exception
+	internal class SceneException : System.Exception
 	{
 		public SceneException() : base("Exception in Scene class"){ }
 		public SceneException(string message) : base(message) { }

@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace Inscryption_Server.NetworkManagers
 {
-	public class LocalServer : Server
+	internal class LocalServer : Server
 	{
 		TcpListener tcpListener;
 		private uint userID;

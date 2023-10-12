@@ -4,7 +4,7 @@ namespace Inscryption_Server.Exceptions.SceneExceptions
 {
 
 	[Serializable]
-	public class UnknownPropertyException : Exception
+	internal class UnknownPropertyException : Exception
 	{
 		public UnknownPropertyException() : base("Unknown Property") { }
 		public UnknownPropertyException(string name, object var) : base($"could not find property {name} in {var.GetType()}.\n Property did not exist or is not public") { }

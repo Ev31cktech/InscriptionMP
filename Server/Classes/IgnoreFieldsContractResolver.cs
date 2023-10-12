@@ -6,7 +6,7 @@ using System;
 
 namespace Inscryption_Server
 {
-	public class IgnoreFieldsContractResolver : DefaultContractResolver
+	internal class IgnoreFieldsContractResolver : DefaultContractResolver
 	{
 		protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
 		{

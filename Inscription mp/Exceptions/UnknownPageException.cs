@@ -4,7 +4,7 @@ namespace Inscryption_mp.Exceptions
 {
 
 	[Serializable]
-	public class UnknownViewException : Exception
+	internal class UnknownViewException : Exception
 	{
 		public UnknownViewException() : base("Unknown View") { }
 		public UnknownViewException(string message) : base(message) { }
