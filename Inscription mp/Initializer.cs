@@ -30,7 +30,7 @@ namespace Inscryption_mp
 			cardType = DynamicTypeCreator.ExpandType($"Full{nameof(CardData)}", typeof(CardData), properties.ToArray());
 		}
 		*/
-		protected override void InitializeCard(JObject data, int cardIndex, ref Inscryption_Server.DataTypes.CardData card, PackData packData)
+		protected override void InitializeCard(JObject data, int cardIndex, ref CardData card, PackData packData)
 		{
 			string portraitPath = data.Value<string>("Portrait");
 			string portraitLoc = $"{packData.AssemblyName}{portraitPath.Replace('/', '.')}";
@@ -39,7 +39,7 @@ namespace Inscryption_mp
 			if (!packData.Assembly.GetManifestResourceNames().Contains(portraitLoc))
 			{ throw new CardException($"Card {cardIndex} in pack {packData.PackIdentifier} did not contain a matching file with {portraitPath}. make sure you have the file included in the dll by setting it's build action to 'Resource'"); }
 			UIElement xaml = XamlReader.Load(packData.Assembly.GetManifestResourceStream(portraitLoc)) as UIElement;
-			(card as CardData).Portrait = xaml;
+			(card as Inscryption_mp.DataTypes.CardData).Portrait = xaml;
 			base.InitializeCard(data, cardIndex, ref card, packData);
 		}
 		protected override void InitializeScenes(JArray scenesData, PackData assemblyData)

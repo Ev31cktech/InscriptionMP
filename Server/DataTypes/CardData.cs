@@ -1,6 +1,7 @@
 ﻿using Inscryption_Server.Serialization;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Inscryption_Server.DataTypes
 {
@@ -30,7 +31,7 @@ namespace Inscryption_Server.DataTypes
 		{
 			return JObject.FromObject(this);
 		}
-		public virtual bool CanPlay(CardData card) { throw new NotImplementedException(""); }
-		public virtual void PlayCard() { throw new NotImplementedException(""); }
+		public abstract bool CanPlay(CardData card);
+		public abstract void PlayCard();
 	}
 }

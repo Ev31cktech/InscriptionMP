@@ -17,7 +17,7 @@ namespace Inscryption_Server.DataTypes
 		public string AssemblyFile { get => Assembly.ManifestModule.Name; }
 		public string AssemblyName { get => AssemblyFile.Replace(' ', '_').Split('.')[0]; }
 		public Assembly Assembly { get; private set; }
-		public JObject Content { get => data.Value<JObject>("Content"); }
+		public JObject Content { get => data.ContainsKey("Content") ? data.Value<JObject>("Content") : new JObject(); }
 		public string PackIdentifier { get => $"{PackName}({AssemblyFile})"; }
 
 		public PackData(JObject data, Assembly assembly)

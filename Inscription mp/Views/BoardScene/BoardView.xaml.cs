@@ -63,9 +63,10 @@ namespace Inscryption_mp.Views.BoardScene
 			//thisScene.RunAction(thisScene.Summon,new CardData("test", 2, 2));
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
-				Inscryption_Server.DataTypes.CardData data;
-				Inscryption_Server.DataTypes.Card.TryGetCard("Act1 Pack.Hodag", out data);
-				activeslot.Card = new Card(data as CardData);
+				CardData data;
+				if(Card.TryGetCard("Act1 Pack.Hodag", out data))
+				{ throw new Exceptions.UnknownCardException(); }
+				activeslot.Card = new Card(data as Inscryption_mp.DataTypes.CardData);
 			}
 		}
 	}

@@ -100,8 +100,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="CardData.cs" />
+    <Compile Include="DataTypes\CardData.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Exceptions\ClientException.cs" />
+    <Compile Include="Exceptions\UnknownCardException.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Views\BoardScene\Card.xaml.cs">
       <DependentUpon>Card.xaml</DependentUpon>
@@ -201,7 +203,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="MetaData.json" />
+    <EmbeddedResource Include="MetaData.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

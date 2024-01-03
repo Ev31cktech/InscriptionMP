@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using CardData = Inscryption_mp.DataTypes.CardData;
 
 namespace Inscryption_mp
 {
@@ -12,7 +13,7 @@ namespace Inscryption_mp
 	{
 		private CardSlot slot;
 		//EventHandler<CardEventArgs> OnSummon;
-		private CardData Data { get;}
+		private CardData Data { get; }
 		public Card(CardData card)
 		{
 			Data = card;
@@ -37,5 +38,6 @@ namespace Inscryption_mp
 		public void Attack(Card opponent)
 		{
 		}
+		internal static bool TryGetCard(string cardId, out Inscryption_Server.DataTypes.CardData card) => Inscryption_Server.DataTypes.Card.TryGetCard(cardId, out card);
 	}
 }

@@ -15,7 +15,7 @@ namespace Inscryption_Server
 	{
 		const string ContentPath = "./Content";
 		protected List<PackData> packs = new List<PackData>();
-		protected Type cardType = typeof(CardData);
+		//protected Type cardType = typeof(CardData);
 
 		public virtual void Initialize()
 		{
@@ -46,9 +46,9 @@ namespace Inscryption_Server
 			}
 			App.Logger.Info("Started initializing CostTypes");
 			packs.ForEach(pack => InitializeCostTypes(pack.Content, pack));
-			List<PropertyInfo> properties = new List<PropertyInfo>();
-			packs.ForEach(pack => InitializeCardData(pack, ref properties));
-			cardType = DynamicTypeCreator.ExpandType($"Full{nameof(CardData)}", typeof(CardData), properties.ToArray());
+			//List<PropertyInfo> properties = new List<PropertyInfo>();
+			//packs.ForEach(pack => InitializeCardData(pack, ref properties));
+			packs.ForEach(pack => InitializeCardTypes(pack.Content, pack));
 			packs.ForEach(pack => InitializeCards(pack.Content, pack));
 			packs.ForEach(pack => InitializeScenes(pack.Content, pack));
 		}
@@ -102,7 +102,7 @@ namespace Inscryption_Server
 
 				}
 				catch (Exception)
-				{}
+				{ }
 			}
 		}
 
@@ -121,6 +121,7 @@ namespace Inscryption_Server
 		{
 			for (int i = 0; i < cardData.Count; i++)
 			{
+				Type cardType = packData.Assembly.GetType();
 				CardData card = Activator.CreateInstance(cardType) as CardData;
 				try
 				{
@@ -175,17 +176,41 @@ namespace Inscryption_Server
 		{
 			for (int i = 0; i < scenesData.Count; i++)
 			{
-				string sceneClass = scenesData[i].Value<string>("SceneClass");
-				if (sceneClass == null)
-				{ throw new InvalidAssemblyException($"Scene[{i}] in packData:  did not contain a 'SceneClass' attribute."); }
-				RegisterScene(sceneClass, packData);
+				string cardTypeName = scenesData[i].Value<string>("Name");
+				string cardTypeClass = scenesData[i].Value<string>("Type");
+				if (cardTypeName == null)
+				{ throw new InvalidAssemblyException($"cardType[{i}] in packData:  did not contain a 'Name' attribute."); }
+				//TODO import image, maybe rewrite this part.
+				CostData.RegisterType(cardTypeName,"",packData.Assembly.GetType(cardTypeClass));
 			}
 		}
+		private void InitializeCardTypes(JObject data, PackData packData)
+		{
+			App.Logger.Debug($"Initializing CardData for {packData.PackName}");
+			JToken token;
+			if (data.TryGetValue("CardTypes", out token))
+			{
+				JArray scenesData = token.Value<JArray>();
+				InitializeCardTypes(scenesData, packData);
+			}
+		}
+		private void InitializeCardTypes(JArray cardTypedata, PackData packData)
+		{
+			for (int i = 0; i < cardTypedata.Count; i++)
+			{
+				string sceneClass = cardTypedata[i].Value<string>("SceneClass");
+				if (sceneClass == null)
+				{ throw new InvalidAssemblyException($"Cardtype[{i}] in packData:  did not contain a 'SceneClass' attribute."); }
+				Card(sceneClass, packData);
+			}
+		}
+		/*
 		protected void InitializeCardData(PackData packData, ref List<PropertyInfo> properties)
 		{
 			foreach (Type CardDataType in packData.Assembly.ExportedTypes.Where(t => t.IsSubclassOf(typeof(CardData))))
 			{ properties.AddRange(CardDataType.GetProperties().Where(prop => !typeof(CardData).GetProperties().Select(p => p.Name).Contains(prop.Name))); }
 		}
+		*/
 
 		protected Scene RegisterScene(string name, PackData packData)
 		{

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -12,7 +13,7 @@ namespace Inscryption_Server
 {
 	internal class DynamicTypeCreator
 	{
-		const string NAME = "DynamicTypeCreator";
+		const string NAME = "InscriptionDynamicodule";
 		static AssemblyBuilder aBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(NAME), AssemblyBuilderAccess.Run);
 		static ModuleBuilder mBuilder = aBuilder.DefineDynamicModule(NAME);
 		public static Type CreateDynamicType(string name, Dictionary<string, Type> properties)
@@ -68,7 +69,7 @@ namespace Inscryption_Server
 		}
 		internal static Type ExpandType(string name, Type baseType, PropertyInfo[] properties)
 		{
-			TypeBuilder typeBuilder = mBuilder.DefineType(name, TypeAttributes.Public, baseType);
+			TypeBuilder typeBuilder = mBuilder.DefineType(name, TypeAttributes.Public | TypeAttributes.Class, baseType);
 			ConstructorInfo baseConstructor =  baseType.GetConstructors()[0];
 			Type[] types =  baseConstructor.GetParameters().Select(i => i.ParameterType).ToArray();
 			ConstructorBuilder ctor0 = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, types);
@@ -88,3 +89,4 @@ namespace Inscryption_Server
 		}
 	}
 }
+*/

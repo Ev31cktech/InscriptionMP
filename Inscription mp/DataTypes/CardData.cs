@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Inscryption_mp
+namespace Inscryption_mp.DataTypes
 {
 	public abstract class CardData : Inscryption_Server.DataTypes.CardData
 	{

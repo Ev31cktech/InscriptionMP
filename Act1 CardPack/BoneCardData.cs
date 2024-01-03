@@ -1,24 +1,17 @@
-﻿using Inscryption_Server.DataTypes;
-using System.Data;
-using System.Diagnostics.Contracts;
-using System.Runtime.Remoting.Messaging;
+﻿using Inscryption_mp.DataTypes;
+using System.Collections.Generic;
 
 namespace Act1_CardPack
 {
-	public class BoneCard : Card
+	public class BoneCardData : CardData
 	{
-		public static uint BoneCount { get; } = 0;
-		public BoneCard(CardData cardData) : base(cardData)
-		{
-		}
+		//TODO can't be static because is per player relivant
+		public static uint BoneCount { get; private set; } = 0;
+		public BoneCardData(): base()
+		{}
 
-		public override bool CanPlay(CardData boneCard)
-		{
-			return boneCard.Cost.Amount <= BoneCount;
-		}
+		public override bool CanPlay(Inscryption_Server.DataTypes.CardData boneCard) => boneCard.Cost.Amount <= BoneCount;
 
-		public override void OnPlay()
-		{
-		}
+		public override void PlayCard(){}
 	}
 }
